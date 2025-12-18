@@ -674,7 +674,7 @@ contains
                 if (spec%targetAcceptanceRate%enabled) then
                     if (meanAccRateSinceStart < spec%targetAcceptanceRate%val(1) .or. spec%targetAcceptanceRate%val(2) < meanAccRateSinceStart) then
                         adaptiveScale = (meanAccRateSinceStart / spec%targetAcceptanceRate%aim) ** spec%ndim%invhalf
-                        print *, adaptiveScale
+                        !print *, adaptiveScale
                         proposal%scaleSq%running = adaptiveScale ** 2
                         adaptiveScaleSq = proposal%scaleSq%running
                         !block
