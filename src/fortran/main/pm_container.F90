@@ -536,7 +536,7 @@ module pm_container
 
     !>  \cond excluded
     interface csp_type
-    pure elemental module function csp_typer_D0(val) result(container)
+    impure elemental module function csp_typer_D0(val) result(container)
 #if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
         !DEC$ ATTRIBUTES DLLEXPORT :: csp_typer_D0
 #endif
