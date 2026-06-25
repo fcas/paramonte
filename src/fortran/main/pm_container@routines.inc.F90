@@ -44,11 +44,21 @@
         if (itis) itis = con1%val == con2%val
 #elif   assign_ENABLED
         if (allocated(source%val)) destin%val = source%val
-#elif   constructCon_ENABLED && (IK_ENABLED || LK_ENABLED || CK_ENABLED || RK_ENABLED)
+#elif   constructCon_ENABLED && (IK_ENABLED || LK_ENABLED || CK_ENABLED || RK_ENABLED) && D0_ENABLED
         container%val = val
-#elif   constructCon_ENABLED && PK_ENABLED
+#elif   constructCon_ENABLED && (IK_ENABLED || LK_ENABLED || CK_ENABLED || RK_ENABLED) && D1_ENABLED
+		integer(IK) :: idim
+		do idim = 1, size(val, 1, IK)
+			container(idim)%val = val(idim)
+		end do
+#elif   constructCon_ENABLED && PK_ENABLED && D0_ENABLED
         allocate(container%val, source = val)
-#elif   constructCon_ENABLED && SK_ENABLED
+#elif   constructCon_ENABLED && PK_ENABLED && D1_ENABLED
+		integer(IK) :: idim
+		do idim = 1, size(val, 1, IK)
+			allocate(container(idim)%val, source = val(idim))
+		end do
+#elif   constructCon_ENABLED && SK_ENABLED && D0_ENABLED
         if (present(trimmed)) then
             if (trimmed) then
                 container%val = val
@@ -56,6 +66,19 @@
             end if
         end if
         container%val = trim(val)
+#elif   constructCon_ENABLED && SK_ENABLED && D1_ENABLED
+		integer(IK) :: idim
+		if (present(trimmed)) then
+            if (trimmed) then
+				do concurrent(idim = 1 : size(val, 1, IK))
+					container(idim)%val = val(idim)
+				end do
+				return
+            end if
+        end if
+		do concurrent(idim = 1 : size(val, 1, IK))
+			container(idim)%val = trim(val(idim))
+		end do
 #elif   getVal_ENABLED
         if (allocated(con%val)) val = con%val
 #else

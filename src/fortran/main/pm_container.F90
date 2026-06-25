@@ -199,9 +199,18 @@ module pm_container
         !DEC$ ATTRIBUTES DLLEXPORT :: css_typer_D0
 #endif
         use pm_kind, only: SKG => SK
-        character(*,SKG)    , intent(in)                :: val
-        logical(LK)         , intent(in)    , optional  :: trimmed
-        type(css_type)                                  :: container
+        character(*,SKG)    , intent(in)                	:: val
+        logical(LK)         , intent(in)    , optional  	:: trimmed
+        type(css_type)                                  	:: container
+    end function
+    pure module function css_typer_D1(val, trimmed) result(container)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: css_typer_D1
+#endif
+        use pm_kind, only: SKG => SK
+        character(*,SKG)    , intent(in)					:: val(:)
+        logical(LK)         , intent(in)    , optional  	:: trimmed
+        type(css_type)                                  	:: container(size(val))
     end function
     end interface
     !>  \endcond excluded
@@ -272,6 +281,14 @@ module pm_container
         integer(IKG)        , intent(in)                :: val
         type(csi_type)                                  :: container
     end function
+    pure module function csi_typer_D1(val) result(container)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: csi_typer_D1
+#endif
+        use pm_kind, only: IKG => IK
+        integer(IKG)        , intent(in)                :: val(:)
+        type(csi_type)                                  :: container(size(val))
+    end function
     end interface
     !>  \endcond excluded
 
@@ -340,6 +357,14 @@ module pm_container
         use pm_kind, only: LKG => LK
         logical(LKG)        , intent(in)                :: val
         type(csl_type)                                  :: container
+    end function
+    pure module function csl_typer_D1(val) result(container)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: csl_typer_D1
+#endif
+        use pm_kind, only: LKG => LK
+        logical(LKG)        , intent(in)                :: val(:)
+        type(csl_type)                                  :: container(size(val))
     end function
     end interface
     !>  \endcond excluded
@@ -410,6 +435,14 @@ module pm_container
         complex(CKG)        , intent(in)                :: val
         type(csc_type)                                  :: container
     end function
+    pure module function csc_typer_D1(val) result(container)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: csc_typer_D1
+#endif
+        use pm_kind, only: CKG => CK
+        complex(CKG)        , intent(in)                :: val(:)
+        type(csc_type)                                  :: container(size(val))
+    end function
     end interface
     !>  \endcond excluded
 
@@ -478,6 +511,14 @@ module pm_container
         use pm_kind, only: RKG => RK
         real(RKG)           , intent(in)                :: val
         type(csr_type)                                  :: container
+    end function
+    pure module function csr_typer_D1(val) result(container)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: csr_typer_D1
+#endif
+        use pm_kind, only: RKG => RK
+        real(RKG)           , intent(in)                :: val(:)
+        type(csr_type)                                  :: container(size(val))
     end function
     end interface
     !>  \endcond excluded
