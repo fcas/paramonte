@@ -192,7 +192,7 @@ set(ParaMonteTest_SOURCE_FILES
 #    ${paramonte_src_fortran_test_dir}/test_pm_val2int@routines.F90
 #    ${paramonte_src_fortran_test_dir}/test_pm_polation.F90
 #    #${paramonte_src_fortran_test_dir}/test_pm_polation.F90
-#    ${paramonte_src_fortran_test_dir}/test_pm_clustering.F90
+#    ${paramonte_src_fortran_test_dir}/test_pm_clusKmeans.F90
 #    ${paramonte_src_fortran_test_dir}/test_pm_logicalCompare.F90
 #    ${paramonte_src_fortran_test_dir}/test_pm_logicalCompare@routines.F90
 #    ${paramonte_src_fortran_test_dir}/test_pm_val2logical.F90
@@ -556,7 +556,7 @@ message(NOTICE "${pmattn} CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}" )
 #    message(NOTICE "CMAKE_FORTRAN_LINK_EXECUTABLE: ${CMAKE_FORTRAN_LINK_EXECUTABLE}")
 #endif ()
 
-# copy input data for testing to the bin folder
+# copy input data for testing to the _bin folder
 
 # enable_testing() # only useful when ctests is used, which is not the case here.
 

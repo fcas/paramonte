@@ -79,7 +79,7 @@
 !>  **Random Number Generation**<br>
 !>
 !>  The **RNG** generic interfaces within this module generate uniformly-distributed random vectors from within an \f$\ndim\f$-dimensional
-!>  hyper-ellipsoid generalize the proposed approach of Marsaglia (1972) for choosing a point from the surface of a sphere.<br>
+!>  hyper-ellipsoid by generalizing the proposed approach of Marsaglia (1972) for choosing a point from the surface of a sphere.<br>
 !>  <ol>
 !>      <li>    Generate a normalized (unit) \f$\ndim\f$-dimensional [Multivariate Normal random vector](@ref pm_distMultiNorm),
 !>              \f{equation}{
@@ -109,7 +109,7 @@
 !>
 !>  \note
 !>  <ol>
-!>      <li>    A ellipsoid with a diagonal representative Gramian matrix \f$\gramian_\ell\f$ is an
+!>      <li>    An ellipsoid with a diagonal representative Gramian matrix \f$\gramian_\ell\f$ is an
 !>              uncorrelated **hyper-ellipsoid** whose axes are parallel to the coordinate axes.<br>
 !>      <li>    An uncorrelated hyper-ellipsoid with equal diagonal elements in its
 !>              representative Gramian matrix \f$\gramian_\ell\f$ is a **hyper-sphere**.<br>
@@ -203,7 +203,7 @@ module pm_distUnifEll
     !>  \note
     !>  Note that the procedures of this generic interface do not require an
     !>  input `X` value representing a location within the domain of the density function.<br>
-    !>  This is fine and intentional by design because the PDF is uniform across the entire support of the PDF.
+    !>  This is fine and intentional by design because the PDF is uniform across the entire support of the PDF.<br>
     !>
     !>  \param[in]  logChoDia   :   The input scalar or `contiguous` vector of shape `(1:ndim)` of the same type and kind as the output `logPDF`.<br>
     !>                              <ol>
@@ -214,7 +214,7 @@ module pm_distUnifEll
     !>                                          of the corresponding hyper-spherical support of the distribution.<br>
     !>                              </ol>
     !>                              (**optional**. It must be present **if and only if** the input `gramian` is missing.)
-    !>  \param[in]  ndim        :   The input positive scalar of type `integer` of default kind \IK, containing the number of dimensions of the distribution.<br>
+    !>  \param[in]  ndim        :   The input positive scalar of type `integer` of default kind \IK, containing the number of dimensions of the domain of the distribution.<br>
     !>                              (**optional**. It must be present **if and only if** the input `logChoDia` is present and is a scalar.)
     !>  \param[in]  gramian     :   The input square matrix of shape `(1:ndim, 1:ndim)` of the same type and kind as the output `logPDF`,
     !>                              containing the **upper** triangle and diagonal elements of the
@@ -467,7 +467,7 @@ module pm_distUnifEll
     !>                                          implying the use of [xoshiro256**](https://prng.di.unimi.it/) uniform RNG.<br>
     !>                              </ol>
     !>                              (**optional**, default = [rngf_type](@ref pm_distUnif::rngf_type).)
-    !>  \param[in]      mean    :   The input `contiguous` vector of the same type, kind, rank, and size as the output `rand`, representing the mean of the MVUE distribution.<br>
+    !>  \param[in]      mean    :   The input `contiguous` vector of shape `(1:ndim)`, of the same type and kind as the output `rand`, representing the mean of the MVUE distribution.<br>
     !>                              (**optional**, default = `[(0., i = 1, size(rand))]`. It must be present if the input argument `chol` is missing.)
     !>  \param[in]      chol    :   The input `contiguous` matrix of shape `(ndim, ndim)` whose specified triangular `subset` contains the [Cholesky Factorization](@ref pm_matrixChol) of the Gramian matrix of the MVUE distribution.<br>
     !>                              (**optional**, the default is the Identity matrix of rank `ndim`. It must be present <b>if and only if</b> the input argument `subset` is also present.)
@@ -2621,12 +2621,12 @@ module pm_distUnifEll
     !>                                          implying the use of [xoshiro256**](https://prng.di.unimi.it/) uniform RNG.<br>
     !>                              </ol>
     !>                              (**optional**, default = [rngf_type](@ref pm_distUnif::rngf_type).)
-    !>  \param[out]     rand    :   The output `contiguous` array of rank `1` of length `ndim` of <br>
+    !>  \param[out]     rand    :   The output `contiguous` vector of shape `(1:ndim)` or matrix of shape `(1:ndim, 1:nsam)` of<br>
     !>                              <ul>
     !>                                  <li>    type `real` of kind \RKALL,<br>
     !>                              </ul>
     !>                              containing the random output vector(s).<br>
-    !>  \param[in]      mean    :   The input `contiguous` vector of the same type, kind, rank, and size as `rand`, representing the center of the distribution.<br>
+    !>  \param[in]      mean    :   The input `contiguous` vector of shape `(1:ndim)`, of the same type and kind as the output `rand`, representing the center of the distribution.<br>
     !>                              (**optional**, default = `[(0., i = 1, size(rand))]`.)
     !>  \param[in]      chol    :   The input `contiguous` matrix of shape `(ndim, ndim)` whose specified triangular `subset` contains
     !>                              the [Cholesky Factorization](@ref pm_matrixChol) of the Gramian matrix of the MVUE distribution.<br>
@@ -2673,8 +2673,8 @@ module pm_distUnifEll
     !>  \endcode
     !>
     !>  \warning
+    !>  The condition `size(mean, 1) == size(rand, 1)` must hold for the corresponding input arguments.<br>
     !>  The condition `all(shape(chol) == size(rand, 1))` must hold for the corresponding input arguments.<br>
-    !>  The condition `size(mean, 1, IK) == size(rand)` must hold for the corresponding input arguments.<br>
     !>  \vericons
     !>
     !>  \impure
@@ -2686,7 +2686,7 @@ module pm_distUnifEll
     !>  \see
     !>  [getNormRand](@ref pm_distNorm::getNormRand)<br>
     !>  [setNormRand](@ref pm_distNorm::setNormRand)<br>
-    !>  [getNormLogPDF](@ref pm_distMultiNorm::getMultiNormLogPDF)<br>
+    !>  [getMultiNormLogPDF](@ref pm_distMultiNorm::getMultiNormLogPDF)<br>
     !>
     !>  \example{setUnifEllRand}
     !>  \include{lineno} example/pm_distUnifEll/setUnifEllRand/main.F90

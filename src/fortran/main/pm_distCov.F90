@@ -51,6 +51,9 @@
 !>              The resulting correlation matrix can be arbitrarily scaled along different dimensions to generate power-law randomly-distributed **covariance matrix**.<br>
 !>  </ol>
 !>
+!>  \see
+!>  [pm_distBeta](@ref pm_distBeta)<br>
+!>
 !>  \test
 !>  [test_pm_distCov](@ref test_pm_distCov)<br>
 !>
@@ -58,9 +61,6 @@
 !>  \pvhigh
 !>  The output square matrices from the onion method are frequently non-positive-definite, particularly in higher dimensions.<br>
 !>  A closer look into the root causes of this instability must be done.<br>
-!>
-!>  \see
-!>  [pm_distBeta](@ref pm_distBeta)<br>
 !>
 !>  \final
 !>
@@ -373,6 +373,10 @@ module pm_distCov
     !>  \warning
     !>  The condition `all([0 < scale])` must hold for the corresponding input arguments.<br>
     !>  \vericons
+    !>
+    !>  \note
+    !>  Unlike the case for [setCovRand](@ref pm_distCov::setCovRand), when the input argument `scale` is missing,
+    !>  the diagonal elements of the output correlation matrix are strictly enforced to `1`.<br>
     !>
     !>  \example{getCovRand}
     !>  \include{lineno} example/pm_distCov/getCovRand/main.F90
@@ -748,6 +752,12 @@ module pm_distCov
     !>  The condition `size(rand, 1) == size(rand, 2)` must hold for the corresponding input arguments.<br>
     !>  The condition `rank(scale) == 0 .or. all(size(scale) == shape(rand))` must hold for the corresponding input arguments.<br>
     !>  \vericons
+    !>
+    !>  \warning
+    !>  Beware that when the input argument `scale` is missing,
+    !>  the diagonal elements of the output correlation matrix are not enforced to match `1`.<br>
+    !>  As such, numerical matrix multiplication errors may lead to diagonal matrix values slightly deviating from `1`.
+    !>  If you need such a guarantee on the diagonal elements of the output random correlation matrix, use [getCovRand](@ref pm_distCov::getCovRand).<br>
     !>
     !>  \example{setCovRand}
     !>  \include{lineno} example/pm_distCov/setCovRand/main.F90

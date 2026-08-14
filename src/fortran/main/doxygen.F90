@@ -10,7 +10,7 @@
 !>  \section ParaMonte What is ParaMonte?
 !>  <!--==============================-->
 !>
-!>  ParaMonte is a library of serial and parallel Monte Carlo and Machine Learning routines
+!>  ParaMonte is a multi-language library of serial and parallel Monte Carlo and Machine Learning routines
 !>  scientific inference, e.g., for sampling mathematical density functions of arbitrary-dimensions,
 !>  with the design goal of unifying
 !>
@@ -52,7 +52,7 @@
 !>  [⛓](#ParaMonteLangDocumentation)
 !>  \section ParaMonteLangDocumentation ParaMonte Fortran Documentation Website
 !>
-!>  The documentation for the latest version of the ParaMonte Fortran library is always <a href="../../fortran/latest/html/index.html" target="_blank"><b>available on this page</b></a>.<br>
+!>  The documentation for the latest version of the ParaMonte Fortran library is always <a href="../../fortran/latest/index.html" target="_blank"><b>available on this page</b></a>.<br>
 !>
 !>  [⛓](#ParaMonteLangModules)
 !>  \section ParaMonteLangModules ParaMonte Fortran Library Modules
@@ -118,11 +118,11 @@
 !>  pm_arrayStrip           | This module contains procedures and generic interfaces for stripping a given pattern from the left and right ends of an array of arbitrary intrinsic type and kind.
 !>  pm_arrayUnique          | This module contains procedures and generic interfaces for finding unique values of an input array of various types.
 !>  pm_arrayVerbose         | This module contains procedures and generic interfaces for flattening (duplicating the elements of) an array according to a user-specified weight.
-!>  pm_batse                | This module contains procedures and generic interfaces for modeling data and detectors of the BATSE Gamma-Ray satellite onboard the NASA Compton Gamma-Ray Observatory.
+!>  pm_batse                | This module contains procedures and generic interfaces for modeling data and detectors of the BATSE Gamma-Ray detectors onboard the NASA Compton Gamma-Ray Observatory.
 !>  pm_bench                | This module contains abstract interfaces and types that facilitate benchmarking of different procedures.
 !>  pm_bit                  | This module contains constants and procedures that are relevant to bit manipulation.
 !>  pm_blas                 | This module contains a set of generic interfaces to the BLAS routines used within the ParaMonte library.
-!>  pm_clustering           | This module contains procedures and routines for the computing the Kmeans clustering of a given set of data.
+!>  pm_clusKmeans           | This module contains procedures and routines for the computing the Kmeans clustering of a given set of data.
 !>  pm_complexAbs           | This module contains procedures and generic interfaces for performing element-wise comparison of the real and imaginary components of scalars and arrays of arbitrary ranks of various types.
 !>  pm_complexCompareAll    | This module contains procedures and generic interfaces for checking if both of the corresponding real and imaginary components of two complex numbers satisfy a relational operator.
 !>  pm_complexCompareAny    | This module contains procedures and generic interfaces for checking if either of the corresponding real and imaginary components of two complex numbers satisfy a relational operator.
@@ -139,7 +139,7 @@
 !>  pm_distanceHellinger    | This module contains classes and procedures for computing the Hellinger statistical distance between two probability distributions.
 !>  pm_distanceKolm         | This module contains classes and procedures for computing the Kolmogorov statistical distance.
 !>  pm_distanceMahal        | This module contains classes and procedures for computing the Mahalanobis statistical distance.
-!>  pm_distBand             | This module contains procedures and generic interfaces for computing the Band photon distribution widely used in modeling the spectra of a class of celestial objects knowns Gamma-Ray Bursts.
+!>  pm_distBand             | This module contains procedures and generic interfaces for computing the Band photon distribution widely used in modeling the spectra of a class of celestial objects known as Gamma-Ray Bursts.
 !>  pm_distBern             | This module contains classes and procedures for generating Bernoulli-distributed random numbers.
 !>  pm_distBeta             | This module contains classes and procedures for computing various statistical quantities related to the Beta distribution.
 !>  pm_distCosRaised        | This module contains classes and procedures for computing various statistical quantities related to the Raised Cosine distribution.
@@ -169,7 +169,7 @@
 !>  pm_distUnifSphere       | This module contains classes and procedures for computing various statistical quantities related to the Uniform Spherical distribution.
 !>  pm_ellipsoid            | This module contains classes and procedures for setting up and computing the properties of the hyper-ellipsoids in arbitrary dimensions.
 !>  pm_err                  | This module contains classes and procedures for reporting and handling errors.
-!>  pm_except               | This module contains procedures and generic interfaces and generic interfaces for testing for exceptional cases at runtime.
+!>  pm_except               | This module contains procedures and generic interfaces for testing for exceptional cases at runtime.
 !>  pm_fftnr                | This module contains procedures and generic interfaces for computing the Discrete Fourier Transform of a real or complex sequence using radix-2 Cooley–Tukey Fast-Fourier Transform.
 !>  pm_fftpack              | This module contains procedures and generic interfaces for computing the Discrete Fourier Transform of a real or complex sequence using a mixed-radix decimation-in-frequency Fast-Fourier Transform.
 !>  pm_io                   | This module contains classes and procedures for input/output (IO) or generic display operations on standard displays or internal/external files.
@@ -187,7 +187,7 @@
 !>  pm_mathErf              | This module contains classes and procedures for computing the mathematical Inverse Error Function.
 !>  pm_mathExp              | This module contains procedures and generic interfaces for computing the previous/next integer exponent for the given base that yields a number smaller/larger than the absolute input value.
 !>  pm_mathFactorial        | This module contains procedures and generic interfaces for the Factorial function.
-!>  pm_mathFactoring        | This module contains procedures and generic interfaces and generic interfaces for computing the prime factors of integers.
+!>  pm_mathFactoring        | This module contains procedures and generic interfaces for computing the prime factors of integers.
 !>  pm_mathGamma            | This module contains procedures and generic interfaces for the Lower and Upper Incomplete Gamma functions.
 !>  pm_mathLog1p            | This module contains procedures and generic interfaces for computing log(1 + x) more precisely for tiny `x`.
 !>  pm_mathLogAddExp        | This module contains procedures and generic interfaces for adding two real or complex values without causing overflow or underflow.
@@ -197,9 +197,9 @@
 !>  pm_mathNumSys           | This module contains procedures and generic interfaces for converting numbers to different bases in different numeral systems.
 !>  pm_mathRoot             | This module contains classes and procedures for computing the roots of one-dimensional continuous mathematical functions using various root-finding methods.
 !>  pm_mathRootTest         | This module contains a collection of example functions for testing or examining the root-finding routines of the ParaMonte library.
-!>  pm_mathSqrt             | This module contains procedures and generic interfaces and generic interfaces for computing the square root of integers.
+!>  pm_mathSqrt             | This module contains procedures and generic interfaces for computing the square root of integers.
 !>  pm_mathSubAdd           | This module contains procedures and generic interfaces for evaluating the mathematical operator ∓ acting on integer, complex, or real values.
-!>  pm_mathUnsigned         | This module contains procedures and generic interfaces and generic interfaces for various operations with positive integers with results that have the same binary representation as an unsigned integer.
+!>  pm_mathUnsigned         | This module contains procedures and generic interfaces for various operations with positive integers with results that have the same binary representation as an unsigned integer.
 !>  pm_matrixChol           | This module contains procedures and generic interfaces for computing the Cholesky factorization of positive definite matrices.
 !>  pm_matrixClass          | This module contains abstract and concrete derived types that are required for compile-time resolution of procedures within the generic interfaces of the ParaMonte library for Linear Algebra operations.
 !>  pm_matrixCopy           | This module contains procedures and generic interfaces relevant to copying (diagonal or upper/lower triangular) subsets of matrices of arbitrary intrinsic types and kinds from one matrix of arbitrary shape and packing format to another matrix of arbitrary shape and packing format.
@@ -382,7 +382,7 @@
 !>  +   The abbreviation `msn`      stands for **Multivariate Skew-Normal** mostly used in the context of the statistical MultiVariate Skew-Normal distribution.
 !>  +   The abbreviation `mvn`      stands for **MultiVariate Normal** mostly used in the context of the statistical MultiVariate Normal distribution.
 !>  +   The abbreviation `mvu`      stands for **MultiVariate Uniform** mostly used in the context of the statistical MultiVariate (ellipsoidal) Uniform distribution.
-!>  +   The abbreviation `norm`     stands for **normal** in the context of statistical distributions or **normalization** factor. Example: `DistMultiNorm_type`.
+!>  +   The abbreviation `norm`     stands for **normal** in the context of statistical distributions or **normalization** factor. Example: `distMultiNorm_type`.
 !>  +   The abbreviation `normed`   stands for **normalized** mostly in the context of statistical samples. Example: `NormedSample`.
 !>  +   The abbreviation `pdf`      stands for **Probability Density Function** in the context of statistics. Example: `getNormLogPDF()`.
 !>  +   The abbreviation `pos`      stands for **positive**. Example: `getInvPosDefMat()`.
@@ -459,8 +459,8 @@
 !>          section</b>, designated by the <tt>\\example</tt>, otherwise, each empty line will start a new paragraph in the documentation.<br>
 !>          Example: See [below](#example-ParaMonteLangDocumentationGuidelines).<br>
 !>      +   The Doxygen `\test` tag, if any exists, must appear immediately after the example section designated by the <tt>\\example</tt> tag.<br>
-!>      +   The Doxygen `\todo` tag, if any exists, must appear immediately after the `\test` tag or any other tag immediately preceding it.<br>
-!>      +   The Doxygen `\bug` tag, if any exists, must appear immediately after the `\todo` tag or any other tag immediately preceding it.<br>
+!>      +   The Doxygen `\bug` tag, if any exists, must appear immediately after the `\test` tag or any other tag immediately preceding it.<br>
+!>      +   The Doxygen `\todo` tag, if any exists, must appear immediately after the `\todo` tag or any other tag immediately preceding it.<br>
 !>      +   The closing command of each documentation section must be the ParaMonte custom command <tt>\\final</tt> separated from the tags before and after by an empty line.<br>
 !>      +   The Doxygen `\author` tag is the last command to appear in any documentation section, and it must preferably have the format exemplified in the example below.<br>
 !>      <br>
@@ -603,13 +603,16 @@
 !>  [⛓](#ParaMonteLangExamples)
 !>  \section ParaMonteLangExamples ParaMonte Fortran Language Examples
 !>
-!>  The ParaMonte Fortran library ships with tens of thousands of example usage that are available in the `example/fortran` folder in the root directory of the project repository.<br>
+!>  The ParaMonte Fortran library ships with tens of thousands of example usage that are available in the `example/fortran` folder in the [root directory of the project repository](https://github.com/cdslaborg/paramonte).<br>
 !>  These examples are also available and discussed in the documentations of individual modules and procedures of this this documentation website.<br>
+!>  The best way to build and run the examples is to build the library to generate the final binary folder for your specific build.<br>
+!>  This binary folder will contains the library along with all available example source codes and build instructions and scripts.<br>
+!>  See [the ParaMonte generic documentation](\pmdoc) for build and installation instructions on all supported platforms.<br>
 !>
 !>  [⛓](#ParaMonteLangBenchmarks)
 !>  \section ParaMonteLangBenchmarks ParaMonte Fortran Language Benchmarks
 !>
-!>  The ParaMonte Fortran library ships with a large number of performance benchmarks that are available in the `benchmark/fortran` folder in the root directory of the project repository.<br>
+!>  The ParaMonte Fortran library ships with a large number of performance benchmarks that are available in the `benchmark/fortran` folder in the [root directory of the project repository](https://github.com/cdslaborg/paramonte).<br>
 !>  These benchmarks are also available and discussed in the [benchmark listing page](@ref benchmarks) of this this documentation website.<br>
 !>
 !>  If you would like to see a relevant benchmark currently not included, [discuss it here](https://github.com/cdslaborg/paramonte/discussions)
@@ -636,7 +639,7 @@
 !>  </ol>
 !>
 !>  [⛓](#ParaMonteLangToDo)
-!>  \section ParaMonteLangToDo ParaMonte Fortran ToDO List
+!>  \section ParaMonteLangToDo ParaMonte Fortran ToDo List
 !>
 !>  For the full listing of all tasks to do see the dedicated [ToDo listing page](./todo.html).<br>
 !>  The following are the library tasks that need to be accomplished.<br>
@@ -654,6 +657,6 @@
 !>  \todo
 !>  \pvhigh
 !>  The ParaNest and ParaDISE samplers must be added to the module [pm_sampling](@ref pm_sampling).<br>
-!>  This is a task that only \AmirShahmoradi can achieve.<br>
+!>  This is a task that only \AmirShahmoradi can complete.<br>
 !>
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

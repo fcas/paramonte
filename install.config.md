@@ -2,16 +2,16 @@
 
 This file contains information about the ParaMonte library build configuration flags.
 
-The ParaMonte library build scripts accept a large number of 
+The ParaMonte library build scripts accept a large number of
 optional flags that can be used to configure the library build.
 
 Nearly all configuration flags can be specified as command line arguments
-to the [install.bat](./install.bat.md), [install.sh](./install.sh.md), or 
-the [CMake binary executable](./CMakeLists.md). Some flags may be essential
+to the [install.bat](./install.bat.md), [install.sh](./install.sh.md), or
+the [CMake binary executable](CMakeLists.md). Some flags may be essential
 to directly call the CMake executable binary, while others are available
 only as optional arguments to the library install scripts mentioned above.
 
-Due to the sheer number of available optional flags, they are categorized 
+Due to the sheer number of available optional flags, they are categorized
 in tiers sorted by their relevance and importance to the end users.
 
 1.  [TIER-1 ParaMonte library build configuration flags](#TIER-1-ParaMonte-library-build-configuration-flags)
@@ -19,21 +19,62 @@ in tiers sorted by their relevance and importance to the end users.
 3.  [TIER-3 ParaMonte library build configuration flags](#TIER-3-ParaMonte-library-build-configuration-flags)
 4.  [TIER-4 ParaMonte library build configuration flags](#TIER-4-ParaMonte-library-build-configuration-flags)
 
+## Usage
+
+### Usage with `install.sh`
+
+The general usage syntax of the flags with the `install.sh` installation script is the following:
+```bash
+./install.sh --flag value
+```
+
+where `flag` can be any of the following installation flags and `value` is the user-specified value for the flag.
+
+> **NOTE** There can be as many `flag` with `value` pairs as needed, although only one pair is shown above as an example.
+
+> **NOTE** Some flags below may not require a `value` to be specified.
+
+> **NOTE** If the installation script `install.sh` is non-executable,
+> you can make it executable using the Bash command `chmod +x install.sh`.
+
+### Usage with `install.bat`
+
+The general usage syntax of the flags with the `install.bat` installation script is the following:
+```bash
+./install.bat --flag value
+```
+
+where `flag` can be any of the following installation flags and `value` is the user-specified value for the flag.
+
+> **NOTE** There can be as many `flag` with `value` pairs as needed, although only one pair is shown above as an example.
+
+> **NOTE** Some flags below may not require a `value` to be specified.
+
 ## TIER-1 ParaMonte library build configuration flags
 
 The ParaMonte TIER-1 build flags set the most important and useful build configurations.
-Assuming the required compilers and external (e.g., Coarray, MPI parallel) libraries are 
+Assuming the required compilers and external (e.g., Coarray, MPI parallel) libraries are
 available on the system, these flags can readily customized the library build.
+
+### `help`
+
+Displays all contents of this file and available installation flags on the command line.
+
++   Usage with `install.bat` or `install.sh`:
+    ```bash
+    --help
+    ```
++   Usage with `cmake` binary executable: **Not Available.**
 
 ### `build`
 
 Specifies the library build type for which the library will be built.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --build "build_type"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dbuild="build_type"
     ```
@@ -69,11 +110,11 @@ compilers, they are automatically converted to `release`.
 Specifies the target programming language(s) for
 which the library will be built and accessed from.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --lang "programming_language"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dlang="programming_language"
     ```
@@ -103,11 +144,11 @@ list of programming languages for which the library will be built in the specifi
 
 Specifies the library file type for which the library will be built.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --lib "library_type"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dlib="library_type"
     ```
@@ -128,11 +169,11 @@ list of possible values for which the library will be built in the specified ord
 
 Specifies the library memory usage type for which the library will be built.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --mem "memory_allocation_type"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dmem="memory_allocation_type"
     ```
@@ -161,11 +202,11 @@ list of possible values for which the library will be built in the specified ord
 
 Specifies the library parallelization paradigm for which the library will be built.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --par "parallelization_type"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dpar="parallelization_type"
     ```
@@ -192,8 +233,8 @@ list of possible values for which the library will be built in the specified ord
 
 ## TIER-2 ParaMonte library build configuration flags
 
-The ParaMonte TIER-2 build flags set the additional optional arguments that 
-run library benchmarks, examples, or tests, or are critical for the correct 
+The ParaMonte TIER-2 build flags set the additional optional arguments that
+run library benchmarks, examples, or tests, or are critical for the correct
 selection of compilers or external compilation libraries, or customize the
 build and installation folders.
 
@@ -204,7 +245,7 @@ CMake and other relevant files will be stored
 before outputting the final product to the
 specified deployment directory via `ddir`.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --bdir "cmake_build_directory_path"
     ```
@@ -223,7 +264,7 @@ to the directory where the library should be built.
 **optional**. The default value for `cmake_build_directory_path` is,
 
 ```bash
-bdir="${root}/bld/${os}/${arch}/${csid}${csvs}/${build}/${lib}/${mem}/${par}/${checking}/${lang}"
+bdir="${root}/_bld/${os}/${arch}/${csid}${csvs}/${build}/${lib}/${mem}/${par}/${checking}/${lang}"
 ```
 
 where
@@ -238,27 +279,33 @@ where
 +   `${mem}`    is replaced with the specified value for the `mem` configuration flag (`stack`, `heap`, ...),
 +   `${par}`    is replaced with a value determined from the `mem` configuration flag:
 
-    Value               | Scenario  
-    --------------------|--------------------------------------------------------------  
-    `cafsingle`         | If the library is built for Coarray single-image parallelism.  
-    `cafshared`         | If the library is built for Coarray shared-memory parallelism.  
-    `cafdist`           | If the library is built for Coarray distributed-memory parallelism.  
-    `mpi`               | If the library is built for MPI parallelism using an unknown MPI distribution.  
-    `impi`              | If the library is built for MPI parallelism using an Intel MPI distribution.  
-    `mpich`             | If the library is built for MPI parallelism using an MPICH MPI distribution.  
-    `openmpi`           | If the library is built for MPI parallelism using an OpenMPI distribution.  
-    `openmp`            | If the library is built for OpenMP parallelism.  
-    `serial`            | If the library is built for serial applications.  
+    Value               | Scenario
+    --------------------|--------------------------------------------------------------
+    `cafsingle`         | If the library is built for Coarray single-image parallelism.
+    `cafshared`         | If the library is built for Coarray shared-memory parallelism.
+    `cafdist`           | If the library is built for Coarray distributed-memory parallelism.
+    `mpi`               | If the library is built for MPI parallelism using an unknown MPI distribution.
+    `impi`              | If the library is built for MPI parallelism using an Intel MPI distribution.
+    `mpich`             | If the library is built for MPI parallelism using an MPICH MPI distribution.
+    `openmpi`           | If the library is built for MPI parallelism using an OpenMPI distribution.
+    `openmp`            | If the library is built for OpenMP parallelism.
+    `serial`            | If the library is built for serial applications.
+
+>   **NOTE**  
+>   The underscore prefix `_` is intentionally added to the ParaMonte output build directory `_bld` 
+>   to make the folder easily identifiable, but more importantly, to readily distinguish and find 
+>   the folder name within the library implementation among the myriad of other applications 
+>   that use the same folder name without underscore for the application builds.
 
 ### `bench`
 
 Specifies the library benchmarks to build and run after building library.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --bench "benchmark_list"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dbench="benchmark_list"
     ```
@@ -293,11 +340,11 @@ b1;b2;...;bn        | Build and run all modules and procedures benchmarks matchi
 
 Specifies the BLAS implementation against which certain ParaMonte library routines will be linked.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --blas "cmake_blas_vendor"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dblas="cmake_blas_vendor"
     ```
@@ -326,11 +373,11 @@ vendor              | Any vendor name recognized by the CMake `BLA_VENDOR`.
 
 Specifies the library runtime checking policy for which the library will be built.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --checking "checking_type"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dchecking="checking_type"
     ```
@@ -358,11 +405,11 @@ degrades the runtime performance and increases the library size.
 Specifies the library deployment directory to
 which the full ParaMonte package will be copied.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --ddir "deploy_directory_path"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dddir="deploy_directory_path"
     ```
@@ -371,18 +418,24 @@ where `deploy_directory_path` is the path to the
 directory where the library binaries should be deployed.
 
 **optional**. The default value for `deploy_directory_path` is
-`"./bin"` where `.` refers to the path to the root directory
+`"./_bin"` where `.` refers to the path to the root directory
 of the project where the main `CMakeLists.txt` file exists.
+
+>   **NOTE**  
+>   The underscore prefix `_` is intentionally added to the ParaMonte output deployment directory `_bin`
+>   to make the folder easily identifiable, but more importantly, to readily distinguish and find 
+>   the folder name within the library implementation among the myriad of other applications 
+>   that use the same folder name without underscore for the application binaries.
 
 ### `exam`
 
 Specifies the library examples to build and run after building library.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --exam "example_list"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dexam="example_list"
     ```
@@ -418,11 +471,11 @@ e1;e2;...;en        | Build and run all modules and procedures examples matching
 Specifies the path to the Fortran compiler binary
 executable file with which the library will be built.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --fc "fortran_compiler_executable_path"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dfc="fortran_compiler_executable_path"
     ```
@@ -443,11 +496,11 @@ is automatically determined by CMake or the build scripts.
 
 Specifies the LAPACK implementation against which certain ParaMonte library routines will be linked.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --lapack "cmake_lapack_vendor"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dlapack="cmake_lapack_vendor"
     ```
@@ -472,28 +525,29 @@ vendor              | Any vendor name recognized by the CMake `BLA_VENDOR`.
 
 **optional**. The default value for `cmake_lapack_vendor` is `none`.
 
-### `matlabdir`
+### `matlabroot`
 
-Specifies the path to the MATLAB binary executable against which the library will be linked.
+Specifies the path to the **root directory** of MATLAB against which the library will be linked.
+Within a MATLAB session, this directory path is returned by the MATLAB intrinsic function `matlabroot`.
+An example such path returned in MATLAB 2024a environment is: `'C:\Program Files\MATLAB\R2024a'` on Windows platforms.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
-    --matlabdir "matlab_executable_dir_path"
+    --matlabroot "matlab_root_dir_path"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
-    -Dmatlabdir="matlab_executable_dir_path"
+    -Dmatlabroot="matlab_root_dir_path"
     ```
 
-where `matlab_executable_dir_path` is the path to the directory containing the
-MATLAB executable binary file (virtually always named `matlab` or `matlab.exe`).
-
-> Beware this MATLAB binary directory almost always ends with `/bin`.
+where `matlab_root_dir_path` is the path to the root directory of MATLAB.
 
 > This option is relevant only to builds where the `lang` configuration flag is set to `matlab`.
 > The specified value is ignored for all language builds of the ParaMonte library.
 
 > Specifying this option helps CMake find the MATLAB library dependencies.
+
+> If specified, it sets the value of the CMake configuration variable `Matlab_ROOT_DIR`.
 
 > This option is essential when the library is to be linked against
 > a particular installation of MATLAB among multiple installations.
@@ -501,19 +555,24 @@ MATLAB executable binary file (virtually always named `matlab` or `matlab.exe`).
 > We highly recommend to specify the MATLAB choice explicitly via this argument
 as CMake often has difficultly choosing the right MATLAB version among several options.
 
-**optional**. The default value for `matlab_executable_dir_path`
-is determined automatically by CMake.
+> **NOTE**
+> If you are a ParaMonte developer and aim to specify a MATLAB installation against which you intend to build the library,
+> always ensure to install the oldest possible compatible MATLAB version. This ensures the generated MEX files are compatible
+> with all newer MATLAB version. The opposite does not generally hold. For example, MATLAB 2024a MEX files are not compatible with
+> MATLAB 2020b environment and libraries.
+
+**optional**. The default value for `matlab_root_dir_path` is set automatically by CMake.
 
 ### `me`
 
 Specifies the path to the MPI launcher `mpiexec`
 binary executable file for MPI-parallel applications.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --me "mpiexec_path"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dme="mpiexec_path"
     ```
@@ -535,11 +594,11 @@ is automatically determined by CMake or the build scripts.
 
 Specifies the library testing mode for which the library will be built.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --test "testing_type"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dtest="testing_type"
     ```
@@ -559,9 +618,9 @@ Value               | Usage
 > **WARNING**
 > The ParaMonte extended precision tests are prone to failure.
 > This is due to GNU compiler bugs for extended precision arithmetic.
-> To avoid bug-induced test failures when using GNU compilers, 
-> you can additionally specify the [`--rki "1;2"`](#rki) build 
-> to build the library and its test for only the 
+> To avoid bug-induced test failures when using GNU compilers,
+> you can additionally specify the [`--rki "1;2"`](#rki) build
+> to build the library and its test for only the
 > single and double `real` type precisions.
 
 **optional**. The default value for `testing_type` is `none`.
@@ -569,18 +628,18 @@ Value               | Usage
 ## TIER-3 ParaMonte library build configuration flags
 
 The ParaMonte TIER-3 build flags are mostly relevant to the ParaMonte library developers
-or advanced users who wish to further customize the library configurations for their needs.  
-Some of the available options with intricate implications require careful attention before usage.  
+or advanced users who wish to further customize the library configurations for their needs.
+Some of the available options with intricate implications require careful attention before usage.
 
 ### `benchpp`
 
 Specifies the library benchmarks postprocessing scripts to run after building the library.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --benchpp "benchmark_postprocessing_list"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dbenchpp="benchmark_postprocessing_list"
     ```
@@ -623,11 +682,11 @@ is the same as the value set for the option `bench`.
 
 Specifies whether the library must be built with C-Fortran interoperable types and kinds.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --cfi "c_fortran_interoperability_list"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dcfi="c_fortran_interoperability_list"
     ```
@@ -651,11 +710,11 @@ Value               | Usage
 
 Determines whether Code Coverage report must be generated.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --codecov "code_coverage_type"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dcodecov="code_coverage_type"
     ```
@@ -684,11 +743,11 @@ Value               | Usage
 
 Specifies the library dependencies to copy to the final deployment directory.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --deps "dependencies_list"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Ddeps="dependencies_list"
     ```
@@ -702,17 +761,55 @@ Value               | Usage
 
 > This is a low level option and mostly useful to the developers of the ParaMonte library.
 
+> **NOTE** This flag is currently non-functional on Windows platforms possibly due to a CMake bug related to `TARGET_SONAME_FILE`.
+
 **optional**. The default value for `dependencies_list` is `none`.
+
+### `dev`
+
+Prevents the creation of the deployment (`_bin`) directory for the final binary products and
+further avoids the duplicate CMake build which is currently required to properly generate
+all preprocessed Fortran source files in the final package.
+
++   Usage with `install.bat` or `install.sh`:
+    ```bash
+    --dev
+    ```
++   Usage with `cmake` binary executable:
+    ```cmake
+    -Ddev_enabled=value
+    ```
+
+where `value` can be any of the following values.
+
+Value               | Usage
+--------------------|------
+`0`                 | The development mode is disabled.
+`1`                 | The development mode is enabled.
+
+> This is a low level option and mostly useful to the developers of the ParaMonte library.
+
+> **NOTE**
+> The primary goal of this flag is to bypass an implementation bug in the current CMake scripts of the ParaMonte library
+> and enhance the library development experience by reducing the redundant builds and file and folder copies,
+> thus, speeding up the library development and testing.
+
+> **WARNING**
+> Beware that specifying this flag will **disable** the deployment to the default or user-specified deploy directory.
+> The default deployment directory is the `_bin` subdirectory in the root directory of
+> the ParaMonte GitHub repository where the install scripts are located.
+
+**optional**. The default value for `value` is `0`.
 
 ### `exampp`
 
 Specifies the library examples postprocessing scripts to run after building the library.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --exampp "example_postprocessing_list"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dexampp="example_postprocessing_list"
     ```
@@ -753,11 +850,11 @@ is the same as the value set for the option `exam`.
 Specifies any additional compile flags passed to
 the Fortran compiler with which the library is built.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --fcf "additional_fortran_compiler_flags"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dfcf="additional_fortran_compiler_flags"
     ```
@@ -778,11 +875,11 @@ separated by semicolon `;` that are added to library default compiler flags.
 Specifies any additional linker flags passed to
 the Fortran linker with which the library object files are linked.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --flf "additional_fortran_linker_flags"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dflf="additional_fortran_linker_flags"
     ```
@@ -800,11 +897,11 @@ separated by semicolon `;` that are added to library default linker flags.
 
 Specifies the preprocessing style of the Fortran source files before building the library.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --fpp "fortran_preprocessing_style"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dfpp="fortran_preprocessing_style"
     ```
@@ -835,14 +932,14 @@ non-portable compiler-specific extensions to the standard Fortran commands and s
 
 ### `fresh`
 
-Specifies the subdirectories of the build and deployment directories 
+Specifies the subdirectories of the build and deployment directories
 that must be deleted before starting the new CMake configuration and build.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --fresh "subdirectories_to_delete"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dfresh="subdirectories_to_delete"
     ```
@@ -858,17 +955,23 @@ filename            | The specified filename in the current build directory will
 
 > This option is simplifies the task of cleaning CMake build directory when library for a given build is being built repeatedly.
 
+> **NOTE**
+> Beware that the specified values for all flags (including `--fresh` are sticky and have to be unset for the next builds, if desired.
+> For example, the value is set to `all`, any subsequent CMake reconfigurations will use this value even if the flag `--fresh` is not specified
+> in the subsequent configurations. This sticky behavior can lead to complete rebuilds of the library, which may be time consuming.
+> To change the sticky behavior, one has to reset the value of `--fresh` explicitly.
+
 **optional**. The default value for `subdirectories_to_delete` is `none`.
 
 ### `G`
 
 Specifies the CMake build generator.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     -G "cmake_build_generator"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -G "cmake_build_generator"
     ```
@@ -881,15 +984,17 @@ Value               | Usage
 `MinGW Makefiles`   | Generates makefiles for use with mingw32-make under a Windows command prompt.
 `MSYS Makefiles`    | Generates makefiles for use with MSYS (Minimal SYStem) make under the MSYS shell.
 `Unix Makefiles`    | Generates standard UNIX makefiles.
+`Ninja`             | Generates a `build.ninja` file into the build tree.
 other               | Any build generator supported by CMake.
 
 > This is a low-level build setting that is automated by the ParaMonte install scripts.
 > This optional flag can be used to enforce a particular CMake build generator when
 > the install scripts fail to identify the right build generator for CMake.
 
+> **WARNING**
 > This build flag **must be explicitly set** when CMake executable is directly invoked.
 
-**optional**. Only when specified for the install scripts. 
+**optional**. Only when specified for the install scripts.
 The default value for `cmake_build_generator` is
 1.  `Unix Makefiles` on Unix systems (macOS, Linux).
 2.  `MSYS Makefiles` on Windows systems within MSYS environments (e.g., MSYS terminal).
@@ -900,11 +1005,11 @@ The default value for `cmake_build_generator` is
 
 Specifies the number parallel threads to be used by the Make software for parallel library build.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     -j "num_parallel_threads"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -j "num_parallel_threads"
     ```
@@ -927,11 +1032,11 @@ where `num_parallel_threads` must be a positive integer.
 
 Specifies the binary name of the output library built.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --libname "desired_paramonte_library_name"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dlibname="desired_paramonte_library_name"
     ```
@@ -946,11 +1051,11 @@ specific name to be used for generating the output library.
 Specifies the list of desired ParaMonte library modules (all source files beginning with `pm_`)
 to compile and add to the final output library file.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --mod "module_list"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dmod="module_list"
     ```
@@ -980,11 +1085,11 @@ and `pm_sampling` when `lang` is set to any other possible value (all other prog
 Specifies whether the Parameterized Derived Types (PDT) interfaces
 of the ParaMonte library should be considered or dropped in the build.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --pdt "pdt_list"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dpdt="pdt_list"
     ```
@@ -1012,11 +1117,11 @@ Value               | Usage
 
 Specifies whether the library should be compiled for performance profiling.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --perfprof "perfprof_list"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dperfprof="perfprof_list"
     ```
@@ -1040,11 +1145,11 @@ Value               | Usage
 
 Specifies whether (designated) procedures should be compiled with `pure` or `impure` attribute.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --purity "purity_type"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dpurity="purity_type"
     ```
@@ -1068,13 +1173,13 @@ otherwise `impure` if `checking` is set to `checked`.
 
 ## TIER-4 ParaMonte library build configuration flags
 
-The ParaMonte TIER-4 build flags set the additional optional arguments that 
-change the behavior of the library at the lowest level by setting the types.  
-These build flags are mostly relevant to the ParaMonte library developers or 
-advanced users who wish to reduce the final library size or supported types.  
+The ParaMonte TIER-4 build flags set the additional optional arguments that
+change the behavior of the library at the lowest level by setting the types.
+These build flags are mostly relevant to the ParaMonte library developers or
+advanced users who wish to reduce the final library size or supported types.
 
-The values of these build options are automatically set by the CMake scripts.  
-Changing the default behavior requires careful attention to the consequences.  
+The values of these build options are automatically set by the CMake scripts.
+Changing the default behavior requires careful attention to the consequences.
 
 The Fortran language 2023 supports five intrinsic types:
 
@@ -1121,11 +1226,11 @@ corresponding constant vectors from the `iso_fortran_env` intrinsic module).
 Specifies a list of `character` kind indices
 for which the ParaMonte library must be built.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --ski "character_kinds_indices"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dski="character_kinds_indices"
     ```
@@ -1153,11 +1258,11 @@ for which the ParaMonte library must be built.
 Specifies any additional linker flags passed to
 the Fortran linker with which the library object files are linked.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --cki "complex_kinds_indices"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dcki="complex_kinds_indices"
     ```
@@ -1192,11 +1297,11 @@ for which the ParaMonte library must be built.
 Specifies any additional linker flags passed to
 the Fortran linker with which the library object files are linked.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --iki "integer_kinds_indices"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Diki="integer_kinds_indices"
     ```
@@ -1229,11 +1334,11 @@ for which the ParaMonte library must be built.
 Specifies any additional linker flags passed to
 the Fortran linker with which the library object files are linked.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --lki "logical_kinds_indices"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Dlki="logical_kinds_indices"
     ```
@@ -1264,11 +1369,11 @@ for which the ParaMonte library must be built.
 Specifies any additional linker flags passed to
 the Fortran linker with which the library object files are linked.
 
-+   Usage (with `install.bat` or `install.sh`)
++   Usage with `install.bat` or `install.sh`:
     ```bash
     --rki "real_kinds_indices"
     ```
-+   Usage (with `cmake` binary executable)
++   Usage with `cmake` binary executable:
     ```cmake
     -Drki="real_kinds_indices"
     ```

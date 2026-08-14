@@ -15,7 +15,7 @@
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 !>  \brief
-!>  This include file contains procedure implementation of [getLinSpace](@ref pm_arraySpace::getLinSpace).
+!>  This include file contains procedure implementation of [pm_arraySpace](@ref pm_arraySpace).
 !>
 !>  \final
 !>
@@ -91,7 +91,7 @@
         !%%%%%%%%%%%%%%%%%%
 
         CHECK_ASSERTION(__LINE__, 0 <= count, SK_"@getLogSpace(): The condition `0 <= count` must hold. count = "//getStr(count))
-        !CHECK_ASSERTION(__LINE__, 0. < base .and. base /= 1., SK_"@getLogSpace(): The condition `0. < base .and. base /= 1.` must hold. base = "//getStr(base))
+        !check_assertion(__LINE__, 0. < base .and. base /= 1., SK_"@getLogSpace(): The condition `0. < base .and. base /= 1.` must hold. base = "//getStr(base))
         if (present(base)) then
             logSpace = base**getLinSpace(logx1, logx2, count, fopen, lopen)
         else
@@ -102,7 +102,7 @@
 #elif   setLogSpace_ENABLED
         !%%%%%%%%%%%%%%%%%%
 
-        !CHECK_ASSERTION(__LINE__, 0. < base .and. base /= 1., SK_"@getLogSpace(): The condition `0. < base .and. base /= 1.` must hold. base = "//getStr(base))
+        !check_assertion(__LINE__, 0. < base .and. base /= 1., SK_"@getLogSpace(): The condition `0. < base .and. base /= 1.` must hold. base = "//getStr(base))
         call setLinSpace(logSpace, logx1, logx2, fopen, lopen)
         if (present(base)) then
             logSpace = base**logSpace

@@ -25,6 +25,7 @@ set(sterile
     pm_array
     pm_bit
     pm_blas
+    #pm_clusPartition
     pm_control
     pm_lapack
     pm_mathConst
@@ -103,6 +104,7 @@ set(grandpa
     pm_arrayMerge
     pm_arrayMinMax
     pm_arrayPad
+    pm_arrayRange
     pm_arrayRank
     pm_arrayRefine
     pm_arrayRemap
@@ -121,7 +123,8 @@ set(grandpa
     pm_arrayVerbose
     pm_batse
     pm_bench
-    pm_clustering
+    pm_clusTest
+    pm_clusKmeans
     pm_complexAbs
     pm_complexCompareAll
     pm_complexCompareAny
@@ -142,7 +145,9 @@ set(grandpa
     pm_distBand
     pm_distBern
     pm_distBeta
+    pm_distBinom
     pm_distCosRaised
+    pm_distChol
     pm_distCov
     pm_distExp
     pm_distExpGamma
@@ -158,6 +163,7 @@ set(grandpa
     pm_distMultiNorm
     pm_distNormShell
     pm_distUnifEll
+    pm_distUnifElls
     pm_distUnifPar
     pm_distNegExp
     pm_distNorm
@@ -165,7 +171,6 @@ set(grandpa
     pm_distPiwiPoweto
     pm_distPower
     pm_distPoweto
-    #pm_distPowetoTapered
     pm_distPois
     pm_distUnif
     pm_distUnifSphere
@@ -183,28 +188,30 @@ set(grandpa
     pm_mathCumPropExp
     pm_mathCumSum
     pm_mathCompare
+    pm_mathDivMul
     pm_mathErf
     pm_mathExp
     pm_mathFactorial
     pm_mathFactoring
+    pm_mathFisher
     pm_mathGamma
+    pm_mathGammaAM
+    pm_mathGammaGil
+    pm_mathGammaNR
     pm_mathLog1p
     pm_mathLogAddExp
     pm_mathLogSubExp
     pm_mathLogSumExp
     pm_mathMinMax
     pm_mathNumSys
-    pm_mathDivMul
-    pm_mathSubAdd
-    pm_polynomial
-    pm_arrayRange
-    pm_mathFisher
     pm_mathRoot
     pm_mathRootTest
+    pm_mathRound
     pm_mathSqrt
+    pm_mathSubAdd
+    pm_mathSum
     pm_matrixMulTri
     pm_mathUnsigned
-    pm_ziggurat
     pm_matrixChol
     pm_matrixClass
     pm_matrixCopy
@@ -223,6 +230,8 @@ set(grandpa
     pm_option
     pm_os
     pm_parallelism
+    pm_polynomial
+   #pm_procPois
     pm_quadPack
     pm_quadRomb
     pm_quadTest
@@ -252,6 +261,7 @@ set(grandpa
     pm_val2logical
     pm_val2real
     pm_val2str
+    pm_ziggurat
     )
 set(paramonte_src_main_fortran_modlist "${paramonte_src_main_fortran_modlist}" "${grandpa}")
 foreach(modname ${grandpa})
@@ -278,18 +288,13 @@ foreach(modname ${resizes})
 endforeach()
 
 #    ${paramonte_src_fortran_main_dir}/EconomicsToolbox_pmod.F90
-#    ${paramonte_src_fortran_main_dir}/pm_processPoisson.F90
+#    ${paramonte_src_fortran_main_dir}/pm_procPois.F90
 #    ${paramonte_src_fortran_main_dir}/pm_histogram.F90
 #    ${paramonte_src_fortran_main_dir}/pm_distMultiNormGrid.F90
 #    ${paramonte_src_fortran_main_dir}/pm_distNormShellMix.F90
 #    ${paramonte_src_fortran_main_dir}/DistMultiNormGenExpGammaMix_pmod.F90
 #    ${paramonte_src_fortran_main_dir}/pm_distMultiSkewNorm.F90
 #    ${paramonte_src_fortran_main_dir}/ClusteredPoint_pmod.F90
-#    ${paramonte_src_fortran_main_dir}/pm_partition.F90
-#    ${paramonte_src_fortran_main_dir}/pm_partition@MaxDen_smod.F90
-#    ${paramonte_src_fortran_main_dir}/pm_partition@MinVol_smod.F90
-#    #${paramonte_src_fortran_main_dir}/PartitionKmeans_pmod.F90
-#    #${paramonte_src_fortran_main_dir}/PartitionVarDen_pmod.F90
 #    #${paramonte_src_fortran_main_dir}/pm_partitionRecursiveMaxDen.F90
 #    #${paramonte_src_fortran_main_dir}/pm_partitionRecursiveMinVol.F90
 #    #${paramonte_src_fortran_main_dir}/pm_partitionMaxDen.F90
@@ -662,6 +667,26 @@ set(paramonte_src_main_c_paths "${paramonte_src_c_main_dir}/pm_sys.c")
 add_library(${libnamec} OBJECT "${paramonte_src_main_c_paths}")
 
 #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# Add the executable for MPI image counts for dynamic languages.
+#:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+#if (MPI_ENABLED)
+#    if (MATHEMATICA_ENABLED OR MATLAB_ENABLED OR PYTHON_ENABLED OR R_ENABLED)
+#        message(NOTICE "${pmattn} Adding the MPI image counter binary for the ${lang} programming language environment: xgetImageStatMPI")
+#        add_executable(xgetImageStatMPI "${paramonte_src_fortran_main_dir}/xgetImageStatMPI.F90")
+#        set_target_properties(xgetImageStatMPI PROPERTIES INSTALL_RPATH "${MPI_Fortran_INCLUDE_DIRS}")
+#        target_include_directories(xgetImageStatMPI PUBLIC ${MPI_Fortran_INCLUDE_PATH})
+#        target_link_libraries(xgetImageStatMPI PUBLIC ${MPI_Fortran_LIBRARIES})
+#        install(TARGETS xgetImageStatMPI
+#                CONFIGURATIONS "${CMAKE_BUILD_TYPE}"
+#                DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+#                RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+#                #RUNTIME_DEPENDENCY_SET pmdeps
+#                )
+#    endif()
+#endif()
+
+#:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # Add the library and compile/link flags.
 #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -734,7 +759,9 @@ if (DLL_ENABLED)
         set_target_properties("${libname}" PROPERTIES INSTALL_RPATH "${rpath_prop}")
     endif()
 
-    #### set up the library-specific compile link flags
+    ####
+    #### Set up the library-specific compile link flags.
+    ####
 
     if(${csid_is_gnu})
 
@@ -878,9 +905,11 @@ if (MPI_ENABLED)
 endif()
 
 if (MATLAB_ENABLED AND Matlab_FOUND)
-    message(NOTICE "${pmattn} Matlab_INCLUDE_DIRS=${Matlab_INCLUDE_DIRS}")
+    message(NOTICE "${pmattn} ${BoldYellow}Matlab_INCLUDE_DIRS=${Matlab_INCLUDE_DIRS}${ColorReset}")
     target_include_directories("${libname}" PUBLIC "${Matlab_INCLUDE_DIRS}")
-    #target_link_libraries("${libname}" PUBLIC "${Matlab_MEX_LIBRARY}" "${Matlab_MX_LIBRARY}")# "${Matlab_LIBRARIES}"
+    target_link_libraries("${libname}" PUBLIC "${Matlab_MEX_LIBRARY}" "${Matlab_MX_LIBRARY}")# "${Matlab_LIBRARIES}"
+    message(NOTICE "${pmattn} ${BoldYellow}Matlab_MEX_LIBRARY=${Matlab_MEX_LIBRARY}${ColorReset}")
+    message(NOTICE "${pmattn} ${BoldYellow}Matlab_MX_LIBRARY=${Matlab_MX_LIBRARY}${ColorReset}")
     #if (NOT CAF_ENABLED AND NOT MPI_ENABLED)
         #allow matlab console print only in serial MATLAB applications.
         target_compile_definitions("${libname}" PUBLIC "MEXPRINT_ENABLED=1")
@@ -1024,6 +1053,8 @@ if (DLL_ENABLED AND DEPS_ENABLED)
                 LIBRARIES ${LIBRARY}
                 RESOLVED_DEPENDENCIES_VAR resolved_deps
                 UNRESOLVED_DEPENDENCIES_VAR unresolved_deps
+                CONFLICTING_DEPENDENCIES_PREFIX colflicting
+                POST_EXCLUDE_REGEXES ".*MATLAB.*" ".*matlab.*"
                 DIRECTORIES "${ilibdir}"
             )
             foreach(FILE ${resolved_deps})
@@ -1034,11 +1065,16 @@ if (DLL_ENABLED AND DEPS_ENABLED)
             foreach(FILE ${unresolved_deps})
                 message(NOTICE "${pmwarn} Unresolved dependency from ${LIBRARY}: ${FILE}")
             endforeach()
+            foreach(FILE ${colflicting_FILENAMES})
+                message(NOTICE "${pmwarn} Conflicting dependency: ${FILE}")
+            endforeach()
         endfunction()
         file(GET_RUNTIME_DEPENDENCIES
             LIBRARIES $<TARGET_SONAME_FILE:libparamonte>
+            CONFLICTING_DEPENDENCIES_PREFIX colflicting
             UNRESOLVED_DEPENDENCIES_VAR unresolved_deps
             RESOLVED_DEPENDENCIES_VAR resolved_deps
+            POST_EXCLUDE_REGEXES ".*MATLAB.*" ".*matlab.*"
             DIRECTORIES "${ilibdir}"
         )
         foreach(FILE ${resolved_deps})
@@ -1046,6 +1082,9 @@ if (DLL_ENABLED AND DEPS_ENABLED)
         endforeach()
         foreach(FILE ${unresolved_deps})
             message(NOTICE "${pmwarn} Unresolved dependency: ${FILE}")
+        endforeach()
+        foreach(FILE ${colflicting_FILENAMES})
+            message(NOTICE "${pmwarn} Conflicting dependency: ${FILE}")
         endforeach()
     ]])
 endif()
@@ -1362,7 +1401,7 @@ endif()
 #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 #if ("${ddir}" STREQUAL "")
-#    set(ddir "${CMAKE_SOURCE_DIR}/bin")
+#    set(ddir "${CMAKE_SOURCE_DIR}/_bin")
 #    message(NOTICE "${pmattn} Unspecified ParaMonte binary install directory `ddir`.")
 #    message(NOTICE "${pmattn} Defining and generating the ParaMonte build directory: ddir=\"${ddir}\"")
 #else()

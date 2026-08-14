@@ -24,7 +24,7 @@ for kind in ["warp", "rotation"]:
         spacing = 0.015
 
         # start with a square Figure
-        fig = plt.figure(figsize=(8, 8))
+        fig = plt.figure(figsize = (8, 8))
 
         plt.rcParams.update({'font.size': fontsize - 2})
         ax = fig.add_axes([left, bottom, width, height]) # scatter plot
@@ -42,17 +42,17 @@ for kind in ["warp", "rotation"]:
 
         # the scatter plot:
         ax.scatter  ( df.values[:, 0]
-                    , df.values[:,1]
+                    , df.values[:, 1]
                     , s = 8
                     , zorder = 1000
                     )
 
         ax_histx.hist(df.values[:, 0], bins = 50, zorder = 1000)
-        ax_histy.hist(df.values[:,1], bins = 50, orientation = "horizontal", zorder= 1000)
+        ax_histy.hist(df.values[:, 1], bins = 50, orientation = "horizontal", zorder = 1000)
 
         ax.set_xlabel("X", fontsize = 17)
         ax.set_ylabel("Y", fontsize = 17)
         ax.legend([file.split(".")[-2]], fontsize = fontsize)
 
-        plt.tight_layout()
+        #plt.tight_layout()
         plt.savefig(file.replace(".txt",".png"))

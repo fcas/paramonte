@@ -321,7 +321,7 @@ fi
 
 #paramonte_src_fortran_dir="${paramonte_dir}/src/fortran"; export paramonte_src_fortran_dir
 #paramonte_src_fortran_test_dir="${paramonte_dir}/src/fortran/test"; export paramonte_src_fortran_test_dir
-ParaMonte_ROOT_BLD_DIR="${paramonte_dir}/bld"; export ParaMonte_ROOT_BLD_DIR
+ParaMonte_ROOT_BLD_DIR="${paramonte_dir}/_bld"; export ParaMonte_ROOT_BLD_DIR
 if ! [ -d "${ParaMonte_ROOT_BLD_DIR}" ]; then mkdir -p "${ParaMonte_ROOT_BLD_DIR}"; fi
 
 #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -370,6 +370,11 @@ fi
 os="${os//$'\r'/}" # Remove all carriage returns.
 os="${os//$'\n'/}" # Remove all newlines.
 export os
+
+unset iswin
+if [ "${os}" = "mingw" ] || [ "${os}" = "msys" ] || [ "${os}" = "cygwin" ]; then
+    iswin="true"
+fi
 
 # uname_os_FULL="$(uname -a)"
 # if [[ "$uname_os_FULL" =~ .*"Microsoft".* && "$uname_os_FULL" =~ .*"Linux".* ]]; then
@@ -535,7 +540,7 @@ else
         cmakeInstallEnabled=true
         echo >&2 "${pmwarn} Failed to detect a ParaMonte-compatible installation of cmake."
     else
-        echo >&2 "${pmnote} The current cmake installation is ParaMonte compatible."
+        echo >&2 "${BoldGreen} The current CMake installation is ParaMonte compatible.${ResetColor}"
     fi
 fi
 #export cmakeInstallEnabled
@@ -621,7 +626,8 @@ getCSVS() {
                 }
             fi
             if [ "${versionExtractionFailed}" = "true" ]; then
-                echo >&2 "${pmwarn} Failed to fetch the compiler suite name and version. Proceeding with no guarantee of build success..."
+                echo >&2 "${pmwarn} Failed to fetch the compiler suite name and version."
+                echo >&2 "${pmwarn} Proceeding with no guarantee of build success..."
             fi
             #echo >&2 "${pmnote} Changing directory to: ${paramonte_dir}"
             cd "${paramonte_dir}"

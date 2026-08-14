@@ -1,67 +1,79 @@
+%>  \brief
+%>  This is the base class for generating objects
+%>  that contain the contents of a given file.<br>
+%>
+%>  \details
+%>  This class is meant to be primarily internally used
+%>  by the ParaMonte library routines (e.g., samplers).<br>
+%>
+%>  \devnote
+%>  The ``handle`` superclass of this class
+%>  is critical for the class functionality.<br>
+%>  See the documentation of the class constructor.<br>
+%>
+%>  \note
+%>  See below for information on class attributes (properties).<br>
+%>
+%>  \note
+%>  See below for information on the methods.<br>
+%>
+%>  \final{FileContents}
+%>
+%>  \author
+%>  \JoshuaOsborne, May 21 2024, 6:03 PM, University of Texas at Arlington<br>
+%>  \FatemehBagheri, May 20 2024, 1:25 PM, NASA Goddard Space Flight Center (GSFC), Washington, D.C.<br>
+%>  \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin<br>
 classdef FileContents < pm.matlab.Handle
-    %
-    %   This is the base class for generating objects
-    %   that contain the contents of a given file.
-    %
-    %   This class is meant to be primarily internally used
-    %   by the ParaMonte library routines (e.g., samplers).
-    %
-    %   \devnote
-    %
-    %       The ``handle`` superclass of this class
-    %       is critical for the class functionality.
-    %
-    %   Parameters
-    %   ----------
-    %
-    %       See the documentation of the class constructor.
-    %
-    %   Attributes
-    %   ----------
-    %
-    %       See below for information on the attributes (properties).
-    %
-    %   Methods
-    %   -------
-    %
-    %       See below for information on the methods.
-    %
-    %   Returns
-    %   -------
-    %
-    %       An object of class pm.io.FileContents.
-    %
-    %   Interface
-    %   ---------
-    %
-    %       contents = pm.io.FileContents(file)
-    %       contents = pm.io.FileContents(file, [])
-    %       contents = pm.io.FileContents(file, silent)
-    %
-    %   LICENSE
-    %   -------
-    %
-    %       https://github.com/cdslaborg/paramonte/blob/main/LICENSE.md
-    %
+
     properties(Access = public)
-        %
-        %   silent
-        %
-        %       The scalar MATLAB logical (Boolean) indicator which is ``false`` by default.
-        %       If it is set to ``true``, it will silence all output postprocessing messages.
-        %
+        %>
+        %>  ``silent``
+        %>
+        %>  The scalar MATLAB logical (Boolean) indicator which is ``false`` by default.<br>
+        %>  If it is set to ``true``, it will silence all output postprocessing messages.<br>
+        %>
         silent = false;
-        %
-        %   file
-        %
-        %       The scalar MATLAB string containing the path to the file whose contents are read.
-        %
+        %>
+        %>  ``file``
+        %>
+        %>  The scalar MATLAB string containing the path to the file whose contents are read.<br>
+        %>
         file = "";
     end
 
     properties(Hidden)
+        %>
+        %>  ``weblinks``
+        %>
+        %>  The scalar ``Hidden`` MATLAB ``struct`` returned by [pm.lib.weblinks](@ref weblinks)
+        %>  used internally for displaying the ParaMonte library web links.<br>
+        %>
+        %>  \warning
+        %>  This is an internal ``Hidden`` class attribute
+        %>  that is inaccessible to the end users.<br>
+        %>
         weblinks;
+        %>
+        %>  ``spinner``
+        %>
+        %>  The scalar ``Hidden`` MATLAB object of class [pm.timing.Spinner](@ref Spinner)
+        %>  used internally for displaying the progress in file contents processing.<br>
+        %>
+        %>  \warning
+        %>  This is an internal ``Hidden`` class attribute
+        %>  that is inaccessible to the end users.<br>
+        %>
         spinner;
+        %>
+        %>  ``timer``
+        %>
+        %>  The scalar ``Hidden`` MATLAB object of class [pm.timing.Timer](@ref Timer)
+        %>  used internally for displaying the timing of the progress in file contents processing.<br>
+        %>
+        %>  \warning
+        %>  This is an internal ``Hidden`` class attribute
+        %>  that is inaccessible to the end users.<br>
+        %>
         timer;
     end
 
@@ -70,49 +82,41 @@ classdef FileContents < pm.matlab.Handle
 
     methods(Access = public)
 
+        %>  \brief
+        %>  Return a scalar object of class [pm.io.FileContents](@ref FileContents).
+        %>
+        %>  \details
+        %>  This is the constructor of the class [pm.io.FileContents](@ref FileContents).<br>
+        %>  It merely serves as the blueprint for the IO subclasses
+        %>  accessible to the end users.<br>
+        %>
+        %>  \param[in]  file    :   The input scalar MATLAB string
+        %>                          containing the path to an external file.
+        %>  \param[in]  silent  :   The input scalar MATLAB logical.<br>
+        %>                          If ``true``, all descriptive messages will be suppressed.<br>
+        %>                          Setting this option to ``false`` is particularly
+        %>                          useful in MPI-parallel simulations.<br>
+        %>                          (**optional**, default = ``false``)
+        %>
+        %>  \return
+        %>  ``self``            :   The output scalar object of class [pm.io.FileContents](@ref FileContents).
+        %>
+        %>  \interface{FileContents}
+        %>  \code{.m}
+        %>
+        %>      contents = pm.io.FileContents(file)
+        %>      contents = pm.io.FileContents(file, [])
+        %>      contents = pm.io.FileContents(file, silent)
+        %>
+        %>  \endcode
+        %>
+        %>  \final{FileContents}
+        %>
+        %>  \author
+        %>  \JoshuaOsborne, May 21 2024, 6:05 PM, University of Texas at Arlington<br>
+        %>  \FatemehBagheri, May 20 2024, 1:25 PM, NASA Goddard Space Flight Center (GSFC), Washington, D.C.<br>
+        %>  \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin<br>
         function self = FileContents(file, silent)
-            %
-            %   Return a scalar object of class ``pm.io.FileContents``.
-            %
-            %   This is the constructor of the class ``pm.io.FileContents``.
-            %   It merely serves as the blueprint for the IO subclasses
-            %   accessible to the end users.
-            %
-            %   Parameters
-            %   ----------
-            %
-            %       file
-            %
-            %           The input scalar MATLAB string
-            %           containing the path to an external file.
-            %
-            %       silent
-            %
-            %           The input scalar MATLAB logical.
-            %           if ``true``, all descriptive messages will be suppressed.
-            %           Setting this option to ``false`` is particularly useful
-            %           in MPI-parallel simulations.
-            %           (**optional**, default = ``false``)
-            %
-            %   Returns
-            %   -------
-            %
-            %       self
-            %
-            %           The output scalar object of class ``pm.io.FileContents``.
-            %
-            %   Interface
-            %   ---------
-            %
-            %       contents = pm.io.FileContents(file)
-            %       contents = pm.io.FileContents(file, [])
-            %       contents = pm.io.FileContents(file, silent)
-            %
-            %   LICENSE
-            %   -------
-            %
-            %       https://github.com/cdslaborg/paramonte/blob/main/LICENSE.md
-            %
             if  nargin < 2
                 silent = [];
             end
@@ -139,36 +143,113 @@ classdef FileContents < pm.matlab.Handle
 
     methods(Access = public, Hidden)
 
+        %>  \brief
+        %>  Display the input warning message about the line
+        %>  number ``line`` of the file whose contents are read and return nothing.
+        %>
+        %>  \details
+        %>  This is a ``Hidden`` method of the class [pm.io.FileContents](@ref FileContents).<br>
+        %>  The messaging within this routine occurs only if the ``silent`` attribute of the parent object
+        %>  is set to ``false`` at the time of constructing the parent object of class [pm.io.FileContents](@ref FileContents).<br>
+        %>
+        %>  \param[inout]   self    :   The **implicitly-passed** input argument representing the parent object of the method.<br>
+        %>  \param[in]      line    :   The input scalar MATLAB string or whole number,
+        %>                              representing the line number within the file about which the warning message should be printed.<br>
+        %>                              (**optional**, default = ``"UNKNOWN"``)
+        %>  \param[in]      msg     :   The input scalar MATLAB string containing a message to display on the MATLAB console.<br>
+        %>                              (**optional**, default = ``"done in " + sprintf("%.6f", string(self.timer.del())) + " seconds."``)
+        %>
+        %>  \interface{warn}
+        %>  \code{.m}
+        %>
+        %>      fc = pm.io.FileContents(file)
+        %>      fc.warn(line, msg)
+        %>      fc.warn([], msg)
+        %>      fc.warn([], [])
+        %>      fc.warn()
+        %>
+        %>  \endcode
+        %>
+        %>  \final{warn}
+        %>
+        %>  \author
+        %>  \JoshuaOsborne, May 21 2024, 6:07 PM, University of Texas at Arlington<br>
+        %>  \FatemehBagheri, May 20 2024, 1:25 PM, NASA Goddard Space Flight Center (GSFC), Washington, D.C.<br>
+        %>  \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin<br>
         function warn(self, line, msg)
-            if nargin < 3
-                msg = "";
-            else
-                msg = string(msg) + newline;
+            if ~self.silent
+                if  nargin < 3
+                    msg = [];
+                end
+                if  nargin < 2
+                    line = [];
+                end
+                if ~isempty(msg)
+                    msg = string(msg) + newline;
+                else
+                    msg = "";
+                end
+                if ~isempty(line)
+                    line = string(line);
+                else
+                    line = "UNKNOWN";
+                end
+                warning ( newline ...
+                        + "The structure of the input file:" + newline ...
+                        + newline ...
+                        + pm.io.tab() + self.file + newline ...
+                        + newline ...
+                        + "appears compromised around line: " + line + newline ...
+                        + msg ...
+                        + "The file parsing will proceed with no guarantee of success." + newline ...
+                        + newline ...
+                        );
             end
-            if nargin < 2
-                line = "UNKNOWN";
-            else
-                line = string(line);
-            end
-            warning ( newline ...
-                    + "The structure of the input file:" + newline ...
-                    + newline ...
-                    + pm.io.tab + self.file + newline ...
-                    + newline ...
-                    + "appears compromised around line: " + line + newline ...
-                    + msg ...
-                    + "The file parsing will proceed with no guarantee of success." + newline ...
-                    + newline ...
-                    );
         end
 
+        %>  \brief
+        %>  Display the input final message and return nothing.
+        %>
+        %>  \details
+        %>  This is a ``Hidden`` method of the class [pm.io.FileContents](@ref FileContents).<br>
+        %>
+        %>  \param[inout]   self    :   The **implicitly-passed** input/output argument representing the parent object of the method.<br>
+        %>  \param[in]      msg     :   The input scalar MATLAB string containing a
+        %>                              message to display on the MATLAB console.<br>
+        %>                              (**optional**, default = ``"done in " + sprintf("%.6f", string(self.timer.del())) + " seconds."``)
+        %>  \param[in]      advance :   The input scalar MATLAB ``logical``.<br>
+        %>                              If ``true``, an end of line character will be added at the end of the printed message.<br>
+        %>                              (**optional**, default = ``true``)
+        %>
+        %>  \interface{checkpoint}
+        %>  \code{.m}
+        %>
+        %>      fc = pm.io.FileContents(file)
+        %>      fc.checkpoint(msg, advance)
+        %>      fc.checkpoint([], advance)
+        %>      fc.checkpoint([], [])
+        %>      fc.checkpoint(msg)
+        %>      fc.checkpoint([])
+        %>      fc.checkpoint()
+        %>
+        %>  \endcode
+        %>
+        %>  \final{checkpoint}
+        %>
+        %>  \author
+        %>  \JoshuaOsborne, May 21 2024, 6:07 PM, University of Texas at Arlington<br>
+        %>  \FatemehBagheri, May 20 2024, 1:25 PM, NASA Goddard Space Flight Center (GSFC), Washington, D.C.<br>
+        %>  \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin<br>
         function checkpoint(self, msg, advance)
             if ~self.silent
-                if nargin < 3
-                    advance = true;
+                if  nargin < 3
+                    advance = [];
                 end
                 if  nargin < 2
                     msg = [];
+                end
+                if  isempty(advance)
+                    advance = true;
                 end
                 if  isempty(msg)
                     msg = "done in " + sprintf("%.6f", string(self.timer.del())) + " seconds.";
@@ -181,46 +262,42 @@ classdef FileContents < pm.matlab.Handle
             end
         end
 
-        function val = getval(self, field)
-            %
-            %   Return a copy of the specified ``field`` (component)
-            %   of the parent object of class ``pm.io.FileContents``.
-            %
-            %   This method is an unfortunate result of the lack references in MATLAB.
-            %   The output of this method is used by the visualization methods of
-            %   this class to repeatedly sync the internal copy of ``df`` with
-            %   the original ``df`` component of the parent object.
-            %
-            %   Parameters
-            %   ----------
-            %
-            %       field
-            %
-            %           The input scalar MATLAB string containing the
-            %           name of a field (component/attribute) of the parent
-            %           object whose value will have to be returned.
-            %
-            %   Returns
-            %   -------
-            %
-            %       val
-            %
-            %           The output object containing the value of the
-            %           specified ``field`` of the parent object.
-            %
-            %   Interface
-            %   ---------
-            %
-            %       fc = pm.io.FileContents(field)
-            %       val = fc.getval(field)
-            %
-            %   LICENSE
-            %   -------
-            %
-            %       https://github.com/cdslaborg/paramonte/blob/main/LICENSE.md
-            %
-            val = self.(field);
-        end
+        %%>  \brief
+        %%>  Return a copy of the specified ``field`` (component)
+        %%>  of the parent object of class [pm.io.FileContents](@ref FileContents).
+        %%>
+        %%>  \details
+        %%>  This method is an unfortunate result of the lack references in MATLAB.<br>
+        %%>  The output of this method is used by the visualization methods of
+        %%>  this class to repeatedly sync the internal copy of ``df`` with
+        %%>  the original ``df`` component of the parent object.
+        %%>
+        %%>  \param[inout]   self    :   The **implicitly-passed** input argument representing the parent object of the method.<br>
+        %%>  \param[in]      field   :   The input scalar MATLAB string containing the
+        %%>                              name of a field (component/attribute) of the parent
+        %%>                              object whose value will have to be returned.<br>
+        %%>
+        %%>  \return
+        %%>  ``val``                 :   The output object containing the value of the
+        %%>                              specified ``field`` of the parent object.<br>
+        %%>
+        %%>  \interface{getVal}
+        %%>  \code{.m}
+        %%>
+        %%>      fc = pm.io.FileContents(field)
+        %%>      val = fc.getVal(field)
+        %%>
+        %%>  \endcode
+        %%>
+        %%>  \final{getVal}
+        %%>
+        %%>  \author
+        %%>  \JoshuaOsborne, May 21 2024, 6:07 PM, University of Texas at Arlington<br>
+        %%>  \FatemehBagheri, May 20 2024, 1:25 PM, NASA Goddard Space Flight Center (GSFC), Washington, D.C.<br>
+        %%>  \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin<br>
+        %function val = getVal(self, field)
+        %    val = self.(field);
+        %end
 
     end
 

@@ -39,7 +39,6 @@
 #       make example
 #       make benchmark
 
-
 cmake_minimum_required(VERSION 3.18)
 
 #cmake_policy(VERSION 3.10...3.23)
@@ -168,6 +167,14 @@ if (TRUE)
       string(REGEX REPLACE "\n" ";" ${lineList} "${${lineList}}")
     endmacro()
 
+endif()
+
+#:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# Set the default for development mode environment.
+#:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+if (NOT DEFINED dev_enabled)
+    set(dev_enabled 0)
 endif()
 
 #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -320,7 +327,7 @@ if (TRUE)
     #if (DEFINED bdir)
     #    message(NOTICE "${pmattn} User-specified ParaMonte build directory detected. bdir=\"${bdir}\"")
     #else()
-    #    set(bdir "${CMAKE_SOURCE_DIR}/bld/${os}/${arch}/${csid}/${CMAKE_Fortran_COMPILER_VERSION}/${build}/${lib}/${mem}/${par}/${lang}")
+    #    set(bdir "${CMAKE_SOURCE_DIR}/_bld/${os}/${arch}/${csid}/${CMAKE_Fortran_COMPILER_VERSION}/${build}/${lib}/${mem}/${par}/${lang}")
     #    message(NOTICE "${pmattn} Defining and generating the ParaMonte build directory: bdir=\"${bdir}\"")
     #    set(ENV{bdir} "${bdir}")
     #    #set(paramonte_bld_dir "${CMAKE_BINARY_DIR}/${csid}/${CMAKE_Fortran_COMPILER_VERSION}/${CMAKE_BUILD_TYPE}/${LTYPE}/${PARALLELISM_DIR}")
@@ -426,7 +433,7 @@ if ("${test}" STREQUAL "all")
                 "${pmwarn} Resetting `mod` to `all`...\n"
                 "\n"
                 )
-        set(mod "all" CACHE "modules to compiler." FORCE)
+        set(mod "all" CACHE STRING "modules to compiler." FORCE)
     endif()
 endif()
 
@@ -757,7 +764,7 @@ if (TRUE)
     set(R_ENABLED 0)
     set(lang_is_dynamic 1)
     string(TOLOWER "${lang}" lang)
-    if ("${lang}" STREQUAL "c")
+    if ("${lang}" STREQUAL "c" OR "${lang}" STREQUAL "C")
         set(lang_is_dynamic 0)
         set(lang_ext ".c")
         set(C_ENABLED 1)
@@ -978,7 +985,7 @@ if (TRUE)
     if(DEFINED purity)
         message(NOTICE "${pmattn} purity=${purity}")
         string(TOLOWER "${purity}" purity)
-        if("${purity}" STREQUAL "purity")
+        if("${purity}" STREQUAL "impure")
             add_compile_definitions("PURE=impure")
         elseif("${purity}" STREQUAL "pure")
             add_compile_definitions("PURE=pure")
@@ -1192,10 +1199,13 @@ if (TRUE)
     add_compile_definitions("MPI_ENABLED=${MPI_ENABLED}")
     add_compile_definitions("OMP_ENABLED=${OMP_ENABLED}")
 endif()
-if (${csid_is_intel} AND ${MPI_ENABLED})
-    set(MPI_Fortran_COMPILER_FLAGS "-static_mpi")
-    set(MPI_Fortran_LINK_FLAGS "-static_mpi")
-endif()
+
+#if (${csid_is_intel} AND ${MPI_ENABLED})
+#    #set(MPI_LINK_FLAGS "${MPI_LINK_FLAGS}" "-static_mpi")
+#    set(MPI_COMPILER_FLAGS "${MPI_COMPILER_FLAGS}" "-static_mpi")
+#    set(MPI_Fortran_LINK_FLAGS "${MPI_Fortran_LINK_FLAGS}" "-static_mpi")
+#    set(MPI_Fortran_COMPILE_OPTIONS "${MPI_Fortran_COMPILE_OPTIONS}" "-static_mpi")
+#endif()
 
 #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # Determine the supported types kinds by the specified Fortran compiler.
@@ -1259,8 +1269,6 @@ if (TRUE)
                     "${pmfatal} Allowed values:\n"
                     "\n"
                     "${pmfatal} none: Source files will not be preprocessed.\n"
-                    "${pmfatal} gnu: Source files will be preprocessed according to the GNU Compiler syntax and toolset.\n"
-                    "${pmfatal} intel: Source files will be preprocessed according to the Intel Compiler syntax and toolset.\n"
                     "${pmfatal} generic: Source files will be preprocessed assuming a generic Compiler syntax and toolset.\n"
                     "${pmfatal} default: Source files will be preprocessed assuming the default Compiler syntax and toolset.\n"
                     "\n"
@@ -1395,13 +1403,14 @@ endif()
 #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 if (MATLAB_ENABLED)
-    if (NOT "${matlabdir}" STREQUAL "")
-        message(NOTICE "${pmattn} Searching for MATLAB in the specified directory: ${matlabdir}")
-        set(Matlab_ROOT_DIR "${matlabdir}")
+    if ("${matlabroot}" STREQUAL "")
+        message(NOTICE "${pmattn} ${BoldYellow}Searching for MATLAB...${ColorReset}")
     else()
-        message(NOTICE "${pmattn} Searching for MATLAB...")
+        set(Matlab_ROOT "${matlabroot}")
+        set(Matlab_ROOT_DIR "${matlabroot}")
+        message(NOTICE "${pmattn} Searching for MATLAB in the specified installation root directory: ${matlabroot}")
     endif()
-    message(NOTICE "${pmattn} Sit back and relax...this search may take a few minutes...")
+    message(NOTICE "${pmattn} ${BoldGreen}Sit back and relax...this search may take a few minutes...${ColorReset}")
     find_package(Matlab)
     if (NOT Matlab_FOUND)
         message(WARNING
@@ -1411,15 +1420,15 @@ if (MATLAB_ENABLED)
                 "${pmwarn} If you believe MATLAB exists on your system, specify the MATLAB directory containing\n"
                 "${pmwarn} the target version of MATLAB to the ParaMonte build script via the command line argument:\n"
                 "${pmwarn} \n"
-                "${pmwarn}      install.sh --matlabdir path_to_matlab_root_directory\n"
+                "${pmwarn}      install.sh --lang matlab --matlabroot path_to_matlab_root_directory\n"
                 "${pmwarn} \n"
                 "${pmwarn} or if you are calling CMake command directly, specify the path to the directory\n"
-                "${pmwarn} by defining either `matlabdir` or `Matlab_ROOT_DIR` on the CMake command line:\n"
+                "${pmwarn} by defining either `matlabroot` or `Matlab_ROOT_DIR` on the CMake command line:\n"
                 "${pmwarn} \n"
-                "${pmwarn}      cmake -Dmatlabdir=path_to_matlab_root_directory\n"
+                "${pmwarn}      cmake -Dlang=matlab -Dmatlabroot=path_to_matlab_root_directory\n"
                 "${pmwarn} \n"
                 "${pmwarn} The MATLAB root directory is the directory that is returned by the MATLAB command `matlabroot`.\n"
-                "${pmwarn} An example of the MATLAB root directory (on Windows) is 'C:\Program Files\MATLAB\R2017b'.\n"
+                "${pmwarn} An example of the MATLAB root directory (on Windows) is 'C:\\Program Files\\MATLAB\\R2017b'.\n"
                 "${pmwarn} PROCEEDING WITHOUT COMPILING MEX FILES AND MATLAB DEPENDENCIES..."
                 )
     endif()
@@ -1583,7 +1592,14 @@ if (MATLAB_ENABLED)
     endif()
     set(paramonte_src_matlab_xrc_dir "${paramonte_src_matlab_dir}/xrc")
     message(NOTICE "${pmattn} paramonte_src_matlab_xrc_dir: ${paramonte_src_matlab_xrc_dir}")
-    add_subdirectory("${paramonte_src_matlab_xrc_dir}" "${paramonte_bld_xrc_dir}")
+    if (NOT WIN32)
+        #### \todo
+        #### \pvhigh
+        #### The above WIN32 fence must be removed as soon as the MEX compilation bug in the CMake intrinsic module FindMatlab.cmake is resolved.
+        #### Note that this bug does not prevent MEX compilation, but only shows up as a runtime error in MATLAB session like "missing gateway function...".
+        #### More information about this bug can be found here: https://gitlab.kitware.com/cmake/cmake/-/issues/25068#note_1453147
+        add_subdirectory("${paramonte_src_matlab_xrc_dir}" "${paramonte_bld_xrc_dir}")
+    endif()
 endif()
 
 #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -1721,24 +1737,44 @@ if (TRUE)
     add_custom_target(copyFileCHANGES COMMAND ${CMAKE_COMMAND} -E copy "${origin}" "${destin}")
     add_dependencies(package copyFileCHANGES)
 
-    #   VERSION
+    #   VERSION generic
 
-    set(origin "${paramonte_src_${lang}_dir}/VERSION.md")
-    set(destin "${paramonte_bld_pkg_dir}/VERSION.md")
+    set(origin "${paramonte_dir}/VERSION.md")
+    set(destin "${paramonte_bld_pkg_dir}/VERSION.generic.md")
     message(NOTICE  "${pmattn} Setting the rule for copying the paramonte::${lang} library VERSION.md file to the package directory...\n"
                     "${pmattn}      - from: ${origin}\n"
                     "${pmattn}      -   to: ${destin}")
-    add_custom_target(copyFileVERSION COMMAND ${CMAKE_COMMAND} -E copy "${origin}" "${destin}")
-    add_dependencies(package copyFileVERSION)
+    add_custom_target(copyFileVersionGeneric COMMAND ${CMAKE_COMMAND} -E copy "${origin}" "${destin}")
+    add_dependencies(package copyFileVersionGeneric)
+
+    #   VERSION language
+
+    set(origin "${paramonte_src_${lang}_dir}/VERSION.md")
+    set(destin "${paramonte_bld_pkg_dir}/VERSION.${lang}.md")
+    message(NOTICE  "${pmattn} Setting the rule for copying the paramonte::${lang} library VERSION.md file to the package directory...\n"
+                    "${pmattn}      - from: ${origin}\n"
+                    "${pmattn}      -   to: ${destin}")
+    add_custom_target(copyFileVersionLang COMMAND ${CMAKE_COMMAND} -E copy "${origin}" "${destin}")
+    add_dependencies(package copyFileVersionLang)
 
     if ("${lang}" STREQUAL "julia" OR "${lang}" STREQUAL "matlab" OR "${lang}" STREQUAL "python" OR "${lang}" STREQUAL "r")
+
         set(origin "${paramonte_dir}/VERSION.md")
-        set(destin "${paramonte_bld_pkg_paramonte_dir}/auxil/VERSION.md")
+        set(destin "${paramonte_bld_pkg_paramonte_dir}/auxil/VERSION.generic.md")
         message(NOTICE  "${pmattn} Setting the rule for copying the paramonte::${lang} library VERSION.md file to the package directory...\n"
                         "${pmattn}      - from: ${origin}\n"
                         "${pmattn}      -   to: ${destin}")
-        add_custom_target(copyFileAuxilVERSION COMMAND ${CMAKE_COMMAND} -E copy "${origin}" "${destin}")
-        add_dependencies(package copyFileAuxilVERSION)
+        add_custom_target(copyFileVersionGenericAuxil COMMAND ${CMAKE_COMMAND} -E copy "${origin}" "${destin}")
+        add_dependencies(package copyFileVersionGenericAuxil)
+
+        set(origin "${paramonte_src_${lang}_dir}/VERSION.md")
+        set(destin "${paramonte_bld_pkg_paramonte_dir}/auxil/VERSION.${lang}.md")
+        message(NOTICE  "${pmattn} Setting the rule for copying the paramonte::${lang} library VERSION.md file to the package directory...\n"
+                        "${pmattn}      - from: ${origin}\n"
+                        "${pmattn}      -   to: ${destin}")
+        add_custom_target(copyFileVersionLangAuxil COMMAND ${CMAKE_COMMAND} -E copy ${origin} "${destin}")
+        add_dependencies(package copyFileVersionLangAuxil)
+
     endif()
 
     # Copy examples/benchmarks folder to the package folder.
@@ -1776,30 +1812,35 @@ endif()
 if (DEFINED ddir)
     set(paramonte_bin_dir "${ddir}")
 else()
-    set(paramonte_bin_dir "${paramonte_dir}/bin")
+    set(paramonte_bin_dir "${paramonte_dir}/_bin")
 endif()
 
 foreach(fitem ${fresh})
     if ("${fitem}" STREQUAL "ddir" OR "${fitem}" STREQUAL "all")
         message(NOTICE "${pmattn} Purging the entire ParaMonte library deploy directory: \"${paramonte_bin_dir}/\"")
-        file(REMOVE_RECURSE "${paramonte_bin_dir}/")
+        file(REMOVE_RECURSE "${paramonte_bin_dir}/${libname}*")
+        file(REMOVE_RECURSE "${paramonte_bin_dir}/${libname}")
         break()
     endif()
 endforeach()
 
-# Copy the package to the binary installation directory.
+####
+#### Copy the package to the binary installation directory.
+####
 
 set(origin "${paramonte_bld_pkg_dir}/")
 set(destin "${paramonte_bin_dir}/${binname}")
-foreach(fitem ${fresh})
-    if ("${fitem}" STREQUAL "deploy" OR "${fitem}" STREQUAL "all")
-        message(NOTICE "${pmattn} Purging the current ParaMonte library deploy directory: \"${destin}/\"")
-        file(REMOVE_RECURSE "${destin}/")
-        break()
-    endif()
-endforeach()
+if (NOT ${dev_enabled})
+    foreach(fitem ${fresh})
+        if ("${fitem}" STREQUAL "deploy" OR "${fitem}" STREQUAL "all")
+            message(NOTICE "${pmattn} Purging the current ParaMonte library deploy directory: \"${destin}/\"")
+            file(REMOVE_RECURSE "${destin}/")
+            break()
+        endif()
+    endforeach()
+endif()
 
-if (NOT ${codecov_enabled})
+if (NOT ${codecov_enabled} AND NOT ${dev_enabled})
     message(NOTICE  "${pmattn} Setting the rule for copying the paramonte::${lang} library package to the final binary installation directory...\n"
                     "${pmattn}      - from: ${origin}\n"
                     "${pmattn}      -   to: ${destin}")
@@ -1811,7 +1852,7 @@ if (NOT ${codecov_enabled})
         add_dependencies(deploy makeBinDir) # ensure the folder is created before deployment.
     endif()
 else()
-    message(NOTICE  "${pmattn} Skipping the rule for copying the paramonte::${lang} library package to the final binary installation directory...")
+    message(NOTICE "${pmattn} Skipping the rule for copying the paramonte::${lang} library package to the final binary installation directory...")
     add_custom_target(deploy)
 endif()
 add_dependencies(deploy package)
@@ -1939,17 +1980,17 @@ if (TRUE)
             file(MAKE_DIRECTORY "${paramonte_bld_test_inc_dir}")
         endif()
 
-        # set up test bin directory
+        # set up test _bin directory
 
         #set(paramonte_bld_test_bin_dir "${paramonte_bld_test_dir}")
-        set(paramonte_bld_test_bin_dir "${paramonte_bld_test_dir}/bin")
+        set(paramonte_bld_test_bin_dir "${paramonte_bld_test_dir}/_bin")
         message(NOTICE "${pmattn} paramonte_bld_test_bin_dir: ${paramonte_bld_test_bin_dir}")
         file(REMOVE_RECURSE "${paramonte_bld_test_bin_dir}/")
         if (NOT EXISTS "${paramonte_bld_test_bin_dir}/")
             file(MAKE_DIRECTORY "${paramonte_bld_test_bin_dir}")
         endif()
 
-        # set up test bin directory
+        # set up test _bin directory
 
         set(paramonte_bld_test_bin_input_dir "${paramonte_bld_test_bin_dir}/input")
         message(NOTICE "${pmattn} paramonte_bld_test_bin_input_dir: ${paramonte_bld_test_bin_input_dir}")

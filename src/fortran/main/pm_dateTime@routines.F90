@@ -20,7 +20,7 @@
 !>  \final
 !>
 !>  \author
-!>  \AmirShahmoradi, March 23, 2012, 5:33 PM, National Institute for Fusion Studies, The University of Texas at Austin
+!>  \AmirShahmoradi, March 23, 2012, 5:33 PM, National Institute for Fusion Studies, The University of Texas Austin<br>
 
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -334,7 +334,7 @@ contains
 
     module procedure getCountLeapYears
         integer(IK) :: year
-        !CHECK_ASSERTION(__LINE__, until /= 0_IK, SK_"@getCountLeapYears(): The condition `until /= 0` must hold. until = "//getStr(until))
+        !check_assertion(__LINE__, until /= 0_IK, SK_"@getCountLeapYears(): The condition `until /= 0` must hold. until = "//getStr(until))
         if (until > 0_IK) then
             year = until
         else
@@ -346,8 +346,8 @@ contains
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     module procedure getCountLeapYearsSince
-        !CHECK_ASSERTION(__LINE__, until /= 0_IK, SK_"@getCountLeapYearsSince(): The condition `until /= 0` must hold. until = "//getStr(until))
-        !CHECK_ASSERTION(__LINE__, since /= 0_IK, SK_"@getCountLeapYearsSince(): The condition `since /= 0` must hold. since = "//getStr(since))
+        !check_assertion(__LINE__, until /= 0_IK, SK_"@getCountLeapYearsSince(): The condition `until /= 0` must hold. until = "//getStr(until))
+        !check_assertion(__LINE__, since /= 0_IK, SK_"@getCountLeapYearsSince(): The condition `since /= 0` must hold. since = "//getStr(since))
         CHECK_ASSERTION(__LINE__, since <= until, SK_"@getCountLeapYears(): The condition `since <= until` must hold. since, until = "//getStr([since, until]))
         countLeapYear = getCountLeapYears(until) - getCountLeapYears(since)
         if (since > 0_IK .and. until > 0_IK) then

@@ -1,22 +1,23 @@
+%>  \brief
+%>  Finalize the ParaMonte MATLAB sampler simulation run and return nothing.<br>
+%>
+%>  \details
+%>  This is a ``private`` and ``Hidden`` dynamic method of the class [pm.sampling.Sampler](@ref Sampler).<br>
+%>
+%>  \param[in]  self    :   The input parent object of class [pm.sampling.Sampler](@ref Sampler)
+%>                          which is **implicitly** passed to this dynamic method (not by the user).<br>
+%>
+%>  \final{finalize}
+%>
+%>  \author
+%>  \JoshuaOsborne, May 21 2024, 12:10 AM, University of Texas at Arlington<br>
+%>  \AmirShahmoradi, September 1, 2012, 12:00 AM, National Institute for Fusion Studies, The University of Texas at Austin<br>
 function finalize(self)
-    %
-    %   Finalize the ParaMonte MATLAB sampler simulation run.
-    %
-    %   Parameters
-    %   ----------
-    %
-    %       None
-    %
-    %   Returns
-    %   -------
-    %
-    %       None
-    %
     if  self.partype == "openmp"
         if ~self.silent
             delete(gcp("nocreate"));
         else
-            evalc('delete(gcp("nocreate")');
+            evalc('delete(gcp("nocreate"))');
         end
     end
     munlock(self.mexname);

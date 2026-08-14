@@ -28,6 +28,8 @@ program main
 
 use pm_test, only: setSummary
 
+call random_seed()
+
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 block; use test_pm_arrayCenter; call setTest(); end block
@@ -132,7 +134,7 @@ block; use test_pm_timer; call setTest(); end block
 !!!block; use test_pm_polation; call setTest(); end block
 !!block; use test_pm_quadRomb; call setTest(); end block
 !!block; use test_pm_polation; call setTest(); end block
-!!block; use test_pm_clustering; call setTest(); end block
+!!block; use test_pm_clusKmeans; call setTest(); end block
 !!block; use test_pm_logicalCompare; call setTest(); end block
 !!block; use test_pm_val2logical; call setTest(); end block
 !

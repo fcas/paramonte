@@ -22,7 +22,7 @@ legends =   [ r"Kolmogorov Distribution"
 
 for kind in ["IK", "CK", "RK"]:
 
-    pattern = "*."+kind+".txt"
+    pattern = "*." + kind + ".txt"
     fileList = glob.glob(pattern)
     if len(fileList) == 1:
 
@@ -38,7 +38,7 @@ for kind in ["IK", "CK", "RK"]:
                     , density = True
                     , alpha = 0.7
                     )
-            ax.hist ( df.values[:,1]
+            ax.hist ( df.values[:, 1]
                     , bins = 30
                     , histtype = "stepfilled"
                     , density = True

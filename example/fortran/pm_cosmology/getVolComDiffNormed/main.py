@@ -23,7 +23,7 @@ legends =   [ "$\Omega_M = 1.0, \Omega_\Lambda = 0.0$"
 
 for kind in ["IK", "CK", "RK"]:
 
-    pattern = "*."+kind+".txt"
+    pattern = "*." + kind + ".txt"
     fileList = glob.glob(pattern)
     if len(fileList) == 1:
 
@@ -38,7 +38,7 @@ for kind in ["IK", "CK", "RK"]:
                     , marker[kind]
                    #, color = "r"
                     )
-            plt.plot( df.values[:,1]
+            plt.plot( df.values[:, 1]
                     , df.values[:,1:len(legends)+1]
                     , marker[kind]
                    #, color = "blue"

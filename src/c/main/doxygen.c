@@ -9,7 +9,7 @@
 /// \section ParaMonte What is ParaMonte?
 /// <!--==============================-->
 ///
-/// ParaMonte is a library of serial and parallel Monte Carlo and Machine Learning routines
+/// ParaMonte is a multi-language library of serial and parallel Monte Carlo and Machine Learning routines
 /// scientific inference, e.g., for sampling mathematical density functions of arbitrary-dimensions,
 /// with the design goal of unifying
 ///
@@ -51,7 +51,7 @@
 /// [⛓](#ParaMonteLangDocumentation)
 /// \section ParaMonteLangDocumentation ParaMonte C Documentation Website
 ///
-/// The documentation for the latest version of the ParaMonte C library is always <a href="../../c/latest/html/index.html" target="_blank"><b>available on this page</b></a>.<br>
+/// The documentation for the latest version of the ParaMonte C library is always <a href="../../c/latest/index.html" target="_blank"><b>available on this page</b></a>.<br>
 ///
 /// [⛓](#ParaMonteLangModules)
 /// \section ParaMonteLangModules ParaMonte C Library Modules
@@ -63,7 +63,7 @@
 /// </ol>
 ///
 /// The ParaMonte C library is currently under active development to extend the library functionalities to other tasks supported by the [ParaMonte Fortran library](../../../fortran/latest/html).<br>
-/// For a full list of all available functionalities and modules, see the [modules listing](./namespaces.html) of this documentation website.<br>
+/// For a full list of all available functionalities and modules, see the [modules listing](./modules.html) of this documentation website.<br>
 ///
 /// Module                  | Functionality
 /// ------------------------|--------------
@@ -166,7 +166,7 @@
 /// +   The abbreviation `msn`      stands for **Multivariate Skew-Normal** mostly used in the context of the statistical MultiVariate Skew-Normal distribution.
 /// +   The abbreviation `mvn`      stands for **MultiVariate Normal** mostly used in the context of the statistical MultiVariate Normal distribution.
 /// +   The abbreviation `mvu`      stands for **MultiVariate Uniform** mostly used in the context of the statistical MultiVariate (ellipsoidal) Uniform distribution.
-/// +   The abbreviation `norm`     stands for **normal** in the context of statistical distributions or **normalization** factor. Example: `DistMultiNorm_type`.
+/// +   The abbreviation `norm`     stands for **normal** in the context of statistical distributions or **normalization** factor. Example: `distMultiNorm_type`.
 /// +   The abbreviation `normed`   stands for **normalized** mostly in the context of statistical samples. Example: `NormedSample`.
 /// +   The abbreviation `pdf`      stands for **Probability Density Function** in the context of statistics. Example: `getNormLogPDF()`.
 /// +   The abbreviation `pos`      stands for **positive**. Example: `getInvPosDefMat()`.
@@ -234,8 +234,8 @@
 ///         section</b>, designated by the <tt>\\example</tt>, otherwise, each empty line will start a new paragraph in the documentation.<br>
 ///         Example: See [below](#example-ParaMonteLangDocumentationGuidelines).<br>
 ///     +   The Doxygen `\test` tag, if any exists, must appear immediately after the example section designated by the <tt>\\example</tt> tag.<br>
-///     +   The Doxygen `\todo` tag, if any exists, must appear immediately after the `\test` tag or any other tag immediately preceding it.<br>
-///     +   The Doxygen `\bug` tag, if any exists, must appear immediately after the `\todo` tag or any other tag immediately preceding it.<br>
+///     +   The Doxygen `\bug` tag, if any exists, must appear immediately after the `\test` tag or any other tag immediately preceding it.<br>
+///     +   The Doxygen `\todo` tag, if any exists, must appear immediately after the `\todo` tag or any other tag immediately preceding it.<br>
 ///     +   The closing command of each documentation section must be the ParaMonte custom command <tt>\\final</tt> separated from the tags before and after by an empty line.<br>
 ///     +   The Doxygen `\author` tag is the last command to appear in any documentation section, and it must preferably have the format exemplified in the example below.<br>
 ///     <br>
@@ -261,23 +261,6 @@
 ///         +   <tt>\\naming</tt> Inserts a `\remark` tag about the naming conventions used in the library.
 ///         +   <tt>\\license</tt>  Inserts a `\remark` tag about the generic licensing of the library.
 ///         +   <tt>\\final</tt>    Inserts the set of final generic remarks that should appear at the end of each documentation section.
-///         +   <tt>\\RK</tt>       Inserts a hyper-link reference \RK     to the default `real` kind used in the library.
-///         +   <tt>\\RK32</tt>     Inserts a hyper-link reference \RK32   to the `real32` real kind used in the library.
-///         +   <tt>\\RK64</tt>     Inserts a hyper-link reference \RK64   to the `real64` real kind used in the library.
-///         +   <tt>\\RK128</tt>    Inserts a hyper-link reference \RK128  to the `real128` real kind used in the library.
-///         +   <tt>\\CK</tt>       Inserts a hyper-link reference \CK     to the default `complex` kind used in the library.
-///         +   <tt>\\CK32</tt>     Inserts a hyper-link reference \CK32   to the `real32` complex kind used in the library.
-///         +   <tt>\\CK64</tt>     Inserts a hyper-link reference \CK64   to the `real64` complex kind used in the library.
-///         +   <tt>\\CK128</tt>    Inserts a hyper-link reference \CK128  to the `real128` complex kind used in the library.
-///         +   <tt>\\IK8</tt>      Inserts a hyper-link reference \IK8    to the `int8` integer kind used in the library.
-///         +   <tt>\\IK16</tt>     Inserts a hyper-link reference \IK16   to the `int16` integer kind used in the library.
-///         +   <tt>\\IK32</tt>     Inserts a hyper-link reference \IK32   to the `int32` integer kind used in the library.
-///         +   <tt>\\IK64</tt>     Inserts a hyper-link reference \IK64   to the `int64` integer kind used in the library.
-///         +   <tt>\\SKALL</tt>    Inserts a hyper-link reference to all major `character` kinds like: \SKALL.
-///         +   <tt>\\IKALL</tt>    Inserts a hyper-link reference to all major `integer`   kinds like: \IKALL.
-///         +   <tt>\\LKALL</tt>    Inserts a hyper-link reference to all major `_Bool`   kinds like: \LKALL.
-///         +   <tt>\\CKALL</tt>    Inserts a hyper-link reference to all major `complex`   kinds like: \CKALL.
-///         +   <tt>\\RKALL</tt>    Inserts a hyper-link reference to all major `real`      kinds like: \RKALL.
 ///     <br>
 ///     <br>
 ///
@@ -316,7 +299,7 @@
 /// See,
 /// <ol>
 ///     <li>    [this generic documentation page](\pmdoc_usage_sampling/paradram/output/)
-///             for more information on the generated output files for samplings performed using the [ParaDRAM](@ref pm_sampling::paradram_type) sampler.
+///             for more information on the generated output files for samplings performed using the [ParaDRAM](@ref runParaDRAM) sampler.
 /// </ol>
 ///
 /// \param[in]  getLogFunc  :   The input user-specified procedure pointer to the natural logarithm of the target density function.<br>
@@ -425,7 +408,7 @@
 /// \final{runParaDRAM}
 ///
 /// \author
-/// \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin
+/// \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin<br>
 ///
 ///     \endverbatim
 ///     <br>
@@ -438,8 +421,11 @@
 /// [⛓](#ParaMonteLangExamples)
 /// \section ParaMonteLangExamples ParaMonte C Language Examples
 ///
-/// The ParaMonte C library ships with tens of thousands of example usage that are available in the `example/c` folder in the root directory of the project repository.<br>
+/// The ParaMonte C library ships with ample example usage that are available in the `example/c` folder in the [root directory of the project repository](https://github.com/cdslaborg/paramonte).<br>
 /// These examples are also available and discussed in the documentations of individual modules and procedures of this this documentation website.<br>
+/// The best way to build and run the examples is to build the library to generate the final binary folder for your specific build.<br>
+/// This binary folder will contains the library along with all available example source codes and build instructions and scripts.<br>
+/// See [the ParaMonte generic documentation](\pmdoc) for build and installation instructions on all supported platforms.<br>
 ///
 /// [⛓](#ParaMonteLangBenchmarks)
 /// \section ParaMonteLangBenchmarks ParaMonte C Language Benchmarks

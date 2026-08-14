@@ -30,10 +30,22 @@
 
         type(rngf_type) :: rng
 #if     S0_ENABLED
+#if     CK_ENABLED
+        complex(TKG), parameter :: ONE = (1._TKG, 0._TKG)
+#elif   RK_ENABLED
+        real(TKG), parameter :: ONE = 1._TKG
+#else
+#error  "Unrecognized interface."
+#endif
+        integer(IK) :: jdim
         if (present(scale)) then
             call setCovRand(rng, rand, scale)
         else
             call setCovRand(rng, rand)
+            ! Ensure all diagonals are 1.
+            do jdim = 1, sizE(rand, 1, IK)
+                rand(jdim, jdim) = ONE
+            end do
         end if
 #elif   S1_ENABLED
         call setCovRand(rng, rand, scale)
@@ -87,7 +99,7 @@
         !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         real(TKG) :: normfac
-        real(TKG), parameter :: EPS = 2 * sqrt(epsilon(0._TKG))
+        !real(TKG), parameter :: EPS = 2 * sqrt(epsilon(0._TKG))
         ! Define the output kind.
 #if     CK_ENABLED
 #define TYPE_OF_RAND complex(TKG)
@@ -103,7 +115,7 @@
 #error  "Unrecognized interface."
 #endif
         TYPE_OF_RAND :: upper(size(rand, 1, IK), size(rand, 2, IK))
-        integer(IK) :: idim, jdim, ndim
+        integer(IK) :: idim, ndim
 #if     SD_ENABLED
 #define GET_SCALED(X)X
 #elif   S0_ENABLED
@@ -123,32 +135,46 @@
         if (ndim < 1_IK) return
         do idim = 1, ndim
             do
-                call setUnifRand(rng, upper(1 : ndim, idim), LB, UB)
-                normfac = real(sqrt(dot_product(upper(1 : ndim, idim), upper(1 : ndim, idim))), TKG) ! \todo: The performance of this expression can be improved by replacing `dot_product` with `absq()`.
-                if (ZERO == normfac) cycle
+                call setUnifRand(rng, upper(1 : idim, idim), LB, UB)
+                upper(idim, idim) = abs(upper(idim, idim))
+                if (real(upper(idim, idim), TKG) < epsilon(0._TKG)) upper(idim, idim) = ONE
+                normfac = real(sqrt(dot_product(upper(1 : idim, idim), upper(1 : idim, idim))), TKG)
+                ! \todo: The performance of the above expression can be improved by replacing `dot_product` with `absq()`.
+                if (0._TKG == normfac) cycle
                 exit
             end do
             normfac = 1._TKG / normfac
-            upper(1 : ndim, idim) = upper(1 : ndim, idim) * normfac
+            upper(1 : idim, idim) = upper(1 : idim, idim) * normfac
+            upper(idim + 1 : ndim, idim) = ZERO
         end do
         rand = matmul(transpose(GET_CONJG(upper)), upper)
+
+        !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         ! Ensure the diagonals are all pure 1, free from numerical round-off errors.
-        do jdim = 1, ndim
-            rand(jdim, jdim) = ONE
-        end do
+        ! Perhaps not really essential as it is guaranteed to be 1, at least theoretically.
+        ! This is now done only within `getCovRand` above.
+        !do jdim = 1, ndim
+        !    rand(jdim, jdim) = ONE
+        !end do
+        !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
         !block
         !   use pm_io
         !   call disp%show("rand")
         !   call disp%show( rand )
         !end block
         !call setCor(rand, uppDia, rand, uppDia)
+
         ! Rescale.
 #if     S0_ENABLED || S1_ENABLED
-        do jdim = 1, ndim
-            do idim = 1, jdim
-                rand(idim, jdim) = GET_SCALED(rand(idim, jdim))
+        block
+            integer(IK) :: jdim
+            do jdim = 1, ndim
+                do idim = 1, jdim
+                    rand(idim, jdim) = GET_SCALED(rand(idim, jdim))
+                end do
             end do
-        end do
+        end block
 #endif
         !block
         !use pm_io, only: disp
@@ -194,7 +220,7 @@
         CHECK_ASSERTION(__LINE__, all([0._TKG < scale]), SK_"@setCovRand(): The condition `all([0. < scale])` must hold. scale = "//getStr(scale))
 #endif
         CHECK_ASSERTION(__LINE__, 0._TKG <= eta, SK_"@setCovRand(): The condition `0. <= eta` must hold. eta = "//getStr(eta))
-       !CHECK_ASSERTION(__LINE__, 0_IK < size(rand, 1, IK), SK_"@setCovRand(): The condition `0 < size(rand, 1)` must hold. shape(rand) = "//getStr(shape(rand)))
+       !check_assertion(__LINE__, 0_IK < size(rand, 1, IK), SK_"@setCovRand(): The condition `0 < size(rand, 1)` must hold. shape(rand) = "//getStr(shape(rand)))
         CHECK_ASSERTION(__LINE__, size(rand, 1, IK) == size(rand, 2, IK), SK_"@setCovRand(): The condition `size(rand, 1) <= size(rand, 2)` must hold. shape(rand) = "//getStr(shape(rand)))
         ndim = size(rand, 1, IK)
         if (1_IK < ndim) then

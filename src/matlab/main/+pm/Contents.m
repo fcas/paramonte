@@ -9,7 +9,7 @@
 %>  \section ParaMonte What is ParaMonte?
 %>  <!--==============================-->
 %>
-%>  ParaMonte is a library of serial and parallel Monte Carlo and Machine Learning routines
+%>  ParaMonte is a multi-language library of serial and parallel Monte Carlo and Machine Learning routines
 %>  scientific inference, e.g., for sampling mathematical density functions of arbitrary-dimensions,
 %>  with the design goal of unifying
 %>
@@ -51,16 +51,16 @@
 %>  [⛓](#ParaMonteLangDocumentation)
 %>  \section ParaMonteLangDocumentation ParaMonte MATLAB Documentation Website
 %>
-%>  The documentation for the latest version of the ParaMonte MATLAB library is always <a href="../../matlab/latest/html/index.html" target="_blank"><b>available on this page</b></a>.<br>
+%>  The documentation for the latest version of the ParaMonte MATLAB library is always <a href="../../matlab/latest/index.html" target="_blank"><b>available on this page</b></a>.<br>
 %>
 %>  [⛓](#ParaMonteUsage)
-%>  <!--=====================================-->
-%>  \section ParaMonteUsage ParaMonte QuickStart
-%>  <!--=====================================-->
+%>  <!--============================================-->
+%>  \section ParaMonteUsage ParaMonte MATLAB QuickStart
+%>  <!--============================================-->
 %>
 %>  For more information on the installation, general usage, and examples, visit:
 %>
-%>  &emsp;<a href="https://www.cdslab.org/paramonte" target="_blank"><b>https://www.cdslab.org/paramonte</b></a>
+%>  &emsp;<a href="https://www.cdslab.org/paramonte/generic/latest/installation/matlab/" target="_blank"><b>https://www.cdslab.org/paramonte/generic/latest/installation/matlab/</b></a>
 %>
 %>  To get started with the library once you download it, simply add the path to the ParaMonte library `+pm`
 %>  package to access the routines and functionalities available in the library.<br>
@@ -74,11 +74,6 @@
 %>
 %>  \endcode
 %>
-%>  [⛓](#ParaMonteLangDocumentation)
-%>  \section ParaMonteLangDocumentation ParaMonte MATLAB Documentation Website
-%>
-%>  The documentation for the latest version of the ParaMonte MATLAB library is always <a href="../../matlab/latest/html/index.html" target="_blank"><b>available on this page</b></a>.<br>
-%>
 %>  [⛓](#ParaMonteLangModules)
 %>  \section ParaMonteLangModules ParaMonte MATLAB Library Modules
 %>
@@ -91,8 +86,14 @@
 %>  \endcode
 %>
 %>  The ParaMonte MATLAB library currently contains a myriad of MATLAB *packages*.<br>
-%>  The ParaMonte MATLAB library is currently under active development to extend the library functionalities to other tasks supported by the [ParaMonte Fortran library](../../../fortran/latest/html).<br>
+%>  The ParaMonte MATLAB library is currently under active development to extend the library functionalities to other tasks supported by the [ParaMonte Fortran library](../../fortran/latest/index.html).<br>
 %>  For a full list of all available functionalities and modules, see the [files listing](./files.html) and [class listing](./annotated.html) of this documentation website.<br>
+%>
+%>  [⛓⛓](#ParaMonteLangModulesSamplers)
+%>  \section ParaMonteLangModulesSamplers ParaMonte MATLAB Library Samplers
+%>
+%>  Perhaps the most relevant ParaMonte MATLAB modules to the end users are the ParaMonte samplers in the `pm.sampling` package of the library.<br>
+%>  See for example, the documentation of the parallel Delayed-Rejection Adaptive Metropolis Markov Chain Monte Carlo sampler [pm.sampling.Paradram](@ref Paradram).<br>
 %>
 %>  [⛓](#ParaMonteLangNamingConventions)
 %>  \section ParaMonteLangNamingConventions ParaMonte MATLAB Naming Conventions
@@ -181,7 +182,7 @@
 %>  +   The abbreviation `msn`      stands for **Multivariate Skew-Normal** mostly used in the context of the statistical MultiVariate Skew-Normal distribution.
 %>  +   The abbreviation `mvn`      stands for **MultiVariate Normal** mostly used in the context of the statistical MultiVariate Normal distribution.
 %>  +   The abbreviation `mvu`      stands for **MultiVariate Uniform** mostly used in the context of the statistical MultiVariate (ellipsoidal) Uniform distribution.
-%>  +   The abbreviation `norm`     stands for **normal** in the context of statistical distributions or **normalization** factor. Example: `DistMultiNorm_type`.
+%>  +   The abbreviation `norm`     stands for **normal** in the context of statistical distributions or **normalization** factor. Example: `distMultiNorm_type`.
 %>  +   The abbreviation `normed`   stands for **normalized** mostly in the context of statistical samples. Example: `NormedSample`.
 %>  +   The abbreviation `pdf`      stands for **Probability Density Function** in the context of statistics. Example: `getNormLogPDF()`.
 %>  +   The abbreviation `pos`      stands for **positive**. Example: `getInvPosDefMat()`.
@@ -214,13 +215,13 @@
 %>  +   **Doxygen custom command orderings**.
 %>
 %>      +   The Doxygen tag `\brief` must always be the first line of the documentation of modules, types, and procedures.<br>
-%>          Example: [+sampling/@Paradram/Paradram](@ref +sampling/@Paradram/Paradram).<br>
+%>          Example: [pm.sampling.Paradram](@ref Paradram).<br>
 %>      +   The Doxygen tag `\details`, if it exists, must always immediately follow the Doxygen tag `\brief`.<br>
-%>          Example: [+sampling/@Paradram/Paradram](@ref +sampling/@Paradram/Paradram).<br>
+%>          Example: [pm.sampling.Paradram](@ref Paradram).<br>
 %>      +   The Doxygen tag `\param`, if any number of it exists, must always immediately follow the Doxygen tag `\brief` (or `\details` if it exists).<br>
-%>          Example: [runParaDRAMD()](@ref +sampling/@Paradram/Paradram::runParaDRAMD).<br>
+%>          Example: [pm.sampling.Paradram](@ref Paradram).<br>
 %>      +   The Doxygen tag `\return`, must be exclusively used to indicate the return value of functions.<br>
-%>          If it exists, it must appear immediately after the set of `\param` tags. Example: [runParaDRAMD()](@ref +sampling/@Paradram/Paradram::runParaDRAMD).<br>
+%>          If it exists, it must appear immediately after the set of `\param` tags. Example: [pm.sampling.Paradram](@ref Paradram).<br>
 %>      +   If a generic interface is being documented, the ParaMonte custom command <tt>\\interface</tt> must appear immediately
 %>          after the Doxygen `\return`, `\param`, `\details`, or `\brief` tags in the specified order, if any exists.<br>
 %>      +   The Doxygen tag `\warning`, if any number of it exists, must immediately follow the Doxygen tag `\return` if it exists,
@@ -249,8 +250,8 @@
 %>          section</b>, designated by the <tt>\\example</tt>, otherwise, each empty line will start a new paragraph in the documentation.<br>
 %>          Example: See [below](#example-ParaMonteLangDocumentationGuidelines).<br>
 %>      +   The Doxygen `\test` tag, if any exists, must appear immediately after the example section designated by the <tt>\\example</tt> tag.<br>
-%>      +   The Doxygen `\todo` tag, if any exists, must appear immediately after the `\test` tag or any other tag immediately preceding it.<br>
-%>      +   The Doxygen `\bug` tag, if any exists, must appear immediately after the `\todo` tag or any other tag immediately preceding it.<br>
+%>      +   The Doxygen `\bug` tag, if any exists, must appear immediately after the `\test` tag or any other tag immediately preceding it.<br>
+%>      +   The Doxygen `\todo` tag, if any exists, must appear immediately after the `\todo` tag or any other tag immediately preceding it.<br>
 %>      +   The closing command of each documentation section must be the ParaMonte custom command <tt>\\final</tt> separated from the tags before and after by an empty line.<br>
 %>      +   The Doxygen `\author` tag is the last command to appear in any documentation section, and it must preferably have the format exemplified in the example below.<br>
 %>      <br>
@@ -276,23 +277,6 @@
 %>          +   <tt>\\naming</tt> Inserts a `\remark` tag about the naming conventions used in the library.
 %>          +   <tt>\\license</tt> Inserts a `\remark` tag about the generic licensing of the library.
 %>          +   <tt>\\final</tt> Inserts the set of final generic remarks that should appear at the end of each documentation section.
-%>          +   <tt>\\RK</tt>       Inserts a hyper-link reference \RK     to the default `real` kind used in the library.
-%>          +   <tt>\\RK32</tt>     Inserts a hyper-link reference \RK32   to the `real32` real kind used in the library.
-%>          +   <tt>\\RK64</tt>     Inserts a hyper-link reference \RK64   to the `real64` real kind used in the library.
-%>          +   <tt>\\RK128</tt>    Inserts a hyper-link reference \RK128  to the `real128` real kind used in the library.
-%>          +   <tt>\\CK</tt>       Inserts a hyper-link reference \CK     to the default `complex` kind used in the library.
-%>          +   <tt>\\CK32</tt>     Inserts a hyper-link reference \CK32   to the `real32` complex kind used in the library.
-%>          +   <tt>\\CK64</tt>     Inserts a hyper-link reference \CK64   to the `real64` complex kind used in the library.
-%>          +   <tt>\\CK128</tt>    Inserts a hyper-link reference \CK128  to the `real128` complex kind used in the library.
-%>          +   <tt>\\IK8</tt>      Inserts a hyper-link reference \IK8    to the `int8` integer kind used in the library.
-%>          +   <tt>\\IK16</tt>     Inserts a hyper-link reference \IK16   to the `int16` integer kind used in the library.
-%>          +   <tt>\\IK32</tt>     Inserts a hyper-link reference \IK32   to the `int32` integer kind used in the library.
-%>          +   <tt>\\IK64</tt>     Inserts a hyper-link reference \IK64   to the `int64` integer kind used in the library.
-%>          +   <tt>\\SKALL</tt>    Inserts a hyper-link reference to all major `character` kinds like: \SKALL.
-%>          +   <tt>\\IKALL</tt>    Inserts a hyper-link reference to all major `integer`   kinds like: \IKALL.
-%>          +   <tt>\\LKALL</tt>    Inserts a hyper-link reference to all major `logical`   kinds like: \LKALL.
-%>          +   <tt>\\CKALL</tt>    Inserts a hyper-link reference to all major `complex`   kinds like: \CKALL.
-%>          +   <tt>\\RKALL</tt>    Inserts a hyper-link reference to all major `real`      kinds like: \RKALL.
 %>      <br>
 %>      <br>
 %>
@@ -318,18 +302,18 @@
 %>  \brief
 %>  This is the ParaDRAM class for generating instances of serial and parallel
 %>  Delayed-Rejection Adaptive Metropolis-Hastings Markov Chain Monte Carlo
-%>  sampler of the ParaMonte MATLAB library.
+%>  sampler of the ParaMonte MATLAB library.<br>
 %>
 %>  \brief
 %>  Once you assign the desired simulation specifications to the corresponding
-%>  attributes within the component `spec` of an object of class ``pm.sampling.Paradram``,
-%>  call the ParaDRAM sampler via the object method ``pm.sampling.Paradram.run()``.
+%>  attributes within the component `spec` of an object of class [pm.sampling.Paradram](@ref Paradram),
+%>  call the ParaDRAM sampler via the object method [pm.sampling.Paradram.run()](@ref Paradram::run).<br>
 %>
 %>  While the constructor of this class does not take any input arguments,
-%>  all ParaDRAM simulation specifications can be set after creating the object.
+%>  all ParaDRAM simulation specifications can be set after creating the object.<br>
 %>
 %>  \return
-%>  `sampler`   :   The output scalar object of class [pm.sampling.Paradram](@ref Paradram).
+%>  ``sampler`` :   The output scalar object of class [pm.sampling.Paradram](@ref Paradram).<br>
 %>
 %>  \interface{Paradram}
 %>  \code{.m}
@@ -375,8 +359,8 @@
 %>                  );
 %>      samples = sampler.readSample();
 %>      sample = samples{1};
-%>      tile = pm.vis.tile.Line(sample.df);
-%>      tile.make("coly", sample.sampleLogFuncColIndex + 1 : sample.sampleLogFuncColIndex + 4, "colc", "sampleLogFunc");
+%>      tile = pm.vis.TileLine(sample.df);
+%>      tile.make("coly", sample.slfc + 1 : sample.slfc + 4, "colc", "sampleLogFunc");
 %>
 %>  \endcode
 %>
@@ -409,7 +393,17 @@
 %>                  );
 %>      samples = sampler.readSample();
 %>      sample = samples{1};
-%>      pm.vis.tile(sample.contents)
+%>      sample.vis.tile.line.make();
+%>
+%>  \endcode
+%>
+%>  The statement ``sample.vis.tile.line.make();`` in
+%>  the above is equivalent to the following set of lines:
+%>
+%>  \code{.m}
+%>
+%>      tile = pm.vis.TileLine(sample.df);
+%>      tile.make("coly", sample.slfc + 1 : sample.slfc + 4, "colc", "sampleLogFunc");
 %>
 %>  \endcode
 %>
@@ -468,7 +462,7 @@
 %>                  fid = fopen("main_mpi.m", "w");
 %>                  sourceCode = ...
 %>                  "sampler = pm.sampling.Paradram();" + newline + ...
-%>                  "sampler.mpiname = pm.lib.mpi.choice();" + newline + ...
+%>                  "%sampler.mpiname = ''; % set this to an explicit MPI library name if needed." + newline + ...
 %>                  "sampler.run( @(x) - sum(x.^2)  ... getLogFunc: the natural log of the objective function." + newline + ...
 %>                  "           , 4                 ... ndim:       the number of dimensions of the objective function" + newline + ...
 %>                  "           );";
@@ -541,7 +535,7 @@
 %>  \final{Paradram}
 %>
 %>  \author
-%>  \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin
+%>  \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin<br>
 %>
 %>      \endverbatim
 %>      <br>
@@ -554,7 +548,7 @@
 %>  [⛓](#ParaMonteLangExamples)
 %>  \section ParaMonteLangExamples ParaMonte MATLAB Language Examples
 %>
-%>  The ParaMonte MATLAB library ships with tens of thousands of example usage that are available in the `example/matlab` folder in the root directory of the project repository.<br>
+%>  The ParaMonte MATLAB library ships with hundreds of example usage that are available in the `example/matlab` folder in the [root directory of the project repository](https://github.com/cdslaborg/paramonte).<br>
 %>  These examples are also available and discussed in the documentations of individual modules and procedures of this this documentation website.<br>
 %>
 %>  [⛓](#ParaMonteLangBenchmarks)

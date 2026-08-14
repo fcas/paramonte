@@ -364,6 +364,26 @@
 !>  Note however that **deflation can lead to approximate factors that differ significantly from the corresponding exact factors**.<br>
 !>  This error is least if the roots are found in the order of increasing magnitude.<br>
 !>
+!>  \benchmarks
+!>
+!>  \benchmark{setPolyRoot, The effects of `method` on runtime efficiency}
+!>  The following program compares the runtime performance of [setPolyRoot](@ref pm_polynomial::setPolyRoot)
+!>  using different polynomial root finding algorithms.<br>
+!>
+!>  \include{lineno} benchmark/pm_polynomial/setPolyRoot/main.F90
+!>  \compilefb{setPolyRoot}
+!>  \postprocb{setPolyRoot}
+!>  \include{lineno} benchmark/pm_polynomial/setPolyRoot/main.py
+!>  \visb{setPolyRoot}
+!>  \image html benchmark/pm_polynomial/setPolyRoot/benchmark.setPolyRoot.runtime.png width=1000
+!>  \image html benchmark/pm_polynomial/setPolyRoot/benchmark.setPolyRoot.runtime.ratio.png width=1000
+!>  \image html benchmark/pm_polynomial/setPolyRoot/benchmark.setPolyRoot.root.count.png width=1000
+!>  \moralb{setPolyRoot}
+!>      -#  Among all root finding algorithms, [jenkins_type](@ref pm_polynomial::jenkins_type) appears to be the fastest.<br>
+!>      -#  The [eigen_type](@ref pm_polynomial::eigen_type) method also tends to offer a comparably good performance.<br>
+!>      -#  Unlike the above two, [laguerre_type](@ref pm_polynomial::laguerre_type) algorithm tends to significantly
+!>          trail behind both in performance and reliability in finding all roots of the polynomial.<br>
+!>
 !>  \test
 !>  [test_pm_polynomial](@ref test_pm_polynomial)<br>
 !>
@@ -374,6 +394,40 @@
 !>  See the commented-out generic interface `setPolyCoef` within this module as the starting point.<br>
 !>
 !>  \final
+!>  Beware that the Skowron-Gould method of polynomial root finding in this module
+!>  have the following LICENSE information carried over with them.<br>
+!>
+!>  \verbatim
+!>      Copyright 2012 Jan Skowron & Andrew Gould
+!>
+!>      Licensed under the Apache License, Version 2.0 (the "License");
+!>      you may not use this file except in compliance with the License.
+!>      You may obtain a copy of the License at
+!>
+!>          http://www.apache.org/licenses/LICENSE-2.0
+!>
+!>      Unless required by applicable law or agreed to in writing, software
+!>      distributed under the License is distributed on an "AS IS" BASIS,
+!>      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+!>      See the License for the specific language governing permissions and
+!>      limitations under the License.
+!>
+!>      -------------------------------------------------------------------!
+!>
+!>      The authors also make this file available under the terms of
+!>      GNU Lesser General Public License version 2 or any later version.
+!>      (text of the LGPL licence 2 in NOTICE file)
+!>
+!>      -------------------------------------------------------------------!
+!>
+!>      A custom in the scientific comunity is (regardless of the licence
+!>      you chose to use or distribute this software under)
+!>      that if this code was important in the scientific process or
+!>      for the results of your scientific work, we kindly ask you for the
+!>      appropriate citation of the Paper (Skowron & Gould 2012), and
+!>      we would be greatful if you pass the information about
+!>      the proper citation to anyone whom you redistribute this software to.
+!>  \endverbatim
 !>
 !>  \author
 !>  \FatemehBagheri, Tuesday 08:49 PM, August 10, 2021, Dallas, TX
@@ -3129,9 +3183,11 @@ module pm_polynomial
     !>  Instead, the end users must use `parameter` objects instantiated from the concrete subclasses of this parent `abstract` derived type.<br>
     !>
     !>  \see
+    !>  [sgl](@ref pm_polynomial::sgl)<br>
     !>  [eigen](@ref pm_polynomial::eigen)<br>
     !>  [jenkins](@ref pm_polynomial::jenkins)<br>
     !>  [laguerre](@ref pm_polynomial::laguerre)<br>
+    !>  [sgl_type](@ref pm_polynomial::sgl_type)<br>
     !>  [eigen_type](@ref pm_polynomial::eigen_type)<br>
     !>  [jenkins_type](@ref pm_polynomial::jenkins_type)<br>
     !>  [laguerre_type](@ref pm_polynomial::laguerre_type)<br>
@@ -3140,9 +3196,86 @@ module pm_polynomial
     !>  \final{method_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, abstract :: method_type
     end type
+
+!%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    !>  \brief
+    !>  This is a concrete derived type whose instances are exclusively used to signify the use of **Skowron-Gould** method of root-finding.<br>
+    !>
+    !>  \details
+    !>  See the root-finding section in the documentation of [pm_polynomial](@ref pm_polynomial) for more details about this root-finding method.<br>
+    !>  Objects instantiated from this derived type are exclusively used to differentiate
+    !>  the procedures within the various generic interfaces of the ParaMonte library.<br>
+    !>  As such, this concrete derived type does not contain any attributes.<br>
+    !>
+    !>  The approach of Skowron and Gould is outlined in their 2012 paper:
+    !>  *General Complex Polynomial Root Solver and Its Further Optimization for Binary Microlenses*.
+    !>
+    !>  \interface{sgl_type}
+    !>  \code{.F90}
+    !>
+    !>      use pm_polynomial, only: sgl_type
+    !>      type(sgl_type), allocatable :: method
+    !>
+    !>      method = sgl_type(polished = polished, informed = informed)
+    !>
+    !>  \endcode
+    !>
+    !>  \note
+    !>  This concrete derived type is not meant to be directly accessed by the end users.<br>
+    !>  Instead, the end users should use the specific object parameter instance of this derived type
+    !>  (e.g., [sgl](@ref pm_polynomial::sgl) as directed by the documentation of the specific procedure they intend to use.<br>
+    !>
+    !>  \see
+    !>  [sgl](@ref pm_polynomial::sgl)<br>
+    !>  [eigen](@ref pm_polynomial::eigen)<br>
+    !>  [jenkins](@ref pm_polynomial::jenkins)<br>
+    !>  [laguerre](@ref pm_polynomial::laguerre)<br>
+    !>  [sgl_type](@ref pm_polynomial::sgl_type)<br>
+    !>  [eigen_type](@ref pm_polynomial::eigen_type)<br>
+    !>  [jenkins_type](@ref pm_polynomial::jenkins_type)<br>
+    !>  [laguerre_type](@ref pm_polynomial::laguerre_type)<br>
+    !>  [method_type](@ref pm_polynomial::method_type)<br>
+    !>
+    !>  \final{sgl_type}
+    !>
+    !>  \author
+    !>  \FatemehBagheri, August 28, 2024, 6:12 PM, NASA Goddard Space Flight Center, Washington, D.C.
+    type, extends(method_type) :: sgl_type
+        logical(LK) :: polished = .true._LK     !<  \public The scalar `logical` of default kind \LK. If `.true.`, the roots identified will be polished.
+        logical(LK) :: reckoned = .false._LK    !<  \public The scalar `logical` of default kind \LK. If `.true.`, the search will start from the user-specified values, otherwise, from zero for all roots.
+    end type
+
+    !>  \brief
+    !>  This is a scalar `parameter` object of type [sgl_type](@ref pm_polynomial::sgl_type) that is exclusively used
+    !>  to signify the use of **Skowron-Gould** method of root-finding within an interface of a procedure of the ParaMonte library.<br>
+    !>
+    !>  \details
+    !>  See the root-finding section in the documentation of [pm_polynomial](@ref pm_polynomial) for more details about this root-finding method.<br>
+    !>  For example usage, see the documentation of the target procedure requiring this object.<br>
+    !>
+    !>  \see
+    !>  [sgl](@ref pm_polynomial::sgl)<br>
+    !>  [eigen](@ref pm_polynomial::eigen)<br>
+    !>  [jenkins](@ref pm_polynomial::jenkins)<br>
+    !>  [laguerre](@ref pm_polynomial::laguerre)<br>
+    !>  [sgl_type](@ref pm_polynomial::sgl_type)<br>
+    !>  [eigen_type](@ref pm_polynomial::eigen_type)<br>
+    !>  [jenkins_type](@ref pm_polynomial::jenkins_type)<br>
+    !>  [laguerre_type](@ref pm_polynomial::laguerre_type)<br>
+    !>  [method_type](@ref pm_polynomial::method_type)<br>
+    !>
+    !>  \final{sgl}
+    !>
+    !>  \author
+    !>  \FatemehBagheri, August 28, 2024, 6:12 PM, NASA Goddard Space Flight Center, Washington, D.C.
+    type(sgl_type), parameter :: sgl = sgl_type()
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+    !DIR$ ATTRIBUTES DLLEXPORT :: sgl
+#endif
 
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -3161,9 +3294,11 @@ module pm_polynomial
     !>  (e.g., [eigen](@ref pm_polynomial::eigen) as directed by the documentation of the specific procedure they intend to use.<br>
     !>
     !>  \see
+    !>  [sgl](@ref pm_polynomial::sgl)<br>
     !>  [eigen](@ref pm_polynomial::eigen)<br>
     !>  [jenkins](@ref pm_polynomial::jenkins)<br>
     !>  [laguerre](@ref pm_polynomial::laguerre)<br>
+    !>  [sgl_type](@ref pm_polynomial::sgl_type)<br>
     !>  [eigen_type](@ref pm_polynomial::eigen_type)<br>
     !>  [jenkins_type](@ref pm_polynomial::jenkins_type)<br>
     !>  [laguerre_type](@ref pm_polynomial::laguerre_type)<br>
@@ -3172,7 +3307,7 @@ module pm_polynomial
     !>  \final{eigen_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(method_type) :: eigen_type
     end type
 
@@ -3185,9 +3320,11 @@ module pm_polynomial
     !>  For example usage, see the documentation of the target procedure requiring this object.<br>
     !>
     !>  \see
+    !>  [sgl](@ref pm_polynomial::sgl)<br>
     !>  [eigen](@ref pm_polynomial::eigen)<br>
     !>  [jenkins](@ref pm_polynomial::jenkins)<br>
     !>  [laguerre](@ref pm_polynomial::laguerre)<br>
+    !>  [sgl_type](@ref pm_polynomial::sgl_type)<br>
     !>  [eigen_type](@ref pm_polynomial::eigen_type)<br>
     !>  [jenkins_type](@ref pm_polynomial::jenkins_type)<br>
     !>  [laguerre_type](@ref pm_polynomial::laguerre_type)<br>
@@ -3196,7 +3333,7 @@ module pm_polynomial
     !>  \final{eigen}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type(eigen_type), parameter :: eigen = eigen_type()
 #if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
     !DIR$ ATTRIBUTES DLLEXPORT :: eigen
@@ -3219,9 +3356,11 @@ module pm_polynomial
     !>  (e.g., [jenkins](@ref pm_polynomial::jenkins) as directed by the documentation of the specific procedure they intend to use.<br>
     !>
     !>  \see
+    !>  [sgl](@ref pm_polynomial::sgl)<br>
     !>  [eigen](@ref pm_polynomial::eigen)<br>
     !>  [jenkins](@ref pm_polynomial::jenkins)<br>
     !>  [laguerre](@ref pm_polynomial::laguerre)<br>
+    !>  [sgl_type](@ref pm_polynomial::sgl_type)<br>
     !>  [eigen_type](@ref pm_polynomial::eigen_type)<br>
     !>  [jenkins_type](@ref pm_polynomial::jenkins_type)<br>
     !>  [laguerre_type](@ref pm_polynomial::laguerre_type)<br>
@@ -3230,7 +3369,7 @@ module pm_polynomial
     !>  \final{jenkins_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(method_type) :: jenkins_type
     end type
 
@@ -3243,9 +3382,11 @@ module pm_polynomial
     !>  For example usage, see the documentation of the target procedure requiring this object.<br>
     !>
     !>  \see
+    !>  [sgl](@ref pm_polynomial::sgl)<br>
     !>  [eigen](@ref pm_polynomial::eigen)<br>
     !>  [jenkins](@ref pm_polynomial::jenkins)<br>
     !>  [laguerre](@ref pm_polynomial::laguerre)<br>
+    !>  [sgl_type](@ref pm_polynomial::sgl_type)<br>
     !>  [eigen_type](@ref pm_polynomial::eigen_type)<br>
     !>  [jenkins_type](@ref pm_polynomial::jenkins_type)<br>
     !>  [laguerre_type](@ref pm_polynomial::laguerre_type)<br>
@@ -3254,7 +3395,7 @@ module pm_polynomial
     !>  \final{jenkins}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type(jenkins_type), parameter :: jenkins = jenkins_type()
 #if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
     !DIR$ ATTRIBUTES DLLEXPORT :: jenkins
@@ -3277,9 +3418,11 @@ module pm_polynomial
     !>  (e.g., [laguerre](@ref pm_polynomial::laguerre) as directed by the documentation of the specific procedure they intend to use.<br>
     !>
     !>  \see
+    !>  [sgl](@ref pm_polynomial::sgl)<br>
     !>  [eigen](@ref pm_polynomial::eigen)<br>
     !>  [jenkins](@ref pm_polynomial::jenkins)<br>
     !>  [laguerre](@ref pm_polynomial::laguerre)<br>
+    !>  [sgl_type](@ref pm_polynomial::sgl_type)<br>
     !>  [eigen_type](@ref pm_polynomial::eigen_type)<br>
     !>  [jenkins_type](@ref pm_polynomial::jenkins_type)<br>
     !>  [laguerre_type](@ref pm_polynomial::laguerre_type)<br>
@@ -3288,7 +3431,7 @@ module pm_polynomial
     !>  \final{laguerre_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(method_type) :: laguerre_type
     end type
 
@@ -3301,9 +3444,11 @@ module pm_polynomial
     !>  For example usage, see the documentation of the target procedure requiring this object.<br>
     !>
     !>  \see
+    !>  [sgl](@ref pm_polynomial::sgl)<br>
     !>  [eigen](@ref pm_polynomial::eigen)<br>
     !>  [jenkins](@ref pm_polynomial::jenkins)<br>
     !>  [laguerre](@ref pm_polynomial::laguerre)<br>
+    !>  [sgl_type](@ref pm_polynomial::sgl_type)<br>
     !>  [eigen_type](@ref pm_polynomial::eigen_type)<br>
     !>  [jenkins_type](@ref pm_polynomial::jenkins_type)<br>
     !>  [laguerre_type](@ref pm_polynomial::laguerre_type)<br>
@@ -3312,7 +3457,7 @@ module pm_polynomial
     !>  \final{laguerre}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type(laguerre_type), parameter :: laguerre = laguerre_type()
 #if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
     !DIR$ ATTRIBUTES DLLEXPORT :: laguerre
@@ -3520,6 +3665,10 @@ module pm_polynomial
     !>                                  <li>    the scalar constant [laguerre](@ref pm_polynomial::laguerre) or a
     !>                                          constant object of type [laguerre_type](@ref pm_polynomial::laguerre_type)
     !>                                          implying the use of the Laguerre root-finding method.<br>
+    !>                                  <li>    the scalar constant [sgl](@ref pm_polynomial::sgl) or a
+    !>                                          constant object of type [sgl_type](@ref pm_polynomial::sgl_type)
+    !>                                          implying the use of the Skowron-Gould root-finding method.<br>
+    !>                                          **This method is yet to be fully implemented**.<br>
     !>                              </ol>
     !>                              **Which polynomial root-finding method should I use?**<br>
     !>                              <ol>
@@ -3540,7 +3689,7 @@ module pm_polynomial
     !>  \interface{getPolyRoot}
     !>  \code{.F90}
     !>
-    !>      use pm_polynomial, only: getPolyRoot
+    !>      use pm_polynomial, only: getPolyRoot, eigen, jenkins, laguerre, sgl
     !>      complex(kind(coef)), allocatable :: root(:)
     !>
     !>      root = getPolyRoot(coef(:)) ! allocatable output.
@@ -3566,6 +3715,27 @@ module pm_polynomial
     !>  \compilef{getPolyRoot}
     !>  \output{getPolyRoot}
     !>  \include{lineno} example/pm_polynomial/getPolyRoot/main.out.F90
+    !>
+    !>  \benchmarks
+    !>
+    !>  \benchmark{setPolyRoot, The effects of `method` on runtime efficiency}
+    !>  The following program compares the runtime performance of [setPolyRoot](@ref pm_polynomial::setPolyRoot)
+    !>  using different polynomial root finding algorithms.<br>
+    !>
+    !>  \include{lineno} benchmark/pm_polynomial/setPolyRoot/main.F90
+    !>  \compilefb{setPolyRoot}
+    !>  \postprocb{setPolyRoot}
+    !>  \include{lineno} benchmark/pm_polynomial/setPolyRoot/main.py
+    !>  \visb{setPolyRoot}
+    !>  \image html benchmark/pm_polynomial/setPolyRoot/benchmark.setPolyRoot.runtime.png width=1000
+    !>  \image html benchmark/pm_polynomial/setPolyRoot/benchmark.setPolyRoot.runtime.ratio.png width=1000
+    !>  \image html benchmark/pm_polynomial/setPolyRoot/benchmark.setPolyRoot.root.count.png width=1000
+    !>  \moralb{setPolyRoot}
+    !>      -#  Among all summation algorithms, [jenkins_type](@ref pm_polynomial::jenkins_type)
+    !>          appears to offer the fastest root finding algorithms.<br>
+    !>      -#  The [eigen_type](@ref pm_polynomial::eigen_type) method also tends to offer excellent performance.<br>
+    !>      -#  Unlike the above two, [laguerre_type](@ref pm_polynomial::laguerre_type) algorithm tends to significantly
+    !>          trail behind both in performance and reliability in finding all roots of the polynomial.<br>
     !>
     !>  \test
     !>  [test_pm_polynomial](@ref test_pm_polynomial)
@@ -4125,6 +4295,146 @@ module pm_polynomial
 
     end interface
 
+    ! Skowron-Gould method.
+
+    interface getPolyRoot
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#if CK5_ENABLED
+    module function getPolyRootSGL_CK5_CK5(coef, method) result(root)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: getPolyRootSGL_CK5_CK5
+#endif
+        use pm_kind, only: CKG => CK5
+        complex(CKG)                            , allocatable   :: root(:)
+        complex(CKG)            , intent(in)    , contiguous    :: coef(:)
+        type(sgl_type)          , intent(in)                    :: method
+    end function
+#endif
+
+#if CK4_ENABLED
+    module function getPolyRootSGL_CK4_CK4(coef, method) result(root)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: getPolyRootSGL_CK4_CK4
+#endif
+        use pm_kind, only: CKG => CK4
+        complex(CKG)                            , allocatable   :: root(:)
+        complex(CKG)            , intent(in)    , contiguous    :: coef(:)
+        type(sgl_type)          , intent(in)                    :: method
+    end function
+#endif
+
+#if CK3_ENABLED
+    module function getPolyRootSGL_CK3_CK3(coef, method) result(root)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: getPolyRootSGL_CK3_CK3
+#endif
+        use pm_kind, only: CKG => CK3
+        complex(CKG)                            , allocatable   :: root(:)
+        complex(CKG)            , intent(in)    , contiguous    :: coef(:)
+        type(sgl_type)          , intent(in)                    :: method
+    end function
+#endif
+
+#if CK2_ENABLED
+    module function getPolyRootSGL_CK2_CK2(coef, method) result(root)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: getPolyRootSGL_CK2_CK2
+#endif
+        use pm_kind, only: CKG => CK2
+        complex(CKG)                            , allocatable   :: root(:)
+        complex(CKG)            , intent(in)    , contiguous    :: coef(:)
+        type(sgl_type)          , intent(in)                    :: method
+    end function
+#endif
+
+#if CK1_ENABLED
+    module function getPolyRootSGL_CK1_CK1(coef, method) result(root)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: getPolyRootSGL_CK1_CK1
+#endif
+        use pm_kind, only: CKG => CK1
+        complex(CKG)                            , allocatable   :: root(:)
+        complex(CKG)            , intent(in)    , contiguous    :: coef(:)
+        type(sgl_type)          , intent(in)                    :: method
+    end function
+#endif
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#if RK5_ENABLED
+    module function getPolyRootSGL_RK5_CK5(coef, method) result(root)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: getPolyRootSGL_RK5_CK5
+#endif
+        use pm_kind, only: RKG => RK5
+        complex(RKG)                            , allocatable   :: root(:)
+        real(RKG)               , intent(in)    , contiguous    :: coef(:)
+        type(sgl_type)          , intent(in)                    :: method
+    end function
+#endif
+
+#if RK4_ENABLED
+    module function getPolyRootSGL_RK4_CK4(coef, method) result(root)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: getPolyRootSGL_RK4_CK4
+#endif
+        use pm_kind, only: RKG => RK4
+        complex(RKG)                            , allocatable   :: root(:)
+        real(RKG)               , intent(in)    , contiguous    :: coef(:)
+        type(sgl_type)          , intent(in)                    :: method
+    end function
+#endif
+
+#if RK3_ENABLED
+    module function getPolyRootSGL_RK3_CK3(coef, method) result(root)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: getPolyRootSGL_RK3_CK3
+#endif
+        use pm_kind, only: RKG => RK3
+        complex(RKG)                            , allocatable   :: root(:)
+        real(RKG)               , intent(in)    , contiguous    :: coef(:)
+        type(sgl_type)          , intent(in)                    :: method
+    end function
+#endif
+
+#if RK2_ENABLED
+    module function getPolyRootSGL_RK2_CK2(coef, method) result(root)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: getPolyRootSGL_RK2_CK2
+#endif
+        use pm_kind, only: RKG => RK2
+        complex(RKG)                            , allocatable   :: root(:)
+        real(RKG)               , intent(in)    , contiguous    :: coef(:)
+        type(sgl_type)          , intent(in)                    :: method
+    end function
+#endif
+
+#if RK1_ENABLED
+    module function getPolyRootSGL_RK1_CK1(coef, method) result(root)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: getPolyRootSGL_RK1_CK1
+#endif
+        use pm_kind, only: RKG => RK1
+        complex(RKG)                            , allocatable   :: root(:)
+        real(RKG)               , intent(in)    , contiguous    :: coef(:)
+        type(sgl_type)          , intent(in)                    :: method
+    end function
+#endif
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    end interface
+
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     !   \param[out] workspace   :   The output matrix of shape `(size(coef) - 1, size(coef) - 1)`,
@@ -4141,51 +4451,58 @@ module pm_polynomial
     !>  \details
     !>  See the documentation of [pm_polynomial](@ref pm_polynomial) for details of the root-finding method.<br>
     !>
-    !>  \param[out] root        :   The output `contiguous` vector of type `complex` of the same kind as the input
-    !>                              argument `coef` and the same size as the degree of the polynomial (i.e., `size(coef) - 1`),
-    !>                              containing the roots of the polynomial determined from the polynomial coefficients `coef`.<br>
-    !>  \param[out] count       :   The output scalar of type `integer` of default kind \IK, containing the
-    !>                              total number of roots computed and stored in the output vector slice `root(1 : count)`.<br>
-    !>                              A value of `count = size(root)` implies a successful computation of all polynomial roots.<br>
-    !>                              A value of `count = 0` implies a total failure of the algorithm in finding any roots.<br>
-    !>                              The condition `count < size(root)` occurs if either,<br>
-    !>                              <ul>
-    !>                                  <li>    the algorithm fails to converge, or<br>
-    !>                                  <li>    the algorithm fails to identify all roots of the polynomial, or<br>
-    !>                                  <li>    the condition `coef(size(coef)) == 0.` occurs (i.e., when the coefficient of the highest power of the polynomial is zero), or<br>
-    !>                                  <li>    the condition `size(coef) < 2` occurs (i.e., when the input polynomial is a constant).<br>
-    !>                              </ul>
-    !>  \param[in]  coef        :   The input `contiguous` vector of,<br>
-    !>                              <ol>
-    !>                                  <li>    type `complex` of kind \CKALL, or<br>
-    !>                                  <li>    type `real` of kind \RKALL, <br>
-    !>                              </ol>
-    !>                              containing the coefficients of the polynomial in the order of **increasing power**.<br>
-    !>                              By definition, the degree of the polynomial is `size(coef) - 1`.<br>
-    !>  \param[in]  method      :   The input scalar constant that can be any of the following:<br>
-    !>                              <ol>
-    !>                                  <li>    the scalar constant [eigen](@ref pm_polynomial::eigen) or a
-    !>                                          constant object of type [eigen_type](@ref pm_polynomial::eigen_type)
-    !>                                          implying the use of the Eigenvalue root-finding method.<br>
-    !>                                  <li>    the scalar constant [jenkins](@ref pm_polynomial::jenkins) or a
-    !>                                          constant object of type [jenkins_type](@ref pm_polynomial::jenkins_type)
-    !>                                          implying the use of the Jenkins-Traub root-finding method.<br>
-    !>                                  <li>    the scalar constant [laguerre](@ref pm_polynomial::laguerre) or a
-    !>                                          constant object of type [laguerre_type](@ref pm_polynomial::laguerre_type)
-    !>                                          implying the use of the Laguerre root-finding method.<br>
-    !>                              </ol>
-    !>                              **Which polynomial root-finding method should I use?**<br>
-    !>                              <ol>
-    !>                                  <li>    If you have a polynomial of highly varying coefficients, then the Eigenvalue method as
-    !>                                          specified by [eigen_type](@ref pm_polynomial::eigen_type) is likely more reliable.<br>
-    !>                                  <li>    The [Jenkins-Traub](@ref pm_polynomial) is also considered a relatively reliable
-    !>                                          fast **Sure-Fire** technique for finding the roots of polynomials.<br>
-    !>                              </ol>
+    !>  \param[inout]   root        :   The output `contiguous` vector of type `complex` of the same kind as the input
+    !>                                  argument `coef` and the same size as the degree of the polynomial (i.e., `size(coef) - 1`),
+    !>                                  containing the roots of the polynomial determined from the polynomial coefficients `coef`.<br>
+    !>                                  If the specified input `method` argument is of type [sgl_type](@ref pm_polynomial::sgl_type),
+    !>                                  the argument `root` has `intent(inout)` and the input values will be used to initialize the
+    !>                                  root searching only if the condition `method%%reckoned == .true.` holds.<br>
+    !>  \param[out]     count       :   The output scalar of type `integer` of default kind \IK, containing the
+    !>                                  total number of roots computed and stored in the output vector slice `root(1 : count)`.<br>
+    !>                                  A value of `count = size(root)` implies a successful computation of all polynomial roots.<br>
+    !>                                  A value of `count = 0` implies a total failure of the algorithm in finding any roots.<br>
+    !>                                  The condition `count < size(root)` occurs if either,<br>
+    !>                                  <ul>
+    !>                                      <li>    the algorithm fails to converge, or<br>
+    !>                                      <li>    the algorithm fails to identify all roots of the polynomial, or<br>
+    !>                                      <li>    the condition `coef(size(coef)) == 0.` occurs (i.e., when the coefficient of the highest power of the polynomial is zero), or<br>
+    !>                                      <li>    the condition `size(coef) < 2` occurs (i.e., when the input polynomial is a constant).<br>
+    !>                                  </ul>
+    !>  \param[in]      coef        :   The input `contiguous` vector of,<br>
+    !>                                  <ol>
+    !>                                      <li>    type `complex` of kind \CKALL, or<br>
+    !>                                      <li>    type `real` of kind \RKALL, <br>
+    !>                                  </ol>
+    !>                                  containing the coefficients of the polynomial in the order of **increasing power**.<br>
+    !>                                  By definition, the degree of the polynomial is `size(coef) - 1`.<br>
+    !>  \param[in]      method      :   The input scalar constant that can be any of the following:<br>
+    !>                                  <ol>
+    !>                                      <li>    the scalar constant [eigen](@ref pm_polynomial::eigen) or a
+    !>                                              constant object of type [eigen_type](@ref pm_polynomial::eigen_type)
+    !>                                              implying the use of the Eigenvalue root-finding method.<br>
+    !>                                      <li>    the scalar constant [jenkins](@ref pm_polynomial::jenkins) or a
+    !>                                              constant object of type [jenkins_type](@ref pm_polynomial::jenkins_type)
+    !>                                              implying the use of the Jenkins-Traub root-finding method.<br>
+    !>                                      <li>    the scalar constant [laguerre](@ref pm_polynomial::laguerre) or a
+    !>                                              constant object of type [laguerre_type](@ref pm_polynomial::laguerre_type)
+    !>                                              implying the use of the Laguerre root-finding method.<br>
+    !>                                      <li>    the scalar constant [sgl](@ref pm_polynomial::sgl) or a
+    !>                                              constant object of type [sgl_type](@ref pm_polynomial::sgl_type)
+    !>                                              implying the use of the Skowron-Gould root-finding method.<br>
+    !>                                              **This method is yet to be fully implemented**.<br>
+    !>                                  </ol>
+    !>                                  **Which polynomial root-finding method should I use?**<br>
+    !>                                  <ol>
+    !>                                      <li>    If you have a polynomial of highly varying coefficients, then the Eigenvalue method as
+    !>                                              specified by [eigen_type](@ref pm_polynomial::eigen_type) is likely more reliable.<br>
+    !>                                      <li>    The [Jenkins-Traub](@ref pm_polynomial) is also considered a relatively reliable
+    !>                                              fast **Sure-Fire** technique for finding the roots of polynomials.<br>
+    !>                                  </ol>
     !>
     !>  \interface{setPolyRoot}
     !>  \code{.F90}
     !>
-    !>      use pm_polynomial, only: setPolyRoot
+    !>      use pm_polynomial, only: setPolyRoot, eigen_type, jenkins_type, laguerre_type, sgl_type
     !>
     !>      call setPolyRoot(root(1 : degree), count, coef(0 : degree), method) ! `degree` is the degree of the polynomial.
     !>
@@ -4220,6 +4537,26 @@ module pm_polynomial
     !>  \output{setPolyRoot}
     !>  \include{lineno} example/pm_polynomial/setPolyRoot/main.out.F90
     !>
+    !>  \benchmarks
+    !>
+    !>  \benchmark{setPolyRoot, The effects of `method` on runtime efficiency}
+    !>  The following program compares the runtime performance of [setPolyRoot](@ref pm_polynomial::setPolyRoot)
+    !>  using different polynomial root finding algorithms.<br>
+    !>
+    !>  \include{lineno} benchmark/pm_polynomial/setPolyRoot/main.F90
+    !>  \compilefb{setPolyRoot}
+    !>  \postprocb{setPolyRoot}
+    !>  \include{lineno} benchmark/pm_polynomial/setPolyRoot/main.py
+    !>  \visb{setPolyRoot}
+    !>  \image html benchmark/pm_polynomial/setPolyRoot/benchmark.setPolyRoot.runtime.png width=1000
+    !>  \image html benchmark/pm_polynomial/setPolyRoot/benchmark.setPolyRoot.runtime.ratio.png width=1000
+    !>  \image html benchmark/pm_polynomial/setPolyRoot/benchmark.setPolyRoot.root.count.png width=1000
+    !>  \moralb{setPolyRoot}
+    !>      -#  Among all root finding algorithms, [jenkins_type](@ref pm_polynomial::jenkins_type) appears to be the fastest.<br>
+    !>      -#  The [eigen_type](@ref pm_polynomial::eigen_type) method also tends to offer a comparably good performance.<br>
+    !>      -#  Unlike the above two, [laguerre_type](@ref pm_polynomial::laguerre_type) algorithm tends to significantly
+    !>          trail behind both in performance and reliability in finding all roots of the polynomial.<br>
+    !>
     !>  \test
     !>  [test_pm_polynomial](@ref test_pm_polynomial)
     !>
@@ -4245,9 +4582,8 @@ module pm_polynomial
     !>  These remaining goto statements should be carefully removed in the future.<br>
     !>
     !>  \todo
-    !>  \pmed
-    !>  A benchmark comparing the runtime performances of the different polynomial
-    !>  root-finding algorithms of the ParaMonte library should be added here.<br>
+    !>  \pvhigh
+    !>  The method of Skowron-Gould must be fully implemented.<br>
     !>
     !>  \todo
     !>  \pmed
@@ -4276,6 +4612,7 @@ module pm_polynomial
     !>
     !>  \author
     !>  \AmirShahmoradi, Oct 16, 2009, 11:14 AM, Michigan
+    !>  \FatemehBagheri, Friday 09:51 AM, September 6, 2024, NASA Goddard Space Flight Center, Washington, D.C.
 
     ! Eigenvalue method.
 
@@ -4726,6 +5063,148 @@ module pm_polynomial
         complex(RKG)            , intent(out)   , contiguous    :: root(:)
         integer(IK)             , intent(out)                   :: count
         type(laguerre_type)     , intent(in)                    :: method
+    end subroutine
+#endif
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    end interface
+
+    ! Skowron-Gould method.
+
+    interface setPolyRoot
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#if CK5_ENABLED
+    module subroutine setPolyRootSGL_CK5_CK5(root, count, coef, method)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: setPolyRootSGL_CK5_CK5
+#endif
+        use pm_kind, only: CKG => CK5
+        complex(CKG)            , intent(in)    , contiguous    :: coef(:)
+        complex(CKG)            , intent(inout) , contiguous    :: root(:)
+        integer(IK)             , intent(out)                   :: count
+        type(sgl_type)          , intent(in)                    :: method
+    end subroutine
+#endif
+
+#if CK4_ENABLED
+    module subroutine setPolyRootSGL_CK4_CK4(root, count, coef, method)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: setPolyRootSGL_CK4_CK4
+#endif
+        use pm_kind, only: CKG => CK4
+        complex(CKG)            , intent(in)    , contiguous    :: coef(:)
+        complex(CKG)            , intent(inout) , contiguous    :: root(:)
+        integer(IK)             , intent(out)                   :: count
+        type(sgl_type)          , intent(in)                    :: method
+    end subroutine
+#endif
+
+#if CK3_ENABLED
+    module subroutine setPolyRootSGL_CK3_CK3(root, count, coef, method)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: setPolyRootSGL_CK3_CK3
+#endif
+        use pm_kind, only: CKG => CK3
+        complex(CKG)            , intent(in)    , contiguous    :: coef(:)
+        complex(CKG)            , intent(inout) , contiguous    :: root(:)
+        integer(IK)             , intent(out)                   :: count
+        type(sgl_type)          , intent(in)                    :: method
+    end subroutine
+#endif
+
+#if CK2_ENABLED
+    module subroutine setPolyRootSGL_CK2_CK2(root, count, coef, method)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: setPolyRootSGL_CK2_CK2
+#endif
+        use pm_kind, only: CKG => CK2
+        complex(CKG)            , intent(in)    , contiguous    :: coef(:)
+        complex(CKG)            , intent(inout) , contiguous    :: root(:)
+        integer(IK)             , intent(out)                   :: count
+        type(sgl_type)          , intent(in)                    :: method
+    end subroutine
+#endif
+
+#if CK1_ENABLED
+    module subroutine setPolyRootSGL_CK1_CK1(root, count, coef, method)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: setPolyRootSGL_CK1_CK1
+#endif
+        use pm_kind, only: CKG => CK1
+        complex(CKG)            , intent(in)    , contiguous    :: coef(:)
+        complex(CKG)            , intent(inout) , contiguous    :: root(:)
+        integer(IK)             , intent(out)                   :: count
+        type(sgl_type)          , intent(in)                    :: method
+    end subroutine
+#endif
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#if RK5_ENABLED
+    module subroutine setPolyRootSGL_RK5_CK5(root, count, coef, method)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: setPolyRootSGL_RK5_CK5
+#endif
+        use pm_kind, only: RKG => RK5
+        real(RKG)               , intent(in)    , contiguous    :: coef(:)
+        complex(RKG)            , intent(inout) , contiguous    :: root(:)
+        integer(IK)             , intent(out)                   :: count
+        type(sgl_type)          , intent(in)                    :: method
+    end subroutine
+#endif
+
+#if RK4_ENABLED
+    module subroutine setPolyRootSGL_RK4_CK4(root, count, coef, method)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: setPolyRootSGL_RK4_CK4
+#endif
+        use pm_kind, only: RKG => RK4
+        real(RKG)               , intent(in)    , contiguous    :: coef(:)
+        complex(RKG)            , intent(inout) , contiguous    :: root(:)
+        integer(IK)             , intent(out)                   :: count
+        type(sgl_type)          , intent(in)                    :: method
+    end subroutine
+#endif
+
+#if RK3_ENABLED
+    module subroutine setPolyRootSGL_RK3_CK3(root, count, coef, method)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: setPolyRootSGL_RK3_CK3
+#endif
+        use pm_kind, only: RKG => RK3
+        real(RKG)               , intent(in)    , contiguous    :: coef(:)
+        complex(RKG)            , intent(inout) , contiguous    :: root(:)
+        integer(IK)             , intent(out)                   :: count
+        type(sgl_type)          , intent(in)                    :: method
+    end subroutine
+#endif
+
+#if RK2_ENABLED
+    module subroutine setPolyRootSGL_RK2_CK2(root, count, coef, method)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: setPolyRootSGL_RK2_CK2
+#endif
+        use pm_kind, only: RKG => RK2
+        real(RKG)               , intent(in)    , contiguous    :: coef(:)
+        complex(RKG)            , intent(inout) , contiguous    :: root(:)
+        integer(IK)             , intent(out)                   :: count
+        type(sgl_type)          , intent(in)                    :: method
+    end subroutine
+#endif
+
+#if RK1_ENABLED
+    module subroutine setPolyRootSGL_RK1_CK1(root, count, coef, method)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: setPolyRootSGL_RK1_CK1
+#endif
+        use pm_kind, only: RKG => RK1
+        real(RKG)               , intent(in)    , contiguous    :: coef(:)
+        complex(RKG)            , intent(inout) , contiguous    :: root(:)
+        integer(IK)             , intent(out)                   :: count
+        type(sgl_type)          , intent(in)                    :: method
     end subroutine
 #endif
 

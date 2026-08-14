@@ -33,7 +33,7 @@
 !>  **Singular matrices are rare** in the sense that if a square matrix entries are randomly selected from any bounded region on the number line or complex plane,
 !>  the probability that the matrix is singular is \f$0\f$, that is, it will *almost never* be singular.<br>
 !>  **Non-square matrices do not have an inverse**.<br>
-!>  However, in some cases such a matrix may have a **left inverse** or **right inverse**. <br>
+!>  However, in some cases such a matrix may have a **left inverse** or **right inverse**.<br>
 !>  If \f$A\f$ is \f$m\f$-by-\f$n\f$ and the rank of \f$A\f$ is equal to \f$n\f$ (\f$n \leq m\f$),
 !>  then \f$A\f$ has a **left inverse**, an \f$n\f$-by-\f$m\f$ matrix \f$B\f$ such that \f$BA = I_n\f$.<br>
 !>  If \f$A\f$ has rank \f$m\f$ (\f$m \leq n\f$), then it has a **right inverse**, an \f$n\f$-by-\f$m\f$ matrix \f$B\f$ such that \f$AB = I_m\f$.<br>
@@ -205,7 +205,7 @@
 !>  \final
 !>
 !>  \author
-!>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+!>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
 
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -255,7 +255,7 @@ module pm_matrixInv
     !>  \final{inversion_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type :: inversion_type
     end type
 
@@ -273,7 +273,7 @@ module pm_matrixInv
     !>  \final{inversion}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type(inversion_type), parameter :: inversion = inversion_type()
 #if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
     !DIR$ ATTRIBUTES DLLEXPORT :: inversion
@@ -314,7 +314,7 @@ module pm_matrixInv
     !>  \interface{getMatInv}
     !>  \code{.F90}
     !>
-    !>      use pm_matrixInv, only: getMatInv
+    !>      use pm_matrixInv, only: getMatInv, choUpp, choLow, upperDiag, lowerDiag
     !>
     !>      inv(1:ndim, 1:ndim) = getMatInv(mat(1:ndim, 1:ndim))
     !>      inv(1:ndim, 1:ndim) = getMatInv(mat(1:ndim, 1:ndim), auxil)
@@ -355,7 +355,7 @@ module pm_matrixInv
     !>  \final{getMatInv}
     !>
     !>  \author
-    !>  \AmirShahmoradi, Apr 21, 2017, 1:54 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, Apr 21, 2017, 1:54 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
 
     ! implicit Def.
 
@@ -1733,6 +1733,8 @@ module pm_matrixInv
     !>  \code{.F90}
     !>
     !>      use pm_matrixInv, only: setMatInv
+    !>      use pm_matrixInv, only: choLow, choUpp
+    !>      use pm_matrixInv, only: upperDiag, lowerDiag
     !>
     !>      call setMatInv(inv(1:ndim, 1:ndim), mat(1:ndim, 1:ndim), auxil)
     !>      call setMatInv(inv(1:ndim, 1:ndim), mat(1:ndim, 1:ndim), auxil, subset) ! only if subset = choLow, choUpp.
@@ -1779,7 +1781,7 @@ module pm_matrixInv
     !>  \final{setMatInv}
     !>
     !>  \author
-    !>  \AmirShahmoradi, Apr 21, 2017, 1:54 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, Apr 21, 2017, 1:54 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
 
     ! implicit upperDiag invFUL.
 

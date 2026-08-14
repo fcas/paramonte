@@ -66,9 +66,9 @@
 !>                  <li>    \f$k(i, j) = i - 1 + j * (j - 1) / 2\f$ for a column-major matrix layout (Fortran-style).
 !>                  <li>    \f$k(i, j) = j - 1 + (i - 1) * (2 * n - i) / 2\f$ for a row-major matrix layout (C-style).
 !>              </ol>
-!>      <li>    <b>Rectangular Band packing (RBP or [rbpack](@ref pm_matrixPack))</b> which is to be added to this module.<br>
-!>      <li>    <b>Rectangular Full packing (RFP or [rfpack](@ref pm_matrixPack::rfpack))</b> for symmetric, Hermitian, or triangular matrices.<br>
-!>              The Rectangular Full packing is a combination of the contiguous and triangular packings.<br>
+!>      <li>    <b>Rectangular Band Packing (RBP or [rbpack](@ref pm_matrixPack))</b> which is to be added to this module.<br>
+!>      <li>    <b>Rectangular Full Packing (RFP or [rfpack](@ref pm_matrixPack::rfpack))</b> for symmetric, Hermitian, or triangular matrices.<br>
+!>              The Rectangular Full Packing is a combination of the contiguous and triangular packings.<br>
 !>              It can be used to pack the upper or lower triangle of a symmetric, Hermitian, or triangular matrix **contiguously**.<br>
 !>              It offers the package savings of the triangular packing plus the efficiency of using contiguous-pack Level 3 BLAS and LAPACK routines.<br>
 !>              The RFP scheme is typically defined by three parameters in major libraries such as Intel MKL:<br>
@@ -118,7 +118,7 @@
 !>  \final
 !>
 !>  \author
-!>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+!>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
 
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -156,7 +156,7 @@ module pm_matrixPack
     !>  \final{package_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, abstract :: package_type
     end type
 
@@ -194,7 +194,7 @@ module pm_matrixPack
     !>  \final{ldpack_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(package_type) :: ldpack_type
     end type
 
@@ -232,7 +232,7 @@ module pm_matrixPack
     !>  \final{rdpack_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(package_type) :: rdpack_type
     end type
 
@@ -259,7 +259,7 @@ module pm_matrixPack
     !>  \final{rdpack}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type(rdpack_type), parameter :: rdpack = rdpack_type()
 #if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
     !DIR$ ATTRIBUTES DLLEXPORT :: rdpack
@@ -298,7 +298,7 @@ module pm_matrixPack
     !>  \final{lcpack_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(ldpack_type) :: lcpack_type
     end type
 
@@ -332,7 +332,7 @@ module pm_matrixPack
     !>  \final{rcpack_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(rdpack_type) :: rcpack_type
     end type
 
@@ -370,7 +370,7 @@ module pm_matrixPack
     !>  \final{lfpack_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(lcpack_type) :: lfpack_type
     end type
 
@@ -397,7 +397,7 @@ module pm_matrixPack
     !>  \final{lfpack}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type(lfpack_type), parameter :: lfpack = lfpack_type()
 #if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
     !DIR$ ATTRIBUTES DLLEXPORT :: lfpack
@@ -437,7 +437,7 @@ module pm_matrixPack
     !>  \final{rfpack_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(rcpack_type) :: rfpack_type
     end type
 
@@ -464,7 +464,7 @@ module pm_matrixPack
     !>  \final{rfpack}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type(rfpack_type), parameter :: rfpack = rfpack_type()
 #if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
     !DIR$ ATTRIBUTES DLLEXPORT :: rfpack

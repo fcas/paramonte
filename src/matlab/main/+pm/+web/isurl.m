@@ -1,46 +1,51 @@
+%>  \brief
+%>  Return a scalar MATLAB logical that is ``true`` if and
+%>  only if the input URL string exists in the world wide web.<br>
+%>
+%>  \param[in]  url :   The input scalar MATLAB string
+%>                      whose existence as a URL is to be tested.<br>
+%>
+%>  \return
+%>  ``itis``        :   The output scalar MATLAB logical that is ``true`` if and
+%>                      only if the input URL string exists in the world wide web.<br>
+%>
+%>  \interface{isurl}
+%>  \code{.m}
+%>
+%>      itis = pm.web.isurl(url)
+%>
+%>  \endcode
+%>
+%>  \example{isurl}
+%>  \include{lineno} example/web/isurl/main.m
+%>  \output{isurl}
+%>  \include{lineno} example/web/isurl/main.out.m
+%>
+%>  \final{isurl}
+%>
+%>  \author
+%>  \JoshuaOsborne, May 22 2024, 7:50 PM, University of Texas at Arlington<br>
+%>  \FatemehBagheri, May 20 2024, 1:25 PM, NASA Goddard Space Flight Center (GSFC), Washington, D.C.<br>
+%>  \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin<br>
 function itis = isurl(url)
-    %
-    %   Return a scalar MATLAB logical that is ``true`` if and
-    %   only if the input URL string exists in the world wide web.
-    %
-    %   Parameters
-    %   ----------
-    %
-    %       url
-    %
-    %           The input scalar MATLAB string
-    %           whose existence as a URL is to be tested.
-    %
-    %   Returns
-    %   -------
-    %
-    %       itis
-    %
-    %           The output scalar MATLAB logical that is ``true`` if and
-    %           only if the input URL string exists in the world wide web.
-    %
-    %   Interface
-    %   ---------
-    %
-    %       itis = pm.web.isurl(url)
-    %
-    %   LICENSE
-    %   -------
-    %
-    %       https://github.com/cdslaborg/paramonte/blob/main/LICENSE.md
-    %
     itis = false;
     try
         urlobj = java.net.URL(url); %create the url object
-        % Get the proxy information using the MATLAB proxy API.
+        %%%%
+        %%%% Get the proxy information using the MATLAB proxy API.
+        %%%%
         proxy = com.mathworks.webproxy.WebproxyFactory.findProxyForURL(urlobj);
-        % Open a connection to the urlobj.
+        %%%%
+        %%%% Open a connection to the urlobj.
+        %%%%
         if isempty(proxy)
             urlConnection = urlobj.openConnection;
         else
             urlConnection = urlobj.openConnection(proxy);
         end
-        % Try to start the input stream.
+        %%%%
+        %%%% Try to start the input stream.
+        %%%%
         inputStream = urlConnection.getInputStream;
         itis = true;
     end

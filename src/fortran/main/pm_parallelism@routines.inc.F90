@@ -20,7 +20,7 @@
 !>  \final
 !>
 !>  \author
-!>  \AmirShahmoradi, Tuesday March 7, 2017, 3:50 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+!>  \AmirShahmoradi, Tuesday March 7, 2017, 3:50 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
 
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -48,14 +48,16 @@
         !>  \final{MAX_NUM_IMAGE}
         !>
         !>  \author
-        !>  \AmirShahmoradi, Tuesday March 7, 2017, 3:50 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+        !>  \AmirShahmoradi, Tuesday March 7, 2017, 3:50 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
         !integer(IK)    , parameter :: MAX_NUM_IMAGE = (huge(0_IK) - mod(huge(0_IK), 2_IK)) / 2_IK ! maximum number of images supported by this algorithm.
         integer(IK)     , parameter :: POWER_BASE = 2_IK
         integer(IK)     , parameter :: MAX_NUM_IMAGE = (huge(0_IK) - mod(huge(0_IK), POWER_BASE)) / POWER_BASE
         integer(IK)     , parameter :: MID_NUM_IMAGE = 2**13_IK ! The number above which we switch to log-linear range.
+        integer(IK)     , parameter :: MAX_LIN_RANGE = 32_IK ! The maximum image count below which the scaling computation is guaranteed to be done for all image counts.
         character(*, SK), parameter :: PROCEDURE_NAME = MODULE_NAME//SK_"@setForkJoinScaling()"
         real(RKG)                   :: contributionImageFirst, totalRunTime, parSecTimeEffective, comSecTimeTotal
-        integer(IK)                 :: lenScaling, iell
+        real(RKG)                   :: powerBase(MAX_LIN_RANGE)
+        integer(IK)                 :: lenScaling, iell, ibase
         logical(LK)                 :: maxvalFound
 
         CHECK_ASSERTION(__LINE__, 0 <= seqSecTime, SK_"@setForkJoinScaling(): The condition `0 <= seqSecTime` must hold. seqSecTime = "//getStr(seqSecTime))
@@ -72,26 +74,37 @@
             else
                 lenScaling = ceiling(2._RKG / max(conProb, 0.001_RKG), IK)
             end if
+
+            !if (allocated(scaling)) deallocate(scaling); allocate(scaling(lenScaling))
+            !if (allocated(numproc)) deallocate(numproc); allocate(numproc(lenScaling))
             call setResized(scaling, lenScaling)
             call setResized(numproc, lenScaling)
 
             iell = 1_IK
+            ibase = 1_IK
             numproc(iell) = 1_IK
             scalingMaxLoc = iell
             scalingMaxVal = 1._RKG
             scaling(iell) = scalingMaxVal
             maxvalFound = .false._LK
+            call setLinSpace(powerBase, x1 = 1._RKG, x2 = real(POWER_BASE, RKG), fopen = .true._LK)
             loopScaling: do
                 if (numproc(iell) < MAX_NUM_IMAGE) then
                     if (iell < lenScaling) then
                         iell = iell + 1_IK
-                        if (0._RKG < comSecTime .and. numproc(iell - 1) < MID_NUM_IMAGE) then
+                        if (numproc(iell - 1) < MAX_LIN_RANGE .or. (0._RKG < comSecTime .and. numproc(iell - 1) < MID_NUM_IMAGE)) then
+                            ! Compute the scaling for all the first `MAX_LIN_RANGE` images or for as long as the second condition holds.
+                            ! The first condition was later added to allow detailed scaling
+                            ! results output for serial runs when `comSecTime == 0` holds.
                             numproc(iell) = iell
                         else
                             ! Here, the scaling function is monotonically increasing.
                             ! We cannot afford computing the scaling for each and every process count.
                             ! As a compromise, we do it for a log-linear range.
-                            numproc(iell) = numproc(iell - 1) * POWER_BASE
+                            !numproc(iell) = numproc(iell - 1) * POWER_BASE
+                            numproc(iell) = nint(numproc(iell - 1) * powerBase(min(ibase, MAX_LIN_RANGE)), IK)
+                            if (numproc(iell) == numproc(iell - 1)) numproc(iell) = numproc(iell) + 1_IK
+                            ibase = ibase + 1_IK
                         end if
                         ! compute the fraction of work done by the first image.
                         if (0._RKG < conProb) then

@@ -1,59 +1,55 @@
-classdef (Abstract) Handle < dynamicprops%handle
-    %
-    %   This is the ``Abstract`` base class for generating
-    %   subclass of MATLAB ``handle`` superclass whose annoying
-    %   methods are forcefully hidden from the user view.
-    %
-    %   Parameters
-    %   ----------
-    %
-    %       None
-    %
-    %   Returns
-    %   -------
-    %
-    %       None
-    %
-    %   Interface
-    %   ---------
-    %
-    %       Handle = pm.matlab.Handle()
-    %
-    %   LICENSE
-    %   -------
-    %
-    %       https://github.com/cdslaborg/paramonte/blob/main/LICENSE.md
-    %
+%>  \brief
+%>  This is the base class for generating
+%>  subclass of MATLAB ``handle`` superclass whose annoying
+%>  methods are forcefully hidden from the user view.<br>
+%>
+%>  \interface{Handle}
+%>  \code{.m}
+%>
+%>      handle = pm.matlab.Handle()
+%>
+%>  \endcode
+%>
+%>  \example{Handle}
+%>  \include{lineno} example/matlab/Handle/main.m
+%>  \output{Handle}
+%>  \include{lineno} example/matlab/Handle/main.out.m
+%>
+%>  \final{Handle}
+%>
+%>  \author
+%>  \JoshuaOsborne, May 21 2024, 11:31 PM, University of Texas at Arlington<br>
+%>  \FatemehBagheri, May 20 2024, 1:25 PM, NASA Goddard Space Flight Center (GSFC), Washington, D.C.<br>
+%>  \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin<br>
+classdef Handle < dynamicprops%handle
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     methods(Access = public)
+        %>  \brief
+        %>  Open the documentation of the class
+        %>  of the parent object on MATLAB display.
+        %>
+        %>  \details
+        %>  This is a dynamic method of the class [pm.matlab.Handle](@ref Handle).
+        %>
+        %>  \param[inout]   self    :   The **implicitly-passed** input argument representing the parent object of the method.<br>
+        %>
+        %>  \interface{doc}
+        %>  \code{.m}
+        %>
+        %>      h = pm.matlab.Handle();
+        %>      h.doc();
+        %>
+        %>  \endcode
+        %>
+        %>  \final{doc}
+        %>
+        %>  \author
+        %>  \JoshuaOsborne, May 21 2024, 11:34 PM, University of Texas at Arlington<br>
+        %>  \FatemehBagheri, May 20 2024, 1:25 PM, NASA Goddard Space Flight Center (GSFC), Washington, D.C.<br>
+        %>  \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin<br>
         function doc(self)
-            %
-            %   Open the documentation of the class
-            %   of the parent object on MATLAB display.
-            %
-            %   This is a dynamic method of the class ``pm.matlab.Handle``.
-            %
-            %   Parameters
-            %   ----------
-            %
-            %       None
-            %
-            %   Returns
-            %   -------
-            %
-            %       None
-            %
-            %   Interface
-            %   ---------
-            %
-            %       self.doc()
-            %
-            %   LICENSE
-            %   -------
-            %
-            %       https://github.com/cdslaborg/paramonte/blob/main/LICENSE.md
-            %
             doc(class(self));
         end
     end
@@ -61,33 +57,27 @@ classdef (Abstract) Handle < dynamicprops%handle
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     methods(Access = public)
+        %>  \brief
+        %>  Print help about the class of
+        %>  the parent object on MATLAB display.
+        %>
+        %>  \details
+        %>  This is a dynamic method of the class [pm.matlab.Handle](@ref Handle).
+        %>
+        %>  \interface{help}
+        %>  \code{.m}
+        %>
+        %>      self.help()
+        %>
+        %>  \endcode
+        %>
+        %>  \final{help}
+        %>
+        %>  \author
+        %>  \JoshuaOsborne, May 21 2024, 11:36 PM, University of Texas at Arlington<br>
+        %>  \FatemehBagheri, May 20 2024, 1:25 PM, NASA Goddard Space Flight Center (GSFC), Washington, D.C.<br>
+        %>  \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin<br>
         function help(self)
-            %
-            %   Print help about the class of
-            %   the parent object on MATLAB display.
-            %
-            %   This is a dynamic method of the class ``pm.matlab.Handle``.
-            %
-            %   Parameters
-            %   ----------
-            %
-            %       None
-            %
-            %   Returns
-            %   -------
-            %
-            %       None
-            %
-            %   Interface
-            %   ---------
-            %
-            %       self.help()
-            %
-            %   LICENSE
-            %   -------
-            %
-            %       https://github.com/cdslaborg/paramonte/blob/main/LICENSE.md
-            %
             help(class(self));
         end
     end
@@ -123,7 +113,7 @@ classdef (Abstract) Handle < dynamicprops%handle
                 if  propertyDoesNotExist
                     disp("hash{i}");
                     disp( hash{i} );
-                    error("The requested object property displayed above does not exist:");
+                    error("The requested object property displayed above does not exist.");
                 end
             end
         end
@@ -132,14 +122,18 @@ classdef (Abstract) Handle < dynamicprops%handle
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     methods(Access = public, Hidden)
-        function setKeyVal(self, field, key, val)
+        function setKeyVal(self, field, subfield, key, val)
             if  nargin < 4
-                if  isempty(self.(field))
-                    self.(field) = key;
+                if ~(isfield(self, field) || isprop(self, field)) || isempty(self.(field))
+                    self.(field) = subfield;
+                end
+            elseif  nargin < 5
+                if ~(isfield(self.(field), subfield) || isprop(self.(field), subfield)) || isempty(self.(field).(subfield))
+                    self.(field).(subfield) = key;
                 end
             else
-                if ~isfield(self.(field), key) || isempty(self.(field).(key))
-                    self.(field).(key) = val;
+                if ~(isfield(self.(field).(subfield), key) || isprop(self.(field).(subfield), key)) || isempty(self.(field).(subfield).(key))
+                    self.(field).(subfield).(key) = val;
                 end
             end
         end
@@ -159,6 +153,8 @@ classdef (Abstract) Handle < dynamicprops%handle
     end
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    %>  \cond excluded
 
     methods(Access = public, Hidden)
         function lh = addlistener(varargin)
@@ -201,6 +197,8 @@ classdef (Abstract) Handle < dynamicprops%handle
         %    TF = isvalid@handle(varargin{:});
         %end
     end
+
+    %>  \endcond excluded
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

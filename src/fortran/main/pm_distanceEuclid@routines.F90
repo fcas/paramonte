@@ -20,7 +20,7 @@
 !>  \final
 !>
 !>  \author
-!>  \AmirShahmoradi, Wednesday 5:43 PM, December 25, 2013, Institute for Fusion Studies, The University of Texas at Austin
+!>  \AmirShahmoradi, Wednesday 5:43 PM, December 25, 2013, Institute for Fusion Studies, The University of Texas Austin<br>
 
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -36,6 +36,7 @@ call setAsserted(ASSERTION,getFine(__FILE__,LINE)//MODULE_NAME//MSG);
 #define CHECK_ASSERTION(LINE,ASSERTION,MSG) continue;
 #endif
 
+    use pm_ellipsoid, only: setVolUnitBall
     implicit none
 
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -423,42 +424,42 @@ contains
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D1_XX_ENABLED 1
+#define D0_D1_XX_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MED_D1_XX_RK5
+    module procedure setDE_MED_D0_D1_XX_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MED_D1_XX_RK4
+    module procedure setDE_MED_D0_D1_XX_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MED_D1_XX_RK3
+    module procedure setDE_MED_D0_D1_XX_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MED_D1_XX_RK2
+    module procedure setDE_MED_D0_D1_XX_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MED_D1_XX_RK1
+    module procedure setDE_MED_D0_D1_XX_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -468,48 +469,48 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D1_XX_ENABLED
+#undef D0_D1_XX_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D2_XX_ENABLED 1
+#define D1_D2_XX_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MED_D2_XX_RK5
+    module procedure setDE_MED_D1_D2_XX_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MED_D2_XX_RK4
+    module procedure setDE_MED_D1_D2_XX_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MED_D2_XX_RK3
+    module procedure setDE_MED_D1_D2_XX_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MED_D2_XX_RK2
+    module procedure setDE_MED_D1_D2_XX_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MED_D2_XX_RK1
+    module procedure setDE_MED_D1_D2_XX_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -519,48 +520,48 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D2_XX_ENABLED
+#undef D1_D2_XX_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D1_D1_ENABLED 1
+#define D0_D1_D1_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MED_D1_D1_RK5
+    module procedure setDE_MED_D0_D1_D1_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MED_D1_D1_RK4
+    module procedure setDE_MED_D0_D1_D1_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MED_D1_D1_RK3
+    module procedure setDE_MED_D0_D1_D1_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MED_D1_D1_RK2
+    module procedure setDE_MED_D0_D1_D1_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MED_D1_D1_RK1
+    module procedure setDE_MED_D0_D1_D1_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -570,48 +571,48 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D1_D1_ENABLED
+#undef D0_D1_D1_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D1_D2_ENABLED 1
+#define D1_D1_D2_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MED_D1_D2_RK5
+    module procedure setDE_MED_D1_D1_D2_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MED_D1_D2_RK4
+    module procedure setDE_MED_D1_D1_D2_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MED_D1_D2_RK3
+    module procedure setDE_MED_D1_D1_D2_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MED_D1_D2_RK2
+    module procedure setDE_MED_D1_D1_D2_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MED_D1_D2_RK1
+    module procedure setDE_MED_D1_D1_D2_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -621,48 +622,48 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D1_D2_ENABLED
+#undef D1_D1_D2_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D2_D1_ENABLED 1
+#define D1_D2_D1_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MED_D2_D1_RK5
+    module procedure setDE_MED_D1_D2_D1_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MED_D2_D1_RK4
+    module procedure setDE_MED_D1_D2_D1_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MED_D2_D1_RK3
+    module procedure setDE_MED_D1_D2_D1_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MED_D2_D1_RK2
+    module procedure setDE_MED_D1_D2_D1_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MED_D2_D1_RK1
+    module procedure setDE_MED_D1_D2_D1_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -672,48 +673,48 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D2_D1_ENABLED
+#undef D1_D2_D1_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D2_D2_ENABLED 1
+#define D2_D2_D2_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MED_D2_D2_RK5
+    module procedure setDE_MED_D2_D2_D2_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MED_D2_D2_RK4
+    module procedure setDE_MED_D2_D2_D2_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MED_D2_D2_RK3
+    module procedure setDE_MED_D2_D2_D2_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MED_D2_D2_RK2
+    module procedure setDE_MED_D2_D2_D2_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MED_D2_D2_RK1
+    module procedure setDE_MED_D2_D2_D2_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -723,7 +724,58 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D2_D2_ENABLED
+#undef D2_D2_D2_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define D2_D1_D1_ENABLED 1
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define RK_ENABLED 1
+
+#if RK5_ENABLED
+    module procedure setDE_MED_D2_D1_D1_RK5
+        use pm_kind, only: TKG => RK5
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK4_ENABLED
+    module procedure setDE_MED_D2_D1_D1_RK4
+        use pm_kind, only: TKG => RK4
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK3_ENABLED
+    module procedure setDE_MED_D2_D1_D1_RK3
+        use pm_kind, only: TKG => RK3
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK2_ENABLED
+    module procedure setDE_MED_D2_D1_D1_RK2
+        use pm_kind, only: TKG => RK2
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK1_ENABLED
+    module procedure setDE_MED_D2_D1_D1_RK1
+        use pm_kind, only: TKG => RK1
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#undef RK_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#undef D2_D1_D1_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -741,42 +793,42 @@ contains
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D1_XX_ENABLED 1
+#define D0_D1_XX_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MEU_D1_XX_RK5
+    module procedure setDE_MEU_D0_D1_XX_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MEU_D1_XX_RK4
+    module procedure setDE_MEU_D0_D1_XX_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MEU_D1_XX_RK3
+    module procedure setDE_MEU_D0_D1_XX_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MEU_D1_XX_RK2
+    module procedure setDE_MEU_D0_D1_XX_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MEU_D1_XX_RK1
+    module procedure setDE_MEU_D0_D1_XX_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -786,48 +838,48 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D1_XX_ENABLED
+#undef D0_D1_XX_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D2_XX_ENABLED 1
+#define D1_D2_XX_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MEU_D2_XX_RK5
+    module procedure setDE_MEU_D1_D2_XX_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MEU_D2_XX_RK4
+    module procedure setDE_MEU_D1_D2_XX_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MEU_D2_XX_RK3
+    module procedure setDE_MEU_D1_D2_XX_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MEU_D2_XX_RK2
+    module procedure setDE_MEU_D1_D2_XX_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MEU_D2_XX_RK1
+    module procedure setDE_MEU_D1_D2_XX_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -837,48 +889,48 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D2_XX_ENABLED
+#undef D1_D2_XX_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D1_D1_ENABLED 1
+#define D0_D1_D1_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MEU_D1_D1_RK5
+    module procedure setDE_MEU_D0_D1_D1_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MEU_D1_D1_RK4
+    module procedure setDE_MEU_D0_D1_D1_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MEU_D1_D1_RK3
+    module procedure setDE_MEU_D0_D1_D1_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MEU_D1_D1_RK2
+    module procedure setDE_MEU_D0_D1_D1_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MEU_D1_D1_RK1
+    module procedure setDE_MEU_D0_D1_D1_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -888,48 +940,48 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D1_D1_ENABLED
+#undef D0_D1_D1_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D1_D2_ENABLED 1
+#define D1_D1_D2_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MEU_D1_D2_RK5
+    module procedure setDE_MEU_D1_D1_D2_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MEU_D1_D2_RK4
+    module procedure setDE_MEU_D1_D1_D2_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MEU_D1_D2_RK3
+    module procedure setDE_MEU_D1_D1_D2_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MEU_D1_D2_RK2
+    module procedure setDE_MEU_D1_D1_D2_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MEU_D1_D2_RK1
+    module procedure setDE_MEU_D1_D1_D2_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -939,48 +991,48 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D1_D2_ENABLED
+#undef D1_D1_D2_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D2_D1_ENABLED 1
+#define D1_D2_D1_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MEU_D2_D1_RK5
+    module procedure setDE_MEU_D1_D2_D1_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MEU_D2_D1_RK4
+    module procedure setDE_MEU_D1_D2_D1_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MEU_D2_D1_RK3
+    module procedure setDE_MEU_D1_D2_D1_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MEU_D2_D1_RK2
+    module procedure setDE_MEU_D1_D2_D1_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MEU_D2_D1_RK1
+    module procedure setDE_MEU_D1_D2_D1_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -990,48 +1042,48 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D2_D1_ENABLED
+#undef D1_D2_D1_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D2_D2_ENABLED 1
+#define D2_D2_D2_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MEU_D2_D2_RK5
+    module procedure setDE_MEU_D2_D2_D2_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MEU_D2_D2_RK4
+    module procedure setDE_MEU_D2_D2_D2_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MEU_D2_D2_RK3
+    module procedure setDE_MEU_D2_D2_D2_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MEU_D2_D2_RK2
+    module procedure setDE_MEU_D2_D2_D2_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MEU_D2_D2_RK1
+    module procedure setDE_MEU_D2_D2_D2_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -1041,7 +1093,58 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D2_D2_ENABLED
+#undef D2_D2_D2_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define D2_D1_D1_ENABLED 1
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define RK_ENABLED 1
+
+#if RK5_ENABLED
+    module procedure setDE_MEU_D2_D1_D1_RK5
+        use pm_kind, only: TKG => RK5
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK4_ENABLED
+    module procedure setDE_MEU_D2_D1_D1_RK4
+        use pm_kind, only: TKG => RK4
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK3_ENABLED
+    module procedure setDE_MEU_D2_D1_D1_RK3
+        use pm_kind, only: TKG => RK3
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK2_ENABLED
+    module procedure setDE_MEU_D2_D1_D1_RK2
+        use pm_kind, only: TKG => RK2
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK1_ENABLED
+    module procedure setDE_MEU_D2_D1_D1_RK1
+        use pm_kind, only: TKG => RK1
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#undef RK_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#undef D2_D1_D1_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1053,48 +1156,417 @@ contains
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+#define MEV_ENABLED 1
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define D0_D1_XX_ENABLED 1
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define RK_ENABLED 1
+
+#if RK5_ENABLED
+    module procedure setDE_MEV_D0_D1_XX_RK5
+        use pm_kind, only: TKG => RK5
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK4_ENABLED
+    module procedure setDE_MEV_D0_D1_XX_RK4
+        use pm_kind, only: TKG => RK4
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK3_ENABLED
+    module procedure setDE_MEV_D0_D1_XX_RK3
+        use pm_kind, only: TKG => RK3
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK2_ENABLED
+    module procedure setDE_MEV_D0_D1_XX_RK2
+        use pm_kind, only: TKG => RK2
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK1_ENABLED
+    module procedure setDE_MEV_D0_D1_XX_RK1
+        use pm_kind, only: TKG => RK1
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#undef RK_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#undef D0_D1_XX_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define D1_D2_XX_ENABLED 1
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define RK_ENABLED 1
+
+#if RK5_ENABLED
+    module procedure setDE_MEV_D1_D2_XX_RK5
+        use pm_kind, only: TKG => RK5
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK4_ENABLED
+    module procedure setDE_MEV_D1_D2_XX_RK4
+        use pm_kind, only: TKG => RK4
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK3_ENABLED
+    module procedure setDE_MEV_D1_D2_XX_RK3
+        use pm_kind, only: TKG => RK3
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK2_ENABLED
+    module procedure setDE_MEV_D1_D2_XX_RK2
+        use pm_kind, only: TKG => RK2
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK1_ENABLED
+    module procedure setDE_MEV_D1_D2_XX_RK1
+        use pm_kind, only: TKG => RK1
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#undef RK_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#undef D1_D2_XX_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define D0_D1_D1_ENABLED 1
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define RK_ENABLED 1
+
+#if RK5_ENABLED
+    module procedure setDE_MEV_D0_D1_D1_RK5
+        use pm_kind, only: TKG => RK5
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK4_ENABLED
+    module procedure setDE_MEV_D0_D1_D1_RK4
+        use pm_kind, only: TKG => RK4
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK3_ENABLED
+    module procedure setDE_MEV_D0_D1_D1_RK3
+        use pm_kind, only: TKG => RK3
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK2_ENABLED
+    module procedure setDE_MEV_D0_D1_D1_RK2
+        use pm_kind, only: TKG => RK2
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK1_ENABLED
+    module procedure setDE_MEV_D0_D1_D1_RK1
+        use pm_kind, only: TKG => RK1
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#undef RK_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#undef D0_D1_D1_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define D1_D1_D2_ENABLED 1
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define RK_ENABLED 1
+
+#if RK5_ENABLED
+    module procedure setDE_MEV_D1_D1_D2_RK5
+        use pm_kind, only: TKG => RK5
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK4_ENABLED
+    module procedure setDE_MEV_D1_D1_D2_RK4
+        use pm_kind, only: TKG => RK4
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK3_ENABLED
+    module procedure setDE_MEV_D1_D1_D2_RK3
+        use pm_kind, only: TKG => RK3
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK2_ENABLED
+    module procedure setDE_MEV_D1_D1_D2_RK2
+        use pm_kind, only: TKG => RK2
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK1_ENABLED
+    module procedure setDE_MEV_D1_D1_D2_RK1
+        use pm_kind, only: TKG => RK1
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#undef RK_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#undef D1_D1_D2_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define D1_D2_D1_ENABLED 1
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define RK_ENABLED 1
+
+#if RK5_ENABLED
+    module procedure setDE_MEV_D1_D2_D1_RK5
+        use pm_kind, only: TKG => RK5
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK4_ENABLED
+    module procedure setDE_MEV_D1_D2_D1_RK4
+        use pm_kind, only: TKG => RK4
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK3_ENABLED
+    module procedure setDE_MEV_D1_D2_D1_RK3
+        use pm_kind, only: TKG => RK3
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK2_ENABLED
+    module procedure setDE_MEV_D1_D2_D1_RK2
+        use pm_kind, only: TKG => RK2
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK1_ENABLED
+    module procedure setDE_MEV_D1_D2_D1_RK1
+        use pm_kind, only: TKG => RK1
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#undef RK_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#undef D1_D2_D1_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define D2_D2_D2_ENABLED 1
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define RK_ENABLED 1
+
+#if RK5_ENABLED
+    module procedure setDE_MEV_D2_D2_D2_RK5
+        use pm_kind, only: TKG => RK5
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK4_ENABLED
+    module procedure setDE_MEV_D2_D2_D2_RK4
+        use pm_kind, only: TKG => RK4
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK3_ENABLED
+    module procedure setDE_MEV_D2_D2_D2_RK3
+        use pm_kind, only: TKG => RK3
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK2_ENABLED
+    module procedure setDE_MEV_D2_D2_D2_RK2
+        use pm_kind, only: TKG => RK2
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK1_ENABLED
+    module procedure setDE_MEV_D2_D2_D2_RK1
+        use pm_kind, only: TKG => RK1
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#undef RK_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#undef D2_D2_D2_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define D2_D1_D1_ENABLED 1
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define RK_ENABLED 1
+
+#if RK5_ENABLED
+    module procedure setDE_MEV_D2_D1_D1_RK5
+        use pm_kind, only: TKG => RK5
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK4_ENABLED
+    module procedure setDE_MEV_D2_D1_D1_RK4
+        use pm_kind, only: TKG => RK4
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK3_ENABLED
+    module procedure setDE_MEV_D2_D1_D1_RK3
+        use pm_kind, only: TKG => RK3
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK2_ENABLED
+    module procedure setDE_MEV_D2_D1_D1_RK2
+        use pm_kind, only: TKG => RK2
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK1_ENABLED
+    module procedure setDE_MEV_D2_D1_D1_RK1
+        use pm_kind, only: TKG => RK1
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#undef RK_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#undef D2_D1_D1_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#undef MEV_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 #define MEQ_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D1_XX_ENABLED 1
+#define D0_D1_XX_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MEQ_D1_XX_RK5
+    module procedure setDE_MEQ_D0_D1_XX_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MEQ_D1_XX_RK4
+    module procedure setDE_MEQ_D0_D1_XX_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MEQ_D1_XX_RK3
+    module procedure setDE_MEQ_D0_D1_XX_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MEQ_D1_XX_RK2
+    module procedure setDE_MEQ_D0_D1_XX_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MEQ_D1_XX_RK1
+    module procedure setDE_MEQ_D0_D1_XX_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -1104,48 +1576,48 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D1_XX_ENABLED
+#undef D0_D1_XX_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D2_XX_ENABLED 1
+#define D1_D2_XX_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MEQ_D2_XX_RK5
+    module procedure setDE_MEQ_D1_D2_XX_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MEQ_D2_XX_RK4
+    module procedure setDE_MEQ_D1_D2_XX_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MEQ_D2_XX_RK3
+    module procedure setDE_MEQ_D1_D2_XX_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MEQ_D2_XX_RK2
+    module procedure setDE_MEQ_D1_D2_XX_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MEQ_D2_XX_RK1
+    module procedure setDE_MEQ_D1_D2_XX_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -1155,48 +1627,48 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D2_XX_ENABLED
+#undef D1_D2_XX_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D1_D1_ENABLED 1
+#define D0_D1_D1_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MEQ_D1_D1_RK5
+    module procedure setDE_MEQ_D0_D1_D1_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MEQ_D1_D1_RK4
+    module procedure setDE_MEQ_D0_D1_D1_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MEQ_D1_D1_RK3
+    module procedure setDE_MEQ_D0_D1_D1_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MEQ_D1_D1_RK2
+    module procedure setDE_MEQ_D0_D1_D1_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MEQ_D1_D1_RK1
+    module procedure setDE_MEQ_D0_D1_D1_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -1206,48 +1678,48 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D1_D1_ENABLED
+#undef D0_D1_D1_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D1_D2_ENABLED 1
+#define D1_D1_D2_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MEQ_D1_D2_RK5
+    module procedure setDE_MEQ_D1_D1_D2_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MEQ_D1_D2_RK4
+    module procedure setDE_MEQ_D1_D1_D2_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MEQ_D1_D2_RK3
+    module procedure setDE_MEQ_D1_D1_D2_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MEQ_D1_D2_RK2
+    module procedure setDE_MEQ_D1_D1_D2_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MEQ_D1_D2_RK1
+    module procedure setDE_MEQ_D1_D1_D2_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -1257,48 +1729,48 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D1_D2_ENABLED
+#undef D1_D1_D2_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D2_D1_ENABLED 1
+#define D1_D2_D1_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MEQ_D2_D1_RK5
+    module procedure setDE_MEQ_D1_D2_D1_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MEQ_D2_D1_RK4
+    module procedure setDE_MEQ_D1_D2_D1_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MEQ_D2_D1_RK3
+    module procedure setDE_MEQ_D1_D2_D1_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MEQ_D2_D1_RK2
+    module procedure setDE_MEQ_D1_D2_D1_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MEQ_D2_D1_RK1
+    module procedure setDE_MEQ_D1_D2_D1_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -1308,48 +1780,48 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D2_D1_ENABLED
+#undef D1_D2_D1_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#define D2_D2_ENABLED 1
+#define D2_D2_D2_ENABLED 1
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #define RK_ENABLED 1
 
 #if RK5_ENABLED
-    module procedure setDE_MEQ_D2_D2_RK5
+    module procedure setDE_MEQ_D2_D2_D2_RK5
         use pm_kind, only: TKG => RK5
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK4_ENABLED
-    module procedure setDE_MEQ_D2_D2_RK4
+    module procedure setDE_MEQ_D2_D2_D2_RK4
         use pm_kind, only: TKG => RK4
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK3_ENABLED
-    module procedure setDE_MEQ_D2_D2_RK3
+    module procedure setDE_MEQ_D2_D2_D2_RK3
         use pm_kind, only: TKG => RK3
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK2_ENABLED
-    module procedure setDE_MEQ_D2_D2_RK2
+    module procedure setDE_MEQ_D2_D2_D2_RK2
         use pm_kind, only: TKG => RK2
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
 #endif
 
 #if RK1_ENABLED
-    module procedure setDE_MEQ_D2_D2_RK1
+    module procedure setDE_MEQ_D2_D2_D2_RK1
         use pm_kind, only: TKG => RK1
 #include "pm_distanceEuclid@routines.inc.F90"
     end procedure
@@ -1359,7 +1831,58 @@ contains
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#undef D2_D2_ENABLED
+#undef D2_D2_D2_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define D2_D1_D1_ENABLED 1
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#define RK_ENABLED 1
+
+#if RK5_ENABLED
+    module procedure setDE_MEQ_D2_D1_D1_RK5
+        use pm_kind, only: TKG => RK5
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK4_ENABLED
+    module procedure setDE_MEQ_D2_D1_D1_RK4
+        use pm_kind, only: TKG => RK4
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK3_ENABLED
+    module procedure setDE_MEQ_D2_D1_D1_RK3
+        use pm_kind, only: TKG => RK3
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK2_ENABLED
+    module procedure setDE_MEQ_D2_D1_D1_RK2
+        use pm_kind, only: TKG => RK2
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#if RK1_ENABLED
+    module procedure setDE_MEQ_D2_D1_D1_RK1
+        use pm_kind, only: TKG => RK1
+#include "pm_distanceEuclid@routines.inc.F90"
+    end procedure
+#endif
+
+#undef RK_ENABLED
+
+    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#undef D2_D1_D1_ENABLED
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

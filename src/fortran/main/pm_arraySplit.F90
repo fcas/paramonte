@@ -202,8 +202,8 @@ module pm_arraySplit
     !>  \status \unresolved
     !>  \source \ifort{2021.5}
     !>  \desc
-    !>  This \ifort{2021.5} on WSL platform cannot correctly set the PDT type
-    !>  alias in a module `use` statement generic interface can be extended to 2D input objects.<br>
+    !>  The \ifort{2021.5} on WSL platform cannot correctly
+    !>  set the PDT type alias in a module `use` statement.<br>
     !>  The following is a sample code demonstrating the issue,
     !>  \code{.F90}
     !>
@@ -280,7 +280,7 @@ module pm_arraySplit
     !>  \final
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
 
     !                                   <li>    An output `contiguous` vector of shape `(:)` of type `integer` of default kind \IK, <br>
     !                                           representing the positions of the last elements of the split parts in the input `array` such that,<br>

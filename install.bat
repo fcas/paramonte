@@ -1,5 +1,6 @@
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::::                                                                                                                            ::::
 ::::    ParaMonte: Parallel Monte Carlo and Machine Learning Library.                                                           ::::
 ::::                                                                                                                            ::::
@@ -24,7 +25,7 @@ setlocal EnableDelayedExpansion
 set BUILD_SCRIPT_NAME=install.bat
 set "script_name=install.bat"
 :: change directory to the folder containing this batch file
-cd %~dp0
+cd "%~dp0"
 
 REM WARNING: paramonte_dir ends with a forward slash.
 
@@ -147,8 +148,10 @@ echo.
 
 set bdir=
 set FOR_COARRAY_NUM_IMAGES=3
-set "ddir=!paramonte_dir!bin"
-set "flag_ddir=-Dddir=!ddir!"
+set "ddir=!paramonte_dir!_bin"
+set "flag_ddir=-Dddir="!ddir!""
+set "cmakeBuildGenerator="
+set "makename="
 
 set list_build=
 set list_checking=
@@ -171,7 +174,7 @@ set flag_fresh=
 set flag_G=
 set flag_j=
 set flag_lapack=
-set flag_matlabdir=
+set flag_matlabroot=
 set flag_me=
 set flag_mod=
 set flag_nproc=
@@ -186,6 +189,26 @@ set flag_lki=
 set flag_cki=
 set flag_rki=
 
+REM
+REM The variable `ntry` is to bypass the need for duplicate build with CMake for development and testing times.
+REM The duplicate build with CMake is required to ensure the generation of FPP source files in the output package.
+REM This need for duplicate builds is an issue within the current CMake build scripts of the ParaMonte library that
+REM must be resolved in the future with a better solution.
+REM
+
+set "flag_dev=-Ddev_enabled=0"
+set ntry=2
+
+REM
+REM MATLAB MEX variables (must be removed once CMake FindMatlab.cmake module bug for Windows is resolved.)
+REM
+
+set "matlabroot="
+
+REM
+REM Echo the ParaMonte banner.
+REM
+
 echo.
 type "!paramonte_auxil_dir!\.paramonte.banner"
 echo.
@@ -196,8 +219,8 @@ if not "%1"=="" (
 
     echo.!pmnote! processing: %1
 
-    set FLAG=%~1
-    set VALUE=%~2
+    set "FLAG=%~1"
+    set "VALUE=%~2"
     REM call :getLowerCase FLAG
     REM call :getLowerCase VALUE
 
@@ -392,11 +415,12 @@ if not "%1"=="" (
         shift
     )
 
-    REM --matlabdir
+    REM --matlabroot
 
-    if "!FLAG!"=="--matlabdir" (
+    if "!FLAG!"=="--matlabroot" (
         set FLAG_SUPPORTED=true
-        set "flag_matlabdir=-Dmatlabdir=!VALUE!"
+        set "matlabroot=!VALUE!"
+        set "flag_matlabroot=-Dmatlabroot="!VALUE!""
         if "!VALUE!"=="" set "VALUE_SUPPORTED=false"
         if /i "!VALUE:~0,2!"=="--" set "VALUE_SUPPORTED=false"
         shift
@@ -534,8 +558,9 @@ if not "%1"=="" (
     REM --ddir
 
     if "!FLAG!"=="--ddir" (
+        set "ddir=!VALUE!"
         set FLAG_SUPPORTED=true
-        set "flag_ddir=-Dddir=!VALUE!"
+        set "flag_ddir=-Dddir="!VALUE!""
         if "!VALUE!"=="" set "VALUE_SUPPORTED=false"
         if /i "!VALUE:~0,2!"=="--" set "VALUE_SUPPORTED=false"
         shift
@@ -560,11 +585,20 @@ if not "%1"=="" (
         exit /b 0
     )
 
+    REM --dev
+
+    if "!FLAG!"=="--dev" (
+        set FLAG_SUPPORTED=true
+        set "flag_dev=-Ddev_enabled=1"
+        set ntry=1
+    )
+
     REM -G
 
     if "!FLAG!"=="-G" (
         set FLAG_SUPPORTED=true
-        set "flag_G=-G !VALUE!"
+        set "flag_G=-G "!VALUE!""
+        set "cmakeBuildGenerator=!VALUE!"
         if "!VALUE!"=="" set "VALUE_SUPPORTED=false"
         if /i "!VALUE:~0,2!"=="--" set "VALUE_SUPPORTED=false"
         shift
@@ -625,6 +659,20 @@ if not defined list_mem set list_mem=heap
 if not defined list_par set list_par=serial
 if not defined flag_j set "flag_j=-j"
 
+REM Set the optional values.
+
+if defined flag_exam (
+    if not defined flag_exampp (
+        set "flag_exampp="
+    )
+)
+
+if defined flag_bench (
+    if not defined flag_benchpp (
+        set "flag_benchpp="
+    )
+)
+
 REM Set the default Fortran compiler and the `list_fc` flag.
 
 if not defined list_fc (
@@ -642,6 +690,7 @@ if not defined list_fc (
         )
     )
 )
+
 :loopExit
 if not defined list_fc (
     echo.!pmwarn! No compatible Fortran compiler detected in the environment.
@@ -670,7 +719,22 @@ if not defined flag_G (
     REM Set the default CMake makefile generator.
 
     set "replacement="
-    set cmakeBuildGenerator=
+    set "cmakeBuildGenerator="
+
+    REM Above all, search for the Ninja makefile generator: ninja
+    REM The ninja executable is installed either as part of Microsoft Visual Studio or Quickstart Fortran software.
+
+    if not defined cmakeBuildGenerator (
+        echo.!pmnote! Searching for the Ninja build generator in the command-line environment...
+        set "NINJA_FOUND="
+        for %%X in (ninja.exe) do (set NINJA_FOUND=%%~$PATH:X)
+        if defined NINJA_FOUND (
+            echo.!pmnote! !BoldYellow!Setting CMake makefile generator to Ninja...!ColorReset!
+            set "cmakeBuildGenerator=Ninja"
+        ) else (
+            echo.!pmnote! Failed to detect the Ninja build generator in the command-line environment. skipping...
+        )
+    )
 
     REM Firstly, search for the CMake makefile generator: make
 
@@ -681,7 +745,7 @@ if not defined flag_G (
         for /f "Tokens=* Delims=" %%i in ('make --version') do set make_version=!make_version!%%i
         for /f "delims=" %%S in (^""!substring!=!replacement!"^") do (set "make_version_modified=!make_version:%%~S!")
         if not "!make_version_modified!" == "!make_version!" (
-            echo.!pmnote! Setting CMake makefile generator to GNU MinGW Make application...
+            echo.!pmnote! !BoldYellow!Setting CMake makefile generator to GNU MinGW Make application...!ColorReset!
             set "cmakeBuildGenerator=MinGW Makefiles"
         ) else (
             echo.!pmnote! Failed to detect the GNU Make application in the command-line environment. skipping...
@@ -690,14 +754,14 @@ if not defined flag_G (
 
     REM Secondly, search for the CMake makefile generator: mingw32-make
 
-    if defined cmakeBuildGenerator (
+    if not defined cmakeBuildGenerator (
         echo.!pmnote! Searching for the GNU Make application in the command-line environment...
         set "make_version="
         set "substring=GNU Make"
         for /f "Tokens=* Delims=" %%i in ('mingw32-make --version') do set make_version=!make_version!%%i
         for /f "delims=" %%S in (^""!substring!=!replacement!"^") do (set "make_version_modified=!make_version:%%~S!")
         if not "!make_version_modified!" == "!make_version!" (
-            echo.!pmnote! Setting CMake makefile generator to GNU MinGW Make application...
+            echo.!pmnote! !BoldYellow!Setting CMake makefile generator to GNU MinGW Make application...!ColorReset!
             set "cmakeBuildGenerator=MinGW Makefiles"
         ) else (
             echo.!pmnote! Failed to detect the GNU MinGW Make application in the command-line environment. skipping...
@@ -713,7 +777,7 @@ if not defined flag_G (
         for /f "Tokens=* Delims=" %%i in ('nmake') do set make_version=!make_version!%%i
         for /f "delims=" %%S in (^""!substring!=!replacement!"^") do (set "make_version_modified=!make_version:%%~S!")
         if not "!make_version_modified!" == "!make_version!" (
-            echo.!pmnote! Setting CMake makefile generator to Microsoft NMake application...
+            echo.!pmnote! !BoldYellow!Setting CMake makefile generator to Microsoft NMake application...!ColorReset!
             set "cmakeBuildGenerator=NMake Makefiles"
         ) else (
             echo.!pmnote! Failed to detect the Microsoft NMake application in the command-line environment. skipping...
@@ -732,6 +796,15 @@ if not defined flag_G (
 
     set "flag_G=-G "!cmakeBuildGenerator!""
 
+
+)
+
+if  defined cmakeBuildGenerator (
+    echo.!pmnote! cmakeBuildGenerator=!cmakeBuildGenerator!
+    if "!cmakeBuildGenerator!" == "NMake Makefiles" set makename=nmake
+    if "!cmakeBuildGenerator!" == "MinGW Makefiles" set makename=mingw
+    if "!cmakeBuildGenerator!" == "Ninja" set makename=ninja
+    echo.!pmnote! makename=!makename!
 )
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -874,10 +947,11 @@ for %%C in ("!list_fc:;=" "!") do (
                             REM Set the ParaMonte CMake build directory.
                             REM
 
-                            if not defined bdir (
-                                set "paramonte_bld_dir=!paramonte_dir!bld\!os!\!arch!\!csid!\!csvs!\%%~B\%%~L\%%~M\!parname!\%%~H\%%~G"
-                                if "!flag_perfprof!" == "-Dperfprof=all" set paramonte_bld_dir=!paramonte_bld_dir!\perfprof
-                                if "!flag_codecov!" == "-Dcodecov=all" set paramonte_bld_dir=!paramonte_bld_dir!\codecov
+                            if  not defined bdir (
+                                set "paramonte_bld_dir=!paramonte_dir!_bld\!os!\!arch!\!csid!\!csvs!\%%~B\%%~L\%%~M\!parname!\%%~H\%%~G"
+                                if "!flag_perfprof!" == "-Dperfprof=all" set "paramonte_bld_dir=!paramonte_bld_dir!\perfprof"
+                                if "!flag_codecov!" == "-Dcodecov=all" set "paramonte_bld_dir=!paramonte_bld_dir!\codecov"
+                                if defined makename set "paramonte_bld_dir=!paramonte_bld_dir!\!makename!"
                                 echo.!pmnote! The ParaMonte library build directory paramonte_bld_dir="!paramonte_bld_dir!"
                             ) else (
                                 echo.!pmnote! User-specified library build directory detected bdir="!bdir!"
@@ -886,76 +960,301 @@ for %%C in ("!list_fc:;=" "!") do (
 
                             REM Make the build directory if needed.
 
-                            if not exist "!paramonte_bld_dir!" (
+                            if  not exist "!paramonte_bld_dir!" (
                                 echo.!pmnote! Generating the ParaMonte build directory...
                                 mkdir "!paramonte_bld_dir!"
                             )
 
-                            REM
-                            REM Configure and build the library via CMake.
-                            REM
+                            REM The following loop temporarily bypasses an existing bug where the first fresh installation
+                            REM does not copy the FPP source files to the deployment and installation directories.
 
-                            echo.!pmnote! All generated build files will be stored at "!paramonte_bld_dir!"
-                            echo.!pmnote! Changing directory to "!paramonte_bld_dir!"
-                            echo.
-                            echo.****************************************************************************************************
-                            echo.
-                            echo.!pmnote! Invoking CMake as:
-                            echo.
+                            set "flag_fresh_current=!flag_fresh!"
 
-                            echo.cd "!paramonte_bld_dir!"
-                            echo.cmake !paramonte_dir! !flag_G! -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON !flag_build! !flag_checking! !flag_lib! !flag_mem! !flag_par! !flag_fc!
-                            echo.!flag_ddir! !flag_bench! !flag_benchpp! !flag_blas! !flag_codecov! !flag_cfi! !flag_deps! !flag_exam! !flag_exampp! !flag_fpp! !flag_fresh! !flag_lapack! !flag_matlabdir!
-                            echo.!flag_lang! !flag_me! !flag_mod! !flag_nproc! !flag_perfprof! !flag_pdt! !flag_purity! !flag_test! !flag_ski! !flag_iki! !flag_lki! !flag_cki! !flag_rki!
+                            for /l %%x in (1, 1, !ntry!) do (
 
-                            cd "!paramonte_bld_dir!"
-                            cmake !paramonte_dir! !flag_G! -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON !flag_build! !flag_checking! !flag_lib! !flag_mem! !flag_par! !flag_fc! ^
-                            !flag_ddir! !flag_bench! !flag_benchpp! !flag_blas! !flag_codecov! !flag_cfi! !flag_deps! !flag_exam! !flag_exampp! !flag_fpp! !flag_fresh! !flag_lapack! !flag_matlabdir! ^
-                            !flag_lang! !flag_me! !flag_mod! !flag_nproc! !flag_perfprof! !flag_pdt! !flag_purity! !flag_test! !flag_ski! !flag_iki! !flag_lki! !flag_cki! !flag_rki! ^
-                            && (
-                                echo.
-                                echo.!pmnote! !BoldGreen!ParaMonte configuration with CMake appears to have succeeded.!ColorReset!
-                            ) || (
-                                echo.
-                                echo.!pmfatal! !BoldRed!ParaMonte configuration with CMake appears to have failed.!ColorReset!
-                                goto LABEL_ERR
-                            )
-                            echo.
-                            echo.****************************************************************************************************
-                            echo.
+                                REM
+                                REM Configure and build the library via CMake.
+                                REM
 
-                            set PATH=!PATH!;!paramonte_bld_dir!\lib
-                            cd "!paramonte_bld_dir!" && cmake --build "!paramonte_bld_dir!" !flag_j! && (
+                                echo.!pmnote! All generated build files will be stored at "!paramonte_bld_dir!"
+                                echo.!pmnote! Changing directory to "!paramonte_bld_dir!"
                                 echo.
-                                echo.!pmnote! !BoldGreen!ParaMonte build appears to have succeeded.!ColorReset!
+                                echo.****************************************************************************************************
                                 echo.
-                            ) || (
+                                echo.!pmnote! Invoking CMake as:
                                 echo.
-                                echo.!pmnote! !BoldRed!ParaMonte build appears to have failed.!ColorReset!
-                                echo.
-                                goto LABEL_ERR
-                            )
 
-                            cd "!paramonte_bld_dir!" && cmake --build "!paramonte_bld_dir!" --target install !flag_j! && (
-                                echo.
-                                echo.!pmnote! !BoldGreen!ParaMonte installation appears to have succeeded.!ColorReset!
-                                echo.
-                            ) || (
-                                echo.
-                                echo.!pmnote! !BoldRed!ParaMonte installation appears to have failed.!ColorReset!
-                                echo.
-                                goto LABEL_ERR
-                            )
+                                echo.cd "!paramonte_bld_dir!"
+                                echo.cmake !paramonte_dir! !flag_G! -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON !flag_build! !flag_checking! !flag_lib! !flag_mem! !flag_par! !flag_fc!
+                                echo.!flag_ddir! !flag_bench! !flag_benchpp! !flag_blas! !flag_codecov! !flag_cfi! !flag_deps! !flag_exam! !flag_exampp! !flag_fpp! !flag_fresh_current! !flag_lapack! !flag_matlabroot!
+                                echo.!flag_lang! !flag_me! !flag_mod! !flag_nproc! !flag_perfprof! !flag_pdt! !flag_purity! !flag_test! !flag_ski! !flag_iki! !flag_lki! !flag_cki! !flag_rki! !flag_dev!
 
-                            cd "!paramonte_bld_dir!" && cmake --build "!paramonte_bld_dir!" --target deploy !flag_j! && (
+                                cd "!paramonte_bld_dir!"
+                                cmake !paramonte_dir! !flag_G! -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON !flag_build! !flag_checking! !flag_lib! !flag_mem! !flag_par! !flag_fc! ^
+                                !flag_ddir! !flag_bench! !flag_benchpp! !flag_blas! !flag_codecov! !flag_cfi! !flag_deps! !flag_exam! !flag_exampp! !flag_fpp! !flag_fresh_current! !flag_lapack! !flag_matlabroot! ^
+                                !flag_lang! !flag_me! !flag_mod! !flag_nproc! !flag_perfprof! !flag_pdt! !flag_purity! !flag_test! !flag_ski! !flag_iki! !flag_lki! !flag_cki! !flag_rki! !flag_dev! ^
+                                && (
+                                    echo.
+                                    echo.!pmnote! !BoldGreen!ParaMonte configuration with CMake appears to have succeeded.!ColorReset!
+                                ) || (
+                                    echo.
+                                    echo.!pmfatal! !BoldRed!ParaMonte configuration with CMake appears to have failed.!ColorReset!
+                                    echo.!pmfatal! !BoldRed!This error could happen for a variety of silly reasons such Dropbox interference with the build files.!ColorReset!
+                                    echo.!pmfatal! !BoldRed!Make sure to disable intensive applications such as Google Drive and Dropbox which lock file ownerships.!ColorReset!
+                                    echo.!pmfatal! !BoldRed!Then retry the build. Keep in mind that this is only one probable cause of the build failure.!ColorReset!
+                                    goto LABEL_ERR
+                                )
+
+                                REM
+                                REM Reset the fresh flag to ensure the build is not erased during the second CMake configure cycle.
+                                REM
+
+                                set "flag_fresh_current=-Dfresh=none"
+
                                 echo.
-                                echo.!pmnote! !BoldGreen!ParaMonte deploy appears to have succeeded.!ColorReset!
+                                echo.****************************************************************************************************
                                 echo.
-                            ) || (
-                                echo.
-                                echo.!pmnote! !BoldRed!ParaMonte deploy appears to have failed.!ColorReset!
-                                echo.
-                                goto LABEL_ERR
+
+                                set PATH=!PATH!;!paramonte_bld_dir!\lib
+                                cd "!paramonte_bld_dir!" && cmake --build "!paramonte_bld_dir!" !flag_j! && (
+                                    echo.
+                                    echo.!pmnote! !BoldGreen!ParaMonte build appears to have succeeded.!ColorReset!
+                                    echo.
+                                ) || (
+                                    echo.
+                                    echo.!pmnote! !BoldRed!ParaMonte build appears to have failed.!ColorReset!
+                                    echo.
+                                    goto LABEL_ERR
+                                )
+
+                                cd "!paramonte_bld_dir!" && cmake --build "!paramonte_bld_dir!" --target install !flag_j! && (
+                                    echo.
+                                    echo.!pmnote! !BoldGreen!ParaMonte installation appears to have succeeded.!ColorReset!
+                                    echo.
+                                ) || (
+                                    echo.
+                                    echo.!pmnote! !BoldRed!ParaMonte installation appears to have failed.!ColorReset!
+                                    echo.
+                                    goto LABEL_ERR
+                                )
+
+                                REM
+                                REM  Search for MATLAB installations and build MEX files before deploying the package.
+                                REM
+
+                                if %%~G==matlab (
+
+                                    set "MATLAB_ROOT_DIR="
+                                    set "MATLAB_EXE_PATH="
+                                    set "MATLAB_BIN_DIR="
+                                    set "MATLAB_LIB_DIR="
+                                    set "MATLAB_INC_DIR=."
+                                    set "MATLAB_LIBMX_FILE="
+                                    set "MATLAB_LIBMEX_FILE="
+                                    set "MATLAB_LIBMAT_FILE="
+                                    set "MATLAB_VERSION_FILE="
+                                    REM set "MATLAB_INC_DIR_FLAG="
+
+                                    echo.
+                                    echo.!pmnote! Searching for a MATLAB installations on your system...
+
+                                    set "INSTALL_LOC_LIST=C:\Program Files\MATLAB\/C:\Program Files (x86)\MATLAB\"
+                                    set MATLAB_VERSION_LIST=R2035b/R2035a/R2034b/R2034a/R2033b/R2033a/R2032b/R2032a/R2031b/R2031a/R2030b/R2030a/R2029b/R2029a/R2028b/R2028a/R2027b/R2027a/R2026b/R2026a
+                                    set MATLAB_VERSION_LIST=!MATLAB_VERSION_LIST!/R2025b/R2025a/R2024b/R2024a/R2023b/R2023a/R2022b/R2022a/R2021b/R2021a/R2020b/R2020a/R2019b/R2019a/R2018b/R2018a/R2017b/R2017a
+
+                                    REM
+                                    REM Amir Shahmoradi Oct 25, 2024:
+                                    REM The following block is currently was added despite its functionality being already implemented within CMake.
+                                    REM The reason for its existence is to resolve the vicious bug that exists in CMake intrinsic module FindMatlab.cmake yielding the following runtime error:
+                                    REM
+                                    REM     Error using pm.sampling.Sampler/run MATLAB:mex:ErrInvalidMEXFile : Invalid MEX-file 'pm_sampling.mexw64': Gateway function is missing
+                                    REM
+                                    REM See also,
+                                    REM
+                                    REM     https://gitlab.kitware.com/cmake/cmake/-/issues/25068#note_1580985
+                                    REM
+                                    REM for a relevant discussion of this bug faced by others and the status of a resolution to fix it.
+                                    REM Note that this CMake bug is different from another vicious MATLAB-MEX-version related bug that causes the MEX files to fail at runtime
+                                    REM while the same MEX compilation and run for ParaMonte 1 succeeds with MATLAB R2022b and older.
+                                    REM See
+                                    REM
+                                    REM     https://www.mathworks.com/matlabcentral/answers/2157360-matlab-mex-errinvalidmexfile-invalid-mex-file-the-specified-procedure-could-not-be-found?s_tid=prof_contriblnk
+                                    REM
+                                    REM for more relevant discussion of this bug and possible causes.
+                                    REM
+                                    REM As of today, both CMake and MATLAB MEX compatibility bugs remain unresolved.
+                                    REM The following block can be commented out by setting the value of
+                                    REM `MATLAB_FOUND` to `none` in the following `set` command.
+                                    REM
+                                    REM \todo
+                                    REM \pvhigh
+                                    REM Once the CMake bug in FindMatlab.cmake intrinsic modules is resolved, the whole shenanigan above and below for MEX compilation must be removed.
+                                    REM
+
+                                    set MATLAB_FOUND=false
+                                    for %%D in ("!INSTALL_LOC_LIST:/=" "!") do (
+                                        for %%V in ("!MATLAB_VERSION_LIST:/=" "!") do (
+
+                                            if !MATLAB_FOUND!==false (
+
+                                                if  defined matlabroot (
+                                                    set "MATLAB_ROOT_DIR_TEMP=!matlabroot!"
+                                                    echo.!pmnote! !BoldYellow!Searching for user-specified MATLAB installation at: !MATLAB_ROOT_DIR_TEMP! !ColorReset!
+                                                ) else (
+                                                    set "MATLAB_ROOT_DIR_TEMP=%%~D%%~V"
+                                                )
+                                                set "MATLAB_BIN_DIR_TEMP=!MATLAB_ROOT_DIR_TEMP!\bin"
+                                                set "MATLAB_EXE_PATH_TEMP=!MATLAB_BIN_DIR_TEMP!\matlab.exe"
+
+                                                if  exist !MATLAB_EXE_PATH_TEMP! (
+
+                                                    set MATLAB_FOUND=true
+                                                    set "MATLAB_ROOT_DIR=!MATLAB_ROOT_DIR_TEMP!"
+                                                    set "MATLAB_EXE_PATH=!MATLAB_EXE_PATH_TEMP!"
+                                                    set "MATLAB_BIN_DIR=!MATLAB_BIN_DIR_TEMP!"
+                                                    set "MATLAB_INC_DIR=!MATLAB_ROOT_DIR!\extern\include"
+                                                    set "MATLAB_LIB_DIR=!MATLAB_ROOT_DIR!\extern\lib\win64\microsoft"
+                                                    set "MATLAB_LIBMX_FILE=!MATLAB_LIB_DIR!\libmx.lib"
+                                                    set "MATLAB_LIBMEX_FILE=!MATLAB_LIB_DIR!\libmex.lib"
+                                                    set "MATLAB_LIBMAT_FILE=!MATLAB_LIB_DIR!\libmat.lib"
+                                                    set "MATLAB_VERSION_FILE=!MATLAB_ROOT_DIR!\extern\version\fortran_mexapi_version.F"
+                                                    echo.!pmnote! !BoldYellow!MATLAB installation detected at: !MATLAB_EXE_PATH! !ColorReset!
+                                                    REM set "MATLAB_INC_DIR_FLAG=/I:!MATLAB_INC_DIR!"
+                                                    REM set FPP_FLAGS=/define:MATLAB_MEX_FILE
+
+                                                    REM
+                                                    REM  Build MATLAB MEX files.
+                                                    REM
+
+                                                    call set PMLIB_MATLAB_NAME=!PMLIB_NAME:_matlab_=_!
+
+                                                    REM /subsystem:windows
+                                                    REM mex -setup:"C:\Program Files\MATLAB\R2019a\bin\win64\mexopts\intel_c_19_vs2017.xml" C
+                                                    REM if !BTYPE!==debug   set "MATLAB_BUILD_FLAGS=!MATLAB_BUILD_FLAGS!/Od /Z7"
+                                                    REM if !BTYPE!==testing set "MATLAB_BUILD_FLAGS=!MATLAB_BUILD_FLAGS!/O2"
+                                                    REM if !BTYPE!==release set "MATLAB_BUILD_FLAGS=!MATLAB_BUILD_FLAGS!/Od"
+
+                                                    REM if !BTYPE!==debug   set "MATLAB_BUILD_FLAGS=!MATLAB_BUILD_FLAGS!!INTEL_CPP_DEBUG_FLAGS!"
+                                                    REM if !BTYPE!==testing set "MATLAB_BUILD_FLAGS=!MATLAB_BUILD_FLAGS!!INTEL_CPP_TESTING_FLAGS!"
+                                                    REM if !BTYPE!==release set "MATLAB_BUILD_FLAGS=!MATLAB_BUILD_FLAGS!!INTEL_CPP_RELEASE_FLAGS!"
+
+                                                    set "MEX_FLAGS=-v -nojvm"
+
+                                                    REM
+                                                    REM If openmp is enabled, define the macro OMP_ENABLED=1.
+                                                    REM \todo
+                                                    REM \pvhigh
+                                                    REM This is a weakness point as the input value for `--par` flag may not be completely lower case.
+                                                    REM
+
+                                                    REM ;pm_parallelism
+                                                    set "list_mex=pm_sampling"
+
+                                                    set "ismatlabomp=false"
+                                                    if omp==%%~P set "ismatlabomp=true"
+                                                    if OMP==%%~P set "ismatlabomp=true"
+                                                    if openmp==%%~P set "ismatlabomp=true"
+                                                    if OPENMP==%%~P set "ismatlabomp=true"
+                                                    if !ismatlabomp!==true set "MEX_FLAGS=!MEX_FLAGS! -DOMP_ENABLED"
+
+                                                    echo.!pmnote!!BoldYellow!Generating the ParaMonte MATLAB MEX files...!ColorReset!
+
+                                                    for %%X in ("!list_mex:;=" "!") do (
+                                                        echo.!pmnote!!BoldYellow!Compiler command: "!MATLAB_BIN_DIR!\mex.bat" !MEX_FLAGS! "!paramonte_src_dir!\matlab\xrc\pm_sampling.c" libparamonte.lib -output pm_sampling!ColorReset!
+                                                        cd !paramonte_bld_dir!\lib
+                                                        REM we cannot use the version variable when MATLAB directory is user-specified.
+                                                        REM if not exist "%%~V" (mkdir "%%~V")
+                                                        REM cd %%~V
+                                                        call "!MATLAB_BIN_DIR!\mex.bat" !MEX_FLAGS! "!paramonte_src_dir!\matlab\xrc\pm_sampling.c" libparamonte.lib -output pm_sampling && (
+                                                            echo.!pmnote! !BoldGreen!The ParaMonte MATLAB shared library build appears to have succeeded.!ColorReset!
+                                                        ) || (
+                                                            echo.
+                                                            echo.!pmwarn! !BoldMagenta!The ParaMonte MATLAB library build failed.!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!Please make sure you have the following components installed!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!on your system before rerunning the installation script:!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!    -- MATLAB, including MATLAB MEX compilers.!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!    -- Intel OneAPI icx/icl and ifx/ifort compilers 2023 or newer.!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!Once you are sure of the existence of these components in your !ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!Windows command line environment, run the following command:!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!    "!MATLAB_BIN_DIR!\mex.bat" -setup C!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!Among the options displayed, you should see the command to setup!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!the Intel OneAPI icl/icx or Microsoft cl compiler for C on your system.!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!This command should look similar to the following,!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!    "!MATLAB_BIN_DIR_TEMP!\mex.bat" -setup:"C:\Program Files\MATLAB\R2024a\bin\win64\mexopts\intel_c_24_vs2022.xml" C!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!with minor differences in the xml file name depending on your specific installations of !ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!    -- the Intel OneAPI or Microsoft compiler version!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!    -- the Microsoft Visual Studio version!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!    -- the MATLAB version!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!Copy and paste this command into your terminal, run it, and then rerun the ParaMonte MATLAB installation script.!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!Please report this or any other issues at:!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!!ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!    https://github.com/cdslaborg/paramonte/issues !ColorReset!
+                                                            echo.!pmwarn! !BoldMagenta!!ColorReset!
+                                                            echo.
+                                                            REM set ERRORLEVEL=1
+                                                            REM exit /B 1
+                                                        )
+                                                    )
+                                                    cd %~dp0
+
+                                                )
+
+                                                set "MATLAB_ROOT_DIR_TEMP="
+                                                set "MATLAB_BIN_DIR_TEMP="
+                                                set "MATLAB_EXE_PATH_TEMP="
+
+                                            )
+                                        )
+                                    )
+
+                                    if  MATLAB_FOUND==false (
+                                        echo.!pmwarn! !BoldMagenta!Exhausted all possible search paths for a MATLAB installation, but failed to find MATLAB.!ColorReset!
+                                        echo.!pmwarn! !BoldMagenta!The ParaMonte MATLAB kernel will not be functional without building the required DLL libraries.!ColorReset!
+                                        echo.!pmwarn! !BoldMagenta!Please add MATLAB to your environmental variable PATH and rerun the install script.!ColorReset!
+                                        echo.!pmwarn! !BoldMagenta!For example, on your current Windows command-line, try:!ColorReset!
+                                        echo.!pmwarn! !BoldMagenta!!ColorReset!
+                                        echo.!pmwarn! !BoldMagenta!    set "PATH=PATH_TO_MATLAB_BIN_DIR;!PATH!
+                                        echo.!pmwarn! !BoldMagenta!!ColorReset!
+                                        echo.!pmwarn! !BoldMagenta!where PATH_TO_MATLAB_BIN_DIR must be replaced with path to the bin folder of the current!ColorReset!
+                                        echo.!pmwarn! !BoldMagenta!installation of MATLAB on your system. Typical MATLAB bin installation path on a 64-bit Windows!ColorReset!
+                                        echo.!pmwarn! !BoldMagenta!Operating Systems is a string like the following:!ColorReset!
+                                        echo.!pmwarn! !BoldMagenta!!ColorReset!
+                                        echo.!pmwarn! !BoldMagenta!    C:\Program Files\MATLAB\2020a\bin\!ColorReset!
+                                        echo.!pmwarn! !BoldMagenta!!ColorReset!
+                                        echo.!pmwarn! !BoldMagenta!where 2020a in the path points to the MATLAB 2020a version installation on the system. You can also!ColorReset!
+                                        echo.!pmwarn! !BoldMagenta!find the installation location of MATLAB by typing the following command in your MATLAB session:!ColorReset!
+                                        echo.!pmwarn! !BoldMagenta!!ColorReset!
+                                        echo.!pmwarn! !BoldMagenta!    matlabroot!ColorReset!
+                                        echo.!pmwarn! !BoldMagenta!
+                                        echo.!pmwarn! !BoldMagenta!skipping the ParaMonte MATLAB build...!ColorReset!
+                                    )
+
+                                )
+
+                                REM
+                                REM End of MATLAB MEX build.
+                                REM
+
+                                cd "!paramonte_bld_dir!" && cmake --build "!paramonte_bld_dir!" --target deploy !flag_j! && (
+                                    echo.
+                                    echo.!pmnote! !BoldGreen!ParaMonte deploy appears to have succeeded.!ColorReset!
+                                    echo.
+                                ) || (
+                                    echo.
+                                    echo.!pmnote! !BoldRed!ParaMonte deploy appears to have failed.!ColorReset!
+                                    echo.
+                                    goto LABEL_ERR
+                                )
+
                             )
 
                             cd "!paramonte_bld_dir!" && cmake --build "!paramonte_bld_dir!" --target test && (
@@ -991,6 +1290,10 @@ for %%C in ("!list_fc:;=" "!") do (
                                 goto LABEL_ERR
                             )
 
+                            REM
+                            REM Mission Accomplished.
+                            REM
+
                             echo.
                             echo.!pmnote! !BoldGreen!All build files for the current build configurations are stored at!ColorReset! "!paramonte_bld_dir!"
                             echo.
@@ -1001,12 +1304,60 @@ for %%C in ("!list_fc:;=" "!") do (
             )
         )
     )
+
 )
 
 echo.
-echo.!pmnote! !BoldGreen!All build files for all requested build configurations are stored at!ColorReset! "!paramonte_dir!bld"
+echo.!pmnote! !BoldGreen!All build files for all requested build configurations are stored at!ColorReset! "!paramonte_bld_dir!"
 echo.!pmnote! !BoldGreen!The installed binary files for all requested build configurations are ready to use at!ColorReset! "!ddir!"
 echo.
+
+REM
+REM zip the binary folder. The application tar.exe
+REM
+
+set "zipperFound="
+set zipperName=tar.exe
+for %%X in (!zipperName!) do (set zipperFound=%%~$PATH:X)
+if  "!zipperFound!"=="" (
+    echo.
+    echo.!pmwarn! !BoldMagenta!Skipping the binary archive generation because the !zipperName! application could not be found.!ColorReset!
+    echo.
+) else (
+    echo.
+    echo.!pmnote! !BoldGreen!Generating the binary archive zip file using !zipperName! at:!ColorReset! "!ddir!"
+    echo.
+    call :NORMALIZEPATH "!ddir!"
+    if  exist "!ddir!" (
+        cd "!ddir!"
+        echo.
+        echo. -- ParaMonte - compressing all subdirectories in the directory: "!ddir!"
+        echo.
+        for /f "tokens=* usebackq" %%G in (`dir /b /a:d "!ddir!"`) do (
+            if exist "%%~G.zip" (
+                echo.!pmwarn! !BoldMagenta!: compressed subdirectory already exists:!ColorReset! "!ddir!\%%~G.zip"
+                echo.!pmwarn! !BoldMagenta!: overwriting the existing archive file...!ColorReset!
+            )
+            echo. -- ParaMonte - compressing subdirectory: "!ddir!%%~G"
+            tar.exe -a -cf "%%~G.zip" "%%~G" || (
+                echo.
+                echo.!pmfatal! !BoldRed!: compression failed for subdirectory:!ColorReset! "!ddir!\%%~G"
+                echo.!pmfatal! !BoldRed!: gracefully exiting.!ColorReset!
+                echo.
+                cd "!paramonte_dir!"
+                set ERRORLEVEL=1
+                exit /B 1
+            )
+        )
+    ) else (
+        echo.
+        echo.!pmfatal! !BoldRed!: The final binary deployment destination directory does not exist: "!ddir!"
+        echo.
+        cd "!paramonte_dir!"
+        set ERRORLEVEL=1
+        exit /B 1
+    )
+)
 
 goto LABEL_EOF
 
@@ -1072,6 +1423,11 @@ echo.
 cd %~dp0
 set ERRORLEVEL=1
 exit /B 1
+
+:NORMALIZEPATH
+cd "!paramonte_dir!"
+set DESTINATION_DIR=%~dpfn1
+exit /B
 
 :LABEL_EOF
 

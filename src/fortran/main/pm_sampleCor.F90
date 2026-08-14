@@ -313,7 +313,7 @@ module pm_sampleCor
     !>  \final{corcoef_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, abstract :: corcoef_type
     end type
 
@@ -345,7 +345,7 @@ module pm_sampleCor
     !>  \final{kendall_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(corcoef_type) :: kendall_type
     end type
 
@@ -368,7 +368,7 @@ module pm_sampleCor
     !>  \final{kendall}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type(kendall_type), parameter :: kendall = kendall_type()
 #if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
     !DIR$ ATTRIBUTES DLLEXPORT :: kendall
@@ -406,7 +406,7 @@ module pm_sampleCor
     !>  \final{kendallA_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(kendall_type) :: kendallA_type
     end type
 
@@ -433,7 +433,7 @@ module pm_sampleCor
     !>  \final{kendallA}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type(kendallA_type), parameter :: kendallA = kendallA_type()
 #if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
     !DIR$ ATTRIBUTES DLLEXPORT :: kendallA
@@ -471,7 +471,7 @@ module pm_sampleCor
     !>  \final{kendallB_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(kendall_type) :: kendallB_type
     end type
 
@@ -498,7 +498,7 @@ module pm_sampleCor
     !>  \final{kendallB}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type(kendallB_type), parameter :: kendallB = kendallB_type()
 #if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
     !DIR$ ATTRIBUTES DLLEXPORT :: kendallB
@@ -533,7 +533,7 @@ module pm_sampleCor
     !>  \final{pearson_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(corcoef_type) :: pearson_type
     end type
 
@@ -556,7 +556,7 @@ module pm_sampleCor
     !>  \final{pearson}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type(pearson_type), parameter :: pearson = pearson_type()
 #if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
     !DIR$ ATTRIBUTES DLLEXPORT :: pearson
@@ -590,7 +590,7 @@ module pm_sampleCor
     !>  \final{spearman_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(corcoef_type) :: spearman_type
     end type
 
@@ -613,7 +613,7 @@ module pm_sampleCor
     !>  \final{spearman}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type(spearman_type), parameter :: spearman = spearman_type()
 #if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
     !DIR$ ATTRIBUTES DLLEXPORT :: spearman
@@ -685,7 +685,7 @@ module pm_sampleCor
     !>                                  <li>    type `real` of the same kind as the kind of the output `cor`,
     !>                              </ol>
     !>                              containing the corresponding weights of individual `nsam` observations in `sample`.<br>
-    !>                              (**optional**. default = `getFilled(1, nsam)`. It can be present **only if** the input arguments `cov`, `subsetv`, and `stdinv` are missing.)
+    !>                              (**optional**. default = [getFilled(1, nsam)](@ref pm_arrayFill::getFilled). It can be present **only if** the input arguments `cov`, `subsetv`, and `stdinv` are missing.)
     !>
     !>  \return
     !>  `cor`                   :   The output **positive semi-definite** square matrix of shape `(1:ndim, 1:ndim)` of,
@@ -2234,7 +2234,7 @@ module pm_sampleCor
     !>                                      <li>    type `real` of the same kind as the kind of the output `cor`,
     !>                                  </ol>
     !>                                  containing the corresponding weights of individual `nsam` observations in `sample` or the pair of vectors `x` and `y`.<br>
-    !>                                  (**optional**. default = `getFilled(1, nsam)`. It can be present **if and only if** the input arguments `sample` or `x` and `y` are present.)
+    !>                                  (**optional**. default = [getFilled(1, nsam)](@ref pm_arrayFill::getFilled). It can be present **if and only if** the input arguments `sample` or `x` and `y` are present.)
     !>  \param[in]      weisum      :   The input scalar of the same type and kind as the input `weight` containing `sum(weight)`.<br>
     !>                                  This quantity is a byproduct of computing the mean of a sample and is automatically returned by [setMean](@ref pm_sampleMean::setMean).<br>
     !>                                  (**optional**. It **must** be present **if and only if** both `mean` and `weight` arguments are present **and** the input argument `cov` is missing.)
@@ -2312,7 +2312,7 @@ module pm_sampleCor
     !>
     !>  \author
     !>  \FatemehBagheri, Monday 02:15 AM, September 27, 2021, Dallas, TX<br>
-    !>  \AmirShahmoradi, Wednesday 4:13 AM, August 13, 2016, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, Wednesday 4:13 AM, August 13, 2016, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -7565,7 +7565,7 @@ module pm_sampleCor
     !>                                  containing the corresponding weights of individual `nsam` observations in `sample` or the pair of vectors `x` and `y`.<br>
     !>                                  Note that this default \RK kind type parameter requirement on input `weight` of type `real` is unlike the other `pm_sample*` modules of the ParaMonte library.<br>
     !>                                  This requirement is enforced by the default kind type parameter of the output of [setRankFractional](@ref pm_arrayRank::setRankFractional).<br>
-    !>                                  (**optional**. default = `getFilled(1, nsam)`.)
+    !>                                  (**optional**. default = [getFilled(1, nsam)](@ref pm_arrayFill::getFilled).)
     !>
     !>  \return
     !>  `rho`                       :   The output positive semi-definite scalar or square matrix of shape `(1 : ndim, 1 : ndim)` of,
@@ -9570,7 +9570,7 @@ module pm_sampleCor
     !>                                      <li>    type `real` of default kind \RK,
     !>                                  </ol>
     !>                                  containing the corresponding weights of individual `nsam` observations in `sample` or the pair of vectors `x` and `y`.<br>
-    !>                                  (**optional**. default = `getFilled(1, nsam)`.)
+    !>                                  (**optional**. default = [getFilled(1, nsam)](@ref pm_arrayFill::getFilled).)
     !>
     !>  \interface{setRho}
     !>  \code{.F90}
@@ -12734,7 +12734,7 @@ module pm_sampleCor
 !    !>                                      <li>    type `real` of default kind \RK,
 !    !>                                  </ol>
 !    !>                                  containing the corresponding weights of individual `nsam` observations in `sample` or the pair of vectors `x` and `y`.<br>
-!    !>                                  (**optional**. default = `getFilled(1, nsam)`.)
+!    !>                                  (**optional**. default = [getFilled(1, nsam)](@ref pm_arrayFill::getFilled).)
 !    !>
 !    !>  `tau`                       :   The output positive semi-definite scalar or square matrix of shape `(1 : ndim, 1 : ndim)` of,
 !    !>                                  <ol>
@@ -14724,7 +14724,7 @@ module pm_sampleCor
 !    !>                                      <li>    type `real` of default kind \RK,
 !    !>                                  </ol>
 !    !>                                  containing the corresponding weights of individual `nsam` observations in `sample` or the pair of vectors `x` and `y`.<br>
-!    !>                                  (**optional**. default = `getFilled(1, nsam)`.)
+!    !>                                  (**optional**. default = [getFilled(1, nsam)](@ref pm_arrayFill::getFilled).)
 !    !>
 !    !>  \interface{setTau}
 !    !>  \code{.F90}
@@ -17880,7 +17880,7 @@ module pm_sampleCor
     !>  \final{setCordance}
     !>
     !>  \author
-    !>  \AmirShahmoradi, April 21, 2017, 1:54 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, April 21, 2017, 1:54 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
 
     ! WNO
 

@@ -26,7 +26,7 @@ legends =   [ r"$(\Omega_M, \Omega_\Lambda, \Omega_R, \Omega_K) = (0.3, 0.7, 0.0
 
 for kind in ["IK", "CK", "RK"]:
 
-    pattern = "*."+kind+".txt"
+    pattern = "*." + kind + ".txt"
     fileList = glob.glob(pattern)
     if len(fileList) == 1:
 
@@ -42,7 +42,7 @@ for kind in ["IK", "CK", "RK"]:
                     , linewidth = linewidth
                    #, color = "r"
                     )
-            plt.plot( df.values[:,1] - 1
+            plt.plot( df.values[:, 1] - 1
                     , df.values[:,1:6]
                     , marker[kind]
                     , linewidth = linewidth

@@ -63,7 +63,7 @@ call setAsserted(ASSERTION,getFine(__FILE__,LINE)//MODULE_NAME//MSG);
     !>  \final{kernel_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, Tuesday March 7, 2017, 3:50 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, Tuesday March 7, 2017, 3:50 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type(kernel_type), allocatable :: mc_kernel
 
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -320,6 +320,8 @@ contains
         use pm_val2str, only: getStr
         use pm_io, only: setContentsFrom
         use pm_sysShell, only: isFailedExec
+        use pm_sysPath, only: isFailedRemove
+        use pm_arrayResize, only: setResized
         use pm_sysPath, only: getPathTemp
         use pm_sysShell, only: shell_type
         use pm_container, only: css_type
@@ -335,7 +337,9 @@ contains
 
         sysInfo = SKG_""
 
-        ! Infer the shell type.
+        !!!!
+        !!!! Infer the shell type.
+        !!!!
 
         shell = shell_type(failed, errmsg)
         if (failed) then
@@ -355,14 +359,18 @@ contains
         !    end if
         !end if
 
-        ! Standard error output for error-catching.
+        !!!!
+        !!!! Standard error output for error-catching.
+        !!!!
 
        !stderr = SK_" 2> "//cache_def//SK_".stderr"
         stdout = getPathTemp(prefix = SK_".sysInfo", failed = failed)
         stderr = stdout//SK_".stderr"
         dumper = SK_" 1> "//stdout//SK_" 2> "//stderr
 
-        ! Define the shell command.
+        !!!!
+        !!!! Define the shell command.
+        !!!!
 
         failed = isFailedInitOS(errmsg)
         if (failed) return ! LCOV_EXCL_LINE
@@ -374,9 +382,90 @@ contains
                     ]
         elseif (mc_kernel%is%linux .or. mc_kernel%is%freebsd .or. shell%is%posix) then
             !command = SK_"uname -a > "//cache_def//SK_"; lshw -short >> "//cache_def//SK_"; lscpu >> "//cache_def
+#if         __INTEL_COMPILER
+            !>  \bug
+            !>  \status \unresolved
+            !>  \source \ifx{2025.0.0 20241008}
+            !>  \desc
+            !>  \ifx{} yields the following segfault error at runtime for using
+            !>  the [css_type](@ref pm_container::css_type) array constructor syntax.<br>
+            !>  \code{.F90}
+            !>
+            !>      --------------------------------------------------------------------------------
+            !>             !Segmentation violation detected at 2024-11-06 22:46:51 -0600
+            !>      --------------------------------------------------------------------------------
+            !>
+            !>      Configuration:
+            !>      Crash Decoding           : Disabled - No sandbox or build area path
+            !>      Crash Mode               : continue (default)
+            !>      Default Encoding         : UTF-8
+            !>      Deployed                 : false
+            !>      GNU C Library            : 2.35 stable
+            !>      Graphics Driver          : Uninitialized software
+            !>      Graphics card 1          : 0x1414 ( 0x1414 ) 0x8e Version 2.0.3.0 (0-0-0)
+            !>      Graphics card 2          : 0x1414 ( 0x1414 ) 0x8e Version 2.0.3.0 (0-0-0)
+            !>      Java Version             : Java 1.8.0_202-b08 with Oracle Corporation Java HotSpot(TM) 64-Bit Server VM mixed mode
+            !>      MATLAB Architecture      : glnxa64
+            !>      MATLAB Entitlement ID    : 2406435
+            !>      MATLAB Root              : /usr/local/MATLAB/R2023b
+            !>      MATLAB Version           : 23.2.0.2428915 (R2023b) Update 4
+            !>      OpenGL                   : software
+            !>      Operating System         : Ubuntu 22.04.4 LTS
+            !>      Process ID               : 24027
+            !>      Processor ID             : x86 Family 6 Model 151 Stepping 2, GenuineIntel
+            !>      Session Key              : 4af1c654-3fca-4695-8780-e5de2107934f
+            !>      Window System            : Microsoft Corporation (12010000), display :0
+            !>
+            !>      Fault Count: 1
+            !>
+            !>
+            !>      Abnormal termination:
+            !>      Segmentation violation
+            !>
+            !>      Current Thread: 'MCR 0 interpret' id 23329188607552
+            !>
+            !>      Register State (from fault):
+            !>      RAX = 0000000000000000  RBX = 00001537bffc8ef8
+            !>      RCX = 0000000000000001  RDX = 0000000000000000
+            !>      RSP = 00001537bffc8690  RBP = 00001537bffc8710
+            !>      RSI = 00001537bffc8ef8  RDI = 000002a6db74779d
+            !>
+            !>      R8 = 0000000000000000   R9 = 0000000000040002
+            !>      R10 = 00001537c00d6fe8  R11 = 0000000000000000
+            !>      R12 = 0000000000000000  R13 = 00000000000004e0
+            !>      R14 = 0000000000000000  R15 = 00001536dba470f0
+            !>
+            !>      RIP = 00001536db95e473  EFL = 0000000000010202
+            !>
+            !>      CS = 0033   FS = 0000   GS = 0000
+            !>
+            !>      Stack Trace (from fault):
+            !>      [  0] 0x00001536db95e473 /home/amir/git/paramonte/_bin/libparamonte_matlab_linux_amd64/+pm/lib/linux/amd64/intelllvm2025/debug/shared/heap/serial/nocheck/libparamonte.so+38818931
+            !>      [  1] 0x00001536db95f54e /home/amir/git/paramonte/_bin/libparamonte_matlab_linux_amd64/+pm/lib/linux/amd64/intelllvm2025/debug/shared/heap/serial/nocheck/libparamonte.so+38823246
+            !>      [  2] 0x00001536db95e69e /home/amir/git/paramonte/_bin/libparamonte_matlab_linux_amd64/+pm/lib/linux/amd64/intelllvm2025/debug/shared/heap/serial/nocheck/libparamonte.so+38819486
+            !>      [  3] 0x00001536da893fbe /home/amir/git/paramonte/_bin/libparamonte_matlab_linux_amd64/+pm/lib/linux/amd64/intelllvm2025/debug/shared/heap/serial/nocheck/libparamonte.so+21213118 pm_sysinfo_MP_getsysinfofailedmsg_+00012510
+            !>      [  4] 0x00001536da890b31 /home/amir/git/paramonte/_bin/libparamonte_matlab_linux_amd64/+pm/lib/linux/amd64/intelllvm2025/debug/shared/heap/serial/nocheck/libparamonte.so+21199665 pm_sysinfo_MP_getsysinfofailed_+00000177
+            !>      [  5] 0x00001536d982d6fe /home/amir/git/paramonte/_bin/libparamonte_matlab_linux_amd64/+pm/lib/linux/amd64/intelllvm2025/debug/shared/heap/serial/nocheck/libparamonte.so+04015870 pm_sampling_base_rk2_MP_openfiles_+00126718
+            !>      [  6] 0x00001536d980c391 /home/amir/git/paramonte/_bin/libparamonte_matlab_linux_amd64/+pm/lib/linux/amd64/intelllvm2025/debug/shared/heap/serial/nocheck/libparamonte.so+03879825 pm_sampling_base_rk2_MP_set_+00135649
+            !>      [  7] 0x00001536d9902171 /home/amir/git/paramonte/_bin/libparamonte_matlab_linux_amd64/+pm/lib/linux/amd64/intelllvm2025/debug/shared/heap/serial/nocheck/libparamonte.so+04886897 pm_sampling_mcmc_rk2_MP_set_+00030945
+            !>      [  8] 0x00001536d998e393 /home/amir/git/paramonte/_bin/libparamonte_matlab_linux_amd64/+pm/lib/linux/amd64/intelllvm2025/debug/shared/heap/serial/nocheck/libparamonte.so+05460883 pm_sampling_dram_rk2_MP_set_+00037203
+            !>      [  9] 0x00001536d9b51923 /home/amir/git/paramonte/_bin/libparamonte_matlab_linux_amd64/+pm/lib/linux/amd64/intelllvm2025/debug/shared/heap/serial/nocheck/libparamonte.so+07309603 pm_sampling_MP_geterrparadram_rk2_+00047939
+            !>      [ 10] 0x00001536d9b43448 /home/amir/git/paramonte/_bin/libparamonte_matlab_linux_amd64/+pm/lib/linux/amd64/intelllvm2025/debug/shared/heap/serial/nocheck/libparamonte.so+07251016 runParaDRAMD+00007992
+            !>      [ 11] 0x00001536f64624a9 /home/amir/git/paramonte/_bin/libparamonte_matlab_linux_amd64/+pm/lib/linux/amd64/intelllvm2025/debug/shared/heap/serial/nocheck/pm_sampling.mexa64+00005289 mexFunction+00000537
+            !>
+            !>  \endcode
+            !>  \remedy
+            !>  Currently, a preprocessor fence is added specifically for Intel compilers that first allocates the
+            !>  vector of type [css_type](@ref pm_container::css_type) and then assigns the vector elements one by one.<br>
+            !>
+            call setResized(cmd, 2_IK)
+            cmd(1) = css_type(SK_"uname -a"//dumper)
+            cmd(2) = css_type(SK_"lscpu"//dumper//SK_" || cat /proc/cpuinfo"//dumper)
+#else
             cmd =   [ css_type(SK_"uname -a"//dumper) &
                     , css_type(SK_"lscpu"//dumper//SK_" || cat /proc/cpuinfo"//dumper) &
                     ]
+#endif
         elseif (mc_kernel%is%windows .and. shell%is%windows) then
             cmd =   [css_type(SK_"systeminfo"//dumper)]
         else
@@ -385,7 +474,9 @@ contains
             return ! LCOV_EXCL_LINE
         end if
 
-        ! Get sysinfo.
+        !!!!
+        !!!! Get sysinfo.
+        !!!!
 
         done = .false._LK
         do icmd = 1, size(cmd, 1, IK)
@@ -397,7 +488,11 @@ contains
                 end if
             end if
         end do
-        ! At least one of the loop cycles must succeed to not fail.
+
+        !!!!
+        !!!! At least one of the loop cycles must succeed to not fail.
+        !!!!
+
         failed = .not. done
         if (failed) then
             errmsg = PROCEDURE_NAME//SK_": "//trim(errmsg) ! LCOV_EXCL_LINE
@@ -416,6 +511,12 @@ contains
         !   This needs a more robust solution in the future.
         !failed = .true._LK ! LCOV_EXCL_LINE
         !return ! LCOV_EXCL_LINE
+
+        !!!!
+        !!!! Delete the stderr file.
+        !!!!
+
+        failed = isFailedRemove(stderr, errmsg = errmsg)
 
     end procedure
 

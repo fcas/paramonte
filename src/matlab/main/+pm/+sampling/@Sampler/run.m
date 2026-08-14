@@ -1,58 +1,76 @@
+%>  \brief
+%>  Perform the basic runtime checks for the sampler and return nothing.
+%>
+%>  \param[inout]   self        :   The input/output parent object of class [pm.sampling.Sampler](@ref Sampler)
+%>                                  which is **implicitly** passed to this dynamic method (not by the user).<br>
+%>  \param[in]      getLogFunc  :   The input MATLAB function handle or anonymous (lambda) function
+%>                                  containing the implementation of the objective function to be sampled.<br>
+%>                                  This user-specified function must have the following interface,<br>
+%>                                  \code{.m}
+%>                                      function logFunc = getLogFunc(state)
+%>                                          ...
+%>                                      end<br>
+%>                                  \endcode
+%>                                  where,<br>
+%>                                  <ol>
+%>                                      <li>    the input argument ``state`` is a vector of type MATLAB ``double``
+%>                                              of size ``ndim`` representing a single point from within the ``ndim``
+%>                                              dimensional domain of the mathematical object function to be explored.<br>
+%>                                      <li>    the output argument `logFunc` is a scalar of the same type as the
+%>                                              input ``state`` containing the natural logarithm of the objective
+%>                                              function at the specified input ``state`` within its domain.<br>
+%>                                  </ol>
+%>  \param[in]      ndim        :   The input scalar positive-valued whole-number representing the number of dimensions
+%>                                  of the domain of the user-specified objective function in the input ``getLogFunc()``.<br>
+%>
+%>  \interface{run}
+%>  \code{.m}
+%>
+%>      sampler = pm.sampling.Sampler();
+%>      sampleList = sampler.run(getLogFunc, ndim);
+%>
+%>  \endcode
+%>
+%>  \final{run}
+%>
+%>  \author
+%>  \JoshuaOsborne, May 21 2024, 12:38 AM, University of Texas at Arlington<br>
+%>  \FatemehBagheri, May 20 2024, 1:25 PM, NASA Goddard Space Flight Center (GSFC), Washington, D.C.<br>
+%>  \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin<br>
 function run(self, getLogFunc, ndim)
-    %
-    %
-    %   Perform the basic runtime checks for the sampler and return nothing.
-    %
-    %   Parameters
-    %   ----------
-    %
-    %       getLogFunc()
-    %
-    %           The input MATLAB function handle or anonymous (lambda) function
-    %           containing the implementation of the objective function to be sampled.
-    %           This user-specified function must have the following interface,
-    %
-    %               function logFunc = getLogFunc(state)
-    %                   ...
-    %               end
-    %
-    %           where,
-    %
-    %               1.  the input argument ``state`` is a vector of type MATLAB ``double``
-    %                   of size ``ndim`` representing a single point from within the ``ndim``
-    %                   dimensional domain of the mathematical object function to be explored.
-    %
-    %               2.  the output argument `logFunc` is a scalar of the same type as the
-    %                   input ``state`` containing the natural logarithm of the objective
-    %                   function at the specified input ``state`` within its domain.
-    %
-    %       ndim
-    %
-    %           The input scalar positive-valued whole-number representing the number of dimensions
-    %           of the domain of the user-specified objective function in the input ``getLogFunc()``.
-    %
-    %   Returns
-    %   -------
-    %
-    %       None
-    %
 
-    % Sanitize ``sampler.silent``.
+    %%%%
+    %%%% Sanitize ``sampler.silent``.
+    %%%%
 
-    if ~pm.introspection.istype(self.silent, "logical", 1)
+    if ~pm.introspection.verified(self.silent, "logical", 1)
         help("pm.sampling.Sampler.silent");
         disp("self.silent =");
-        disp(self.mpiname);
+        disp(self.silent);
         error   ( newline ...
-                + "The sampler attribute ``mpiname`` must be a scalar of type ``char`` or ``string``." + newline ...
+                + "The sampler attribute ``silent`` must be a scalar of type ``logical``." + newline ...
                 + "For more information, see the documentation displayed above." + newline ...
                 + newline ...
                 );
     end
 
-    % Sanitize parallelism method to set reporting permission.
+    %%%%
+    %%%% Sanitize parallelism method to set reporting permission.
+    %%%%
 
-    if ~pm.introspection.istype(self.mpiname, "string", 1) % Sanitize ``mpiname``.
+    % global mpiname;
+    % ismember('mpiname', who('global'));
+    % MPI enabled by a global definition of ``mpiname``.
+    % if  pm.array.len(self.mpiname) == 0 && ~isempty(mpiname) && pm.introspection.verified(mpiname, "string", 1)
+    %     self.mpiname = mpiname;
+    % end
+
+    if ~pm.introspection.verified(self.mpiname, "string", 1)
+
+        %%%%
+        %%%% Sanitize ``mpiname``.
+        %%%%
+
         help("pm.sampling.Sampler.mpiname");
         disp("mpiname =");
         disp(self.mpiname);
@@ -61,21 +79,37 @@ function run(self, getLogFunc, ndim)
                 + "For more information, see the documentation displayed above." + newline ...
                 + newline ...
                 );
-    elseif 0 < pm.array.len(self.mpiname) % MPI enabled.
+
+    elseif pm.array.len(self.mpiname) == 0
+
+        %%%%
+        %%%% Detect potential MPI launcher.
+        %%%%
+
+        [mpiname, nproc, ~] = pm.lib.mpi.runtime.detect();
+        if  pm.array.len(mpiname) > 0 && nproc > 1
+            self.mpiname = mpiname;
+        end
+
+    end
+
+    %%%%
+    %%%% First detect potential use of MPI, then check for thread parallelism.
+    %%%%
+
+    if  0 < pm.array.len(self.mpiname) % MPI enabled.
+
         self.silent = true; % Otherwise, we keep the default value of self.silent.
         self.partype = string(pm.lib.mpi.name(self.mpiname));
-        %if  self.partype ~= pm.lib.mpi.choice()
-        %    warning ( newline ...
-        %            + "The specified mpi library name (mpiname = """ + self.mpiname + """) does not match" + newline ...
-        %            + "the ParaMonte-preferred MPI library name (""" + pm.lib.mpi.choice() + """) for the current operating system." + newline ...
-        %            + "The MPI-parallel simulations may fail depending on the availability" + newline ...
-        %            + "of the ParaMonte shared libraries for the requested MPI library." + newline ...
-        %            + newline ...
-        %            );
-        %end
-    elseif ~isempty(self.spec.parallelismNumThread) % Sanitize ``self.spec.parallelismNumThread``.
+
+    elseif ~isempty(self.spec.parallelismNumThread)
+
+        %%%%
+        %%%% Sanitize ``self.spec.parallelismNumThread``.
+        %%%%
+
         % The following separate conditions are crucial to remain separate.
-        failed = ~pm.introspection.istype(self.spec.parallelismNumThread, "integer", 1);
+        failed = ~pm.introspection.verified(self.spec.parallelismNumThread, "integer", 1);
         if ~failed
             failed = self.spec.parallelismNumThread < 0;
         end
@@ -100,23 +134,26 @@ function run(self, getLogFunc, ndim)
                     + "of threads should be specified for ``parallelismNumThread`` as using" + newline ...
                     + "all available threads exclusively for a simulation will" + newline ...
                     + "slow down all open system applications including MATLAB." + newline ...
-                    + "Specifying this option requires the MATLAB parallel toolbox." + newline ...
-                    + "If missing or specified as empty `[]`, the simulation will run in serial mode." + newline ...
+                    + "Beware that specifying this option requires the MATLAB parallel toolbox." + newline ...
+                    + "If missing or specified as empty ``[]``, the simulation will run in serial mode." + newline ...
                     + "You have specified:" + newline ...
                     + newline ...
-                    + pm.io.tab + "self.spec.parallelismNumThread = " + string(self.parallelismNumThread) + newline ...
+                    + pm.io.tab() + "self.spec.parallelismNumThread = " + string(self.parallelismNumThread) + newline ...
                     + newline ...
-                    + "Does your matlab have Parallel Computing Toolbox?" + newline ...
+                    + "Does your MATLAB have Parallel Computing Toolbox?" + newline ...
                     + newline ...
-                    + pm.io.tab + "pm.matlab.has.parallel() = " + string(pm.matlab.has.parallel()) + newline ...
+                    + pm.io.tab() + "pm.matlab.has.parallel() = " + string(pm.matlab.has.parallel()) + newline ...
                     + newline ...
                     + "For more information, see the documentation displayed above." + newline ...
                     + newline ...
                     );
         end
+
     end
 
-    % Sanitize ``getLogFunc``.
+    %%%%
+    %%%% Sanitize ``getLogFunc``.
+    %%%%
 
     if ~isa(getLogFunc, "function_handle")
         help("pm.sampling.Sampler.run");
@@ -132,9 +169,11 @@ function run(self, getLogFunc, ndim)
                 );
     end
 
-    % Sanitize ``ndim``.
+    %%%%
+    %%%% Sanitize ``ndim``.
+    %%%%
 
-    failed = ~pm.introspection.istype(ndim, "integer", 1);
+    failed = ~pm.introspection.verified(ndim, "integer", 1);
     if ~failed
         failed = ndim < 1;
     end
@@ -153,9 +192,11 @@ function run(self, getLogFunc, ndim)
                 );
     end
 
-    % Sanitize ``input`` specifications/file string.
+    %%%%
+    %%%% Sanitize ``input`` specifications/file string.
+    %%%%
 
-    if ~pm.introspection.istype(self.input, "string", 1)
+    if ~pm.introspection.verified(self.input, "string", 1)
         help("pm.sampling.Sampler.input");
         disp("self.input = ");
         disp(self.input);
@@ -176,7 +217,7 @@ function run(self, getLogFunc, ndim)
                 warning ( newline ...
                         + "User-specified input namelist file detected: " + newline ...
                         + newline ...
-                        + pm.io.tab + """" + self.input + """" + newline ...
+                        + pm.io.tab() + """" + self.input + """" + newline ...
                         + newline ...
                         + "All simulation specifications will be read from the input file." + newline ...
                         + "All simulation specifications in the ``spec`` component of the sampler object will be ignored." + newline ...
@@ -189,11 +230,13 @@ function run(self, getLogFunc, ndim)
         end
     end
 
-    % Sanitize ``checked``.
+    %%%%
+    %%%% Sanitize ``checked``.
+    %%%%
 
     if ~isempty(self.checked)
-        if ~pm.introspection.istype(self.checked, "logical", 1)
-            help("pm.sampling.Sampler");
+        if ~pm.introspection.verified(self.checked, "logical", 1)
+            help("pm.sampling.Sampler.checked");
             disp("self.checked =");
             disp(self.checked);
             error   ( newline ...
@@ -210,22 +253,25 @@ function run(self, getLogFunc, ndim)
         chktypes = ["nocheck", "checked"];
     end
 
-    % Setup the ParaMonter sampler library name.
+    %%%%
+    %%%% Setup the ParaMonter sampler library name.
+    %%%%
 
     libspecs = [pm.os.namel(), pm.sys.arch(), self.libtype, self.memtype, self.partype];
     mexdirs = pm.lib.path.mexdir(self.mexname, libspecs);
 
-    % We will choose the checking mode, compiler suite, and build mode based on the availability below.
+    % We will choose the checking mode, compiler suite,
+    % and build mode based on the availability below.
 
     if  self.bldtype == ""
         bldtypes = pm.lib.bldtypes();
     else
-        bldtypes = lower(self.bldtype());
+        bldtypes = lower(self.bldtype);
     end
     if  self.clstype == ""
         clstypes = pm.lib.clstypes();
     else
-        clstypes = lower(self.clstype());
+        clstypes = lower(self.clstype);
     end
     failed = isempty(mexdirs);
     if ~failed
@@ -237,7 +283,9 @@ function run(self, getLogFunc, ndim)
                 for ibld = 1 : length(bldtypes)
                     bldtype = filesep + bldtypes(ibld) + filesep;
                     for imex = 1 : length(mexdirs)
-                        if  contains(mexdirs(imex), clstype) && contains(mexdirs(imex), bldtype) && contains(mexdirs(imex), chktype)
+                        if  contains(mexdirs(imex), clstype) ...
+                        &&  contains(mexdirs(imex), bldtype) ...
+                        &&  contains(mexdirs(imex), chktype)
                             mexdir = mexdirs(imex);
                             if  self.bldtype == ""
                                 self.bldtype = bldtypes(ibld);
@@ -257,31 +305,36 @@ function run(self, getLogFunc, ndim)
                     break;
                 end
             end
+            if ~failed
+                break;
+            end
         end
     end
 
     if  failed
         help("pm.sampling.Sampler");
-        disp("libspecs =");
-        disp(libspecs);
-        disp("bldtypes =");
-        disp(bldtypes);
-        disp("clstypes =");
-        disp(clstypes);
+        disp("libspecs");
+        disp( libspecs );
+        disp("bldtypes");
+        disp( bldtypes );
+        disp("clstypes");
+        disp( clstypes );
         error   ( newline ...
                 + "There are no MEX libraries associated with the configurations displayed above:" + newline ...
                 + "Either the user has compromised internal structure of the ParaMonte library" + newline ...
                 + "or the user has tempered with hidden attributes of the ParaMonte sampler." + newline ...
                 + "If you believe neither is the case, please report this error at:" + newline ...
                 + newline ...
-                + pm.io.tab + pm.web.href(self.weblinks.github.issues.url) + newline ...
+                + pm.io.tab() + pm.web.href(self.weblinks.github.issues.url) + newline ...
                 + newline ...
                 + "for a quick resolution." + newline ...
                 + newline ...
                 );
     end
 
-    % Add the identified mex path to the MATLAB pat list, only temporarily.
+    %%%%
+    %%%% Add the identified MEX path to the MATLAB path list, only temporarily.
+    %%%%
 
     pm.lib.path.clean();
     self.matpath = path;
@@ -303,25 +356,46 @@ function run(self, getLogFunc, ndim)
         setenv('GFORTRAN_STDERR_UNIT', '0');
     end
 
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%
+    %%%% Set up the MEX file to call.
+    %%%%
 
     if  self.partype == "openmp"
         mexcall = string(self.mexname + "(convertStringsToChars(self.method), @getLogFuncConcurrent, ndim, convertStringsToChars(self.nml))");
         if ~self.silent
             delete(gcp("nocreate"));
-            pool = parpool("threads", abs(self.spec.parallelismNumThread));
+            % The following works only in MATLAB 2022b and beyond.
+            if  pm.matlab.release() < "2022b"
+                pool = parpool("threads");
+                maxNumCompThreads(abs(self.spec.parallelismNumThread));
+            else
+                pool = parpool("threads", abs(self.spec.parallelismNumThread));
+            end
         else
-            evalc('delete(gcp("nocreate")');
-            evalc('pool = parpool("threads", abs(self.spec.parallelismNumThread))');
+            evalc('delete(gcp("nocreate"))');
+            if  pm.matlab.release() < "2022b"
+                evalc('pool = parpool("threads")');
+                evalc('maxNumCompThreads(abs(self.spec.parallelismNumThread))');
+            else
+                evalc('pool = parpool("threads", abs(self.spec.parallelismNumThread))');
+            end
         end
     else
         mexcall = string(self.mexname + "(convertStringsToChars(self.method), @getLogFuncWrapped, ndim, convertStringsToChars(self.nml))");
         %getLogFuncSpec = functions(getLogFunc);
     end
 
+    %%%%
+    %%%% Define the ``getLogFunc`` wrapper function for serial/MPI sampling.
+    %%%%
+
     function logFunc = getLogFuncWrapped(state)
         logFunc = getLogFunc(state);
     end
+
+    %%%%
+    %%%% Define the ``getLogFunc`` wrapper function for OpenMP sampling.
+    %%%%
 
     %getLogFuncConst = parallel.pool.Constant(@(state) getLogFunc(state));
     function [logFunc, avgTimePerFunCall, avgCommPerFunCall] = getLogFuncConcurrent(state)
@@ -375,44 +449,37 @@ function run(self, getLogFunc, ndim)
         avgCommPerFunCall = toc(avgCommPerFunCall) - avgTimePerFunCall;
     end
 
+    %%%%
+    %%%% Call the MEX sampler.
+    %%%%
+
     try
         eval(mexcall);
         self.finalize();
         if ~self.silent
             disp( newline ...
-                + "Use the following object methods to read the generated basic output files: " + newline ...
-                + newline ...
-                + pm.io.tab + self.name + ".readChain()    % Return a list of the contents of the output chain file(s)." + newline ...
-                + pm.io.tab + self.name + ".readSample()   % Return a list of i.i.d. sample(s) from the output sample file(s)." + newline ...
-                + pm.io.tab + self.name + ".readReport()   % Return a list of summary report(s) from the output report file(s)." + newline ...
-                + pm.io.tab + self.name + ".readRestart()  % Return a list of the contents of the ASCII output restart file(s)." + newline ...
-                + pm.io.tab + self.name + ".readProgress() % Return a list of the contents of the output progress file(s)." + newline ...
-                + newline ...
+                + self.getppm() + newline ...
                 + "For more information and examples on the usage, visit:" + newline ...
                 + newline ...
-                + pm.io.tab + pm.web.href(self.weblinks.home.url) + newline ...
+                + pm.io.tab() + pm.web.href(self.weblinks.docs.generic.url) + newline ...
                 + newline ...
                 );
         end
-    catch ME
+    catch me
         self.finalize();
-        msg = newline ...
-            + "Error occurred: " + newline ...
-            + string(ME.message) + newline ...
-            + newline ...
-            ;
-        if ismac && strcmpi(ME.identifier, 'MATLAB:mex:ErrInvalidMEXFile')
+        msg = string(me.identifier) + " : " + string(me.message) + newline;
+        if ismac && strcmpi(me.identifier, 'MATLAB:mex:ErrInvalidMEXFile')
             msg = msg ...
                 + "This error is most likely due to the ""System Integrity Protection""" + newline ...
                 + "(SIP) of your macOS interfering with the ParaMonte MATLAB MEX files." + newline ...
                 + "You can follow the guidelines in the documentation to resolve this error:" + newline ...
                 + newline ...
-                + pm.io.tab + pm.web.href(pm.lib.weblinks.home.url + "/notes/troubleshooting/macos-developer-cannot-be-verified/") + newline ...
+                + pm.io.tab() + pm.web.href(self.weblinks.generic.docs.url + "/troubleshooting/macos-developer-cannot-be-verified/") + newline ...
                 + newline ...
                 + "If the problem persists even after following the guidelines" + newline ...
                 + "in the above page, please report this issue to the developers at:" + newline ...
                 + newline ...
-                + pm.io.tab + pm.web.href(pm.lib.weblinks.github.issues.url) ...
+                + pm.io.tab() + pm.web.href(self.weblinks.github.issues.url) ...
                 + newline ...
                 ;
         else
@@ -421,7 +488,7 @@ function run(self, getLogFunc, ndim)
                 + "Also check the contents of the generated output '*_report.txt' files" + newline ...
                 + "if any such files were generated before the simulation crash:" + newline ...
                 + newline ...
-                + pm.io.tab + self.spec.outputFileName + "*_report.txt" + newline ...
+                + pm.io.tab() + self.spec.outputFileName + "*_report.txt" + newline ...
                 + newline ...
                 ;
         end

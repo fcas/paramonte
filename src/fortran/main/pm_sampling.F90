@@ -17,13 +17,16 @@
 !>  \brief
 !>  This module contains procedures and generic interfaces for the ParaMonte library sampler routines.
 !>
+!>  \details
+!>  See the documentation of [getErrSampling](@ref pm_sampling::getErrSampling) for example usage.<br>
+!>
 !>  \test
 !>  [test_pm_sampling](@ref test_pm_sampling)<br>
 !>
 !>  \final
 !>
 !>  \author
-!>  \AmirShahmoradi, Monday 00:01 AM, January 1, 2018, Institute for Computational Engineering and Sciences, University of Texas Austin
+!>  \AmirShahmoradi, Monday 00:01 AM, January 1, 2018, Institute for Computational Engineering and Sciences, University of Texas Austin<br>
 
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -46,6 +49,7 @@ module pm_sampling
     !>  the **optional** simulation properties of the ParaMonte library explorers and samplers.<br>
     !>
     !>  \details
+    !>  See the documentation of [getErrSampling](@ref pm_sampling::getErrSampling) for example usage.<br>
     !>  Objects of this derived type are not meant to be used directly by the end users.<br>
     !>  Instead use one of the appropriate derived types:<br>
     !>  <ol>
@@ -72,7 +76,7 @@ module pm_sampling
     !>  \final{sampler_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type                                        :: sampler_type
         character(:,SKG)        , allocatable   :: description                          !<  \specdram{description}
         character(:,SKG)        , allocatable   :: domain                               !<  \specdram{domain}
@@ -172,6 +176,7 @@ module pm_sampling
     !>  the **optional** simulation properties of the ParaMonte library MCMC explorers and samplers.<br>
     !>
     !>  \details
+    !>  See the documentation of [getErrSampling](@ref pm_sampling::getErrSampling) for example usage.<br>
     !>  Objects of this derived type are not meant to be used directly by the end users.<br>
     !>  Instead use one of the appropriate derived types:<br>
     !>  <ol>
@@ -200,7 +205,7 @@ module pm_sampling
     !>  \final{paramcmc_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(sampler_type)                 :: paramcmc_type
         integer(IK)             , allocatable   :: outputChainSize                      !<  \specdram{outputchainsize}
         integer(IK)             , allocatable   :: outputSampleRefinementCount          !<  \specdram{outputsamplerefinementcount}
@@ -221,6 +226,7 @@ module pm_sampling
     !>  properties of the ParaMonte library Delayed-Rejection Adaptive Metropolis (DRAM) MCMC explorers and samplers.<br>
     !>
     !>  \note
+    !>  See the documentation of [getErrSampling](@ref pm_sampling::getErrSampling) for example usage.<br>
     !>  For more information on any of the components of this derived type,
     !>  see the output `_report.txt` files from the corresponding sampler simulations.<br>
     !>  Alternatively, see the ParaMonte library cross-language sampler documentation
@@ -240,7 +246,7 @@ module pm_sampling
     !>  \final{paradram_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(paramcmc_type)                :: paradram_type
         real(RKH)               , allocatable   :: proposalAdaptationBurnin             !<  \specdram{proposaladaptationburnin}
         integer(IK)             , allocatable   :: proposalAdaptationCount              !<  \specdram{proposaladaptationcount}
@@ -255,6 +261,7 @@ module pm_sampling
     !>  properties of the ParaMonte library DRAM-enhanced MCMC explorers and samplers.<br>
     !>
     !>  \note
+    !>  See the documentation of [getErrSampling](@ref pm_sampling::getErrSampling) for example usage.<br>
     !>  For more information on any of the components of this derived type,
     !>  see the output `_report.txt` files from the corresponding sampler simulations.<br>
     !>  Alternatively, see the ParaMonte library cross-language sampler documentation
@@ -274,7 +281,7 @@ module pm_sampling
     !>  \final{paradise_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(paradram_type)                :: paradise_type
     end type
 
@@ -283,6 +290,7 @@ module pm_sampling
     !>  properties of the ParaMonte library Nested explorers and samplers.<br>
     !>
     !>  \note
+    !>  See the documentation of [getErrSampling](@ref pm_sampling::getErrSampling) for example usage.<br>
     !>  For more information on any of the components of this derived type,
     !>  see the output `_report.txt` files from the corresponding sampler simulations.<br>
     !>  Alternatively, see the ParaMonte library cross-language sampler documentation
@@ -300,10 +308,10 @@ module pm_sampling
     !>  [getErrSampling](@ref pm_sampling::getErrSampling)<br>
     !>  [getErrSampling](@ref pm_sampling::getErrSampling)<br>
     !>
-    !>  \final{paradise_type}
+    !>  \final{paranest_type}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type, extends(sampler_type)                 :: paranest_type
         integer(IK)             , allocatable   :: domainPartitionAdaptationCount
         integer(IK)             , allocatable   :: domainPartitionAdaptationPeriod
@@ -473,8 +481,8 @@ module pm_sampling
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     !>  \brief
-    !>  Generate and return `.true.` if the procedure fails to fully accomplish the task of generating a
-    !>  Monte Carlo sample of the specified input mathematical objective function, otherwise, return `.false.`.
+    !>  Generate and return `.true.` if the procedure fails to fully accomplish the task of Monte Carlo
+    !>  sampling of the specified input mathematical objective function, otherwise, return `.false.`.<br>
     !>
     !>  \details
     !>  This generic interface is the entry point to all ParaMonte Monte Carlo samplers of mathematical density functions.<br>
@@ -545,7 +553,7 @@ module pm_sampling
     !>                                          This interface is particularly vital in higher-level programming languages such as MATLAB, Python, and R where ParaMonte thread-level
     !>                                          parallelism is impossible due to the [global interpreter lock (GIL)](https://en.wikipedia.org/wiki/Global_interpreter_lock).<br>
     !>                                          This interface is currently activated **if and only if** the preprocessors `OMP_ENABLED=1` and either `MATLAB_ENABLED=1` or `PYTHON_ENABLED=1` or `R_ENABLED=1` are set.<br>
-    !>                                  <li>    When the library is built for any build configuration other than the above with preprocessor `CDF_ENABLED=1`, particularly, for the C and C++ programming languages,
+    !>                                  <li>    When the library is built for any build configuration other than the above with preprocessor `CFI_ENABLED=1`, particularly, for the C and C++ programming languages,
     !>                                          the input `getLogFunc()` must have the following interface:<br>
     !>                                          \code{.F90}
     !>                                              function getLogFunc(state, ndim) result(logFunc)
@@ -645,10 +653,24 @@ module pm_sampling
     !>  \test
     !>  [test_pm_sampling](@ref test_pm_sampling)
     !>
+    !>  \bug
+    !>  \status \unresolved
+    !>  \source \ifx{2024.0.2 20231213}
+    !>  \desc
+    !>  \ifx cannot handle compilation of the `pm_sampling` implementation include file.<br>
+    !>  \code{.sh}
+    !>      /home/amir/git/paramonte/src/fortran/main/pm_sampling@routines.inc.F90(454): error #5623: **Internal compiler error: internal abort** Please report this error along with the circumstances in which it occurred in a Software Problem Report.  Note: File and line given may not be explicit cause of this error.
+    !>                         if (spec%parallelism%is%forkJoin .and. scalings%current%scaling(spec%image%count) < 1._RKG) then
+    !>      ------------------------------------------------------------------------------------------------------^
+    !>      compilation aborted for /home/amir/git/paramonte/src/fortran/main/pm_sampling@routines.F90 (code 3)
+    !>  \endcode
+    !>  \remedy{2.0.0}
+    !>  The new interface allocatable output arguments entirely, thus obviating the need to handle this gracefully.<br>
+    !>
     !>  \final{getErrSampling}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2012, 12:00 AM, National Institute for Fusion Studies, The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2012, 12:00 AM, National Institute for Fusion Studies, The University of Texas Austin<br>
     interface getErrSampling
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -801,10 +823,11 @@ contains
     !>  \cfi
     !>
     !>  \brief
-    !>  Generate and return a non-zero value (`1`) if the procedure fails to fully accomplish the task of generating
-    !>  a Monte Carlo sample of the specified input mathematical objective function, otherwise, return `0`.
+    !>  Generate and return a non-zero value (`1`) if the procedure fails to fully accomplish the task of Monte Carlo
+    !>  sampling of the specified input mathematical objective function, otherwise, return `0`.
     !>
     !>  \details
+    !>  See the documentation of [getErrSampling](@ref pm_sampling::getErrSampling) for example usage in Fortran programming language.<br>
     !>  This interface group is the entry point to all **C-style interfaces** to the ParaDRAM samplers of mathematical density functions.<br>
     !>  Although the procedures of this generic interface return a single scalar of type `int32_t`, the procedures generate
     !>  massive amounts of information about each simulation which are stored in appropriate external hard drive files.<br>
@@ -885,9 +908,72 @@ contains
     !>
     !>  \bug
     !>  \status \unresolved
+    !>  \source \ifort{2021.11.1 20231117}
+    !>  \desc
+    !>  \ifort returns an *already allocated error with the statement `call setResized(scaling, lenScaling)` which persists in both release and debug modes.<br>
+    !>  The full debug message is the following:<br>
+    !>  \code{.sh}
+    !>
+    !>      forrtl: severe (151): allocatable array is already allocated
+    !>      Image              PC                Routine            Line        Source
+    !>      libparamonte.so    00007FCFBA641EB8  Unknown               Unknown  Unknown
+    !>      libparamonte.so    00007FCFB6E6D4A3  pm_arrayresize_MP         170  pm_arrayResize@routines.inc.F90
+    !>      libparamonte.so    00007FCFB72B5BD6  pm_parallelism_MP          77  pm_parallelism@routines.inc.F90
+    !>      libparamonte.so    00007FCFB6263F43  pm_sampling_MP_ge         394  pm_sampling@routines.inc.F90
+    !>      libparamonte.so    00007FCFB61F0194  runParaDRAMD              136  pm_sampling@routines.inc.F90
+    !>
+    !>  \endcode
+    !>  Note that the line numbers for this file in the message above have changed because of code change in this file.<br>
+    !>  This error does not occur when the library is compiled with \gfortran{13}.<br>
+    !>  This error does not occur when the library is compiled with \ifx{2025.0.0 20241008}.<br>
+    !>  It seems like this error occurs because of placing the following typed variable `speedup`
+    !>  in the `forkjoin_parallelism_block` below.<br>
+    !>  \remedy{2.0.0}
+    !>  For now, the type definition and the typed variable declaration are taken out of the block and placed below.<br>
+    !>  This must be checked with newer Intel compilers as \ifort{2021.11.1 20231117} is being phased out by Intel.<br>
+    !>
+    !>  \bug
+    !>  \status \unresolved
+    !>  \source \ifort{2021.11.1 20231117}
+    !>  \desc
+    !>  The following declarations belong to only parallel multichain modes within a nested `block`.<br>
+    !>  \code{.F90}
+    !>
+    !>      type :: probKS_type
+    !>          real(RKG)       , allocatable   :: values(:)
+    !>          real(RKG)                       :: minval
+    !>          integeR(IK)                     :: minloc
+    !>          integeR(IK)                     :: minpid
+    !>      end type
+    !>
+    !>      type :: sampleLogFuncState_type
+    !>          character(:, SK), allocatable   :: filePath
+    !>          real(RKG)       , allocatable   :: thisImage(:,:)
+    !>          real(RKG)       , allocatable   :: thatImage(:,:)
+    !>          type(probKS_type)               :: probKS
+    !>      end type
+    !>
+    !>  \endcode
+    !>  But they had to be taken out of their local scope because
+    !>  \ifort{2021.11.1 20231117} cannot compile them with an ICE message as below.<br>
+    !>  \code{.sh}
+    !>
+    !>      pm_sampling@routines.inc.F90(1267): catastrophic error:
+    !>      **Internal compiler error: internal abort** Please report this error along with the circumstances in which it occurred in a Software Problem Report.
+    !>      Note: File and line given may not be explicit cause of this error.
+    !>      compilation aborted for /home/amir/git/paramonte/src/fortran/main/pm_sampling@routines.F90 (code 1)
+    !>
+    !>  \endcode
+    !>  \remedy{2.0.0}
+    !>  For now, the type definition and the typed variable declaration are taken out of the block and placed below.<br>
+    !>  This must be checked with newer Intel compilers as \ifort{2021.11.1 20231117} is being phased out by Intel.<br>
+    !>  This bug may have the same origins as the bug in the above.<br>
+    !>
+    !>  \bug
+    !>  \status \unresolved
     !>  \source \ifort{2021.11.0 20231010}
     !>  \desc
-    !>  The `runParaDRAML` interface for `long double` yields a segmentation fault error.
+    !>  The `runParaDRAML` interface for `long double` yields a segmentation fault error.<br>
     !>  \remedy
     !>  None as of today.<br>
     !>
@@ -901,7 +987,7 @@ contains
     !>  \final{runParaDRAM}
     !>
     !>  \author
-    !>  \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin
+    !>  \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin<br>
     function runParaDRAML(getLogFunc, ndim, input) result(stat) bind(C, name = "runParaDRAML")
 #if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
         !DEC$ ATTRIBUTES DLLEXPORT :: runParaDRAML

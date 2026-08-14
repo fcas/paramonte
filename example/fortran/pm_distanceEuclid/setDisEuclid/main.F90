@@ -1,9 +1,10 @@
 program example
 
     use pm_kind, only: SK, IK, LK, RKH
-    use pm_kind, only: RKG => RKS ! all processor kinds are supported.
+    use pm_kind, only: TKG => RKS ! all processor kinds are supported.
     use pm_io, only: display_type
-    use pm_distanceEuclid, only: setDisEuclid, euclid, euclidu, euclidsq
+    use pm_distanceEuclid, only: setDisEuclid, euclid, euclidu, euclidv, euclidsq
+    use pm_ellipsoid, only: getVolUnitBall
     use pm_arrayResize, only: setResized
     use pm_distUnif, only: getUnifRand
 
@@ -19,8 +20,8 @@ program example
     call disp%skip()
 
     block
-        real(RKG) :: distance
-        real(RKG), allocatable :: point(:), ref(:)
+        real(TKG) :: distance
+        real(TKG), allocatable :: point(:), ref(:)
         call disp%skip()
         call disp%show("point = getUnifRand(1, 10, 3_IK)")
                         point = getUnifRand(1, 10, 3_IK)
@@ -44,7 +45,7 @@ program example
     call disp%skip()
 
     block
-        real(RKG), allocatable :: point(:,:), ref(:,:), distance(:,:)
+        real(TKG), allocatable :: point(:,:), ref(:,:), distance(:,:)
         integer(IK) :: ndim, npnt, nref
         call disp%skip()
         call disp%show("ndim = getUnifRand(1, 3); npnt = getUnifRand(1, 4); nref = getUnifRand(1, 3)")
@@ -59,20 +60,20 @@ program example
                         ref = getUnifRand(1, 10, ndim, nref)
         call disp%show("ref")
         call disp%show( ref )
-        call disp%show("call setResized(distance, [nref, npnt])")
-                        call setResized(distance, [nref, npnt])
+        call disp%show("call setResized(distance, [npnt, nref])")
+                        call setResized(distance, [npnt, nref])
         call disp%show("call setDisEuclid(distance, point, ref, euclidsq)")
                         call setDisEuclid(distance, point, ref, euclidsq)
         call disp%show("distance")
         call disp%show( distance )
-        call disp%show("call setDisEuclid(distance(:,1), point(:,1), ref, euclidsq)")
-                        call setDisEuclid(distance(:,1), point(:,1), ref, euclidsq)
-        call disp%show("distance(:,1)")
-        call disp%show( distance(:,1) )
-        call disp%show("call setDisEuclid(distance(1,:), point, ref(:,1), euclidsq)")
-                        call setDisEuclid(distance(1,:), point, ref(:,1), euclidsq)
+        call disp%show("call setDisEuclid(distance(1,:), point(:,1), ref, euclidsq)")
+                        call setDisEuclid(distance(1,:), point(:,1), ref, euclidsq)
         call disp%show("distance(1,:)")
         call disp%show( distance(1,:) )
+        call disp%show("call setDisEuclid(distance(:,1), point, ref(:,1), euclidsq)")
+                        call setDisEuclid(distance(:,1), point, ref(:,1), euclidsq)
+        call disp%show("distance(:,1)")
+        call disp%show( distance(:,1) )
         call disp%show("call setDisEuclid(distance(1,1), point(:,1), ref(:,1), euclidsq)")
                         call setDisEuclid(distance(1,1), point(:,1), ref(:,1), euclidsq)
         call disp%show("distance(1,1)")
@@ -81,11 +82,43 @@ program example
                         call setDisEuclid(distance(1,1), point(:,1), euclidsq)
         call disp%show("distance(1,1)")
         call disp%show( distance(1,1) )
-        call disp%show("call setDisEuclid(distance(1,:), point, euclidsq) ! `ref` is the origin.")
-                        call setDisEuclid(distance(1,:), point, euclidsq)
-        call disp%show("distance(1,:)")
-        call disp%show( distance(1,:) )
+        call disp%show("call setDisEuclid(distance(:,1), point, euclidsq) ! `ref` is the origin.")
+                        call setDisEuclid(distance(:,1), point, euclidsq)
+        call disp%show("distance(:,1)")
+        call disp%show( distance(:,1) )
+        call disp%show("call setDisEuclid(distance, point(1,:), ref(1,:), euclid) ! 1D point and ref (faster than below).")
+                        call setDisEuclid(distance, point(1,:), ref(1,:), euclid)
+        call disp%show("distance")
+        call disp%show( distance )
+        call disp%show("call setDisEuclid(distance, point(1:1,:), ref(1:1,:), euclid) ! For comparison with the above.")
+                        call setDisEuclid(distance, point(1:1,:), ref(1:1,:), euclid)
+        call disp%show("distance")
+        call disp%show( distance )
+        call disp%show("call setDisEuclid(distance, point(1,:), ref(1,:), euclidsq) ! 1D point and ref (faster than below).")
+                        call setDisEuclid(distance, point(1,:), ref(1,:), euclidsq)
+        call disp%show("distance")
+        call disp%show( distance )
+        call disp%show("call setDisEuclid(distance, point(1:1,:), ref(1:1,:), euclidsq) ! For comparison with the above.")
+                        call setDisEuclid(distance, point(1:1,:), ref(1:1,:), euclidsq)
+        call disp%show("distance")
+        call disp%show( distance )
+        call disp%show("call setDisEuclid(distance, point(1,:), ref(1,:), euclidv) ! volume.")
+                        call setDisEuclid(distance, point(1,:), ref(1,:), euclidv)
+        call disp%show("distance")
+        call disp%show( distance )
+        call disp%show("call setDisEuclid(distance, point(1,:), ref(1,:), euclid) ! reference volume.")
+                        call setDisEuclid(distance, point(1,:), ref(1,:), euclid)
+        call disp%show("getVolUnitBall(1._TKG) * distance")
+        call disp%show( getVolUnitBall(1._TKG) * distance )
         call disp%skip()
+        call disp%show("call setDisEuclid(distance, point, ref, euclidv) ! volume")
+                        call setDisEuclid(distance, point, ref, euclidv) ! volume
+        call disp%show("distance")
+        call disp%show( distance )
+        call disp%show("call setDisEuclid(distance, point, ref, euclid) ! reference volume")
+                        call setDisEuclid(distance, point, ref, euclid) ! reference volume
+        call disp%show("getVolUnitBall(real(ndim, TKG)) * distance**ndim")
+        call disp%show( getVolUnitBall(real(ndim, TKG)) * distance**ndim )
     end block
 
 end program example

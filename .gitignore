@@ -28,6 +28,13 @@
 *.out
 
 #########################
+# Fortran               #
+#########################
+
+*pm_procPois*
+**/__pycache__/*
+
+#########################
 # Python                #
 #########################
 
@@ -57,6 +64,7 @@
 *.log
 *.sql
 *.sqlite
+*Zone.Identifier
 
 ######################
 # OS generated files #
@@ -118,19 +126,19 @@ Thumbs.db
 # ParaMonte temp folders
 #########################
 
+**/pm_clusPartition*
 **/pm_paramonte@version.inc.F90
 **/.ipynb_checkpoints
-**/src/python/setup
-**/src/python/main
-**/src/python/test
+**/example/python
+**/src/python
 **/codecov
 **/build
 **/trash
 **/temp
-**/bld
-**/bin
+**/_bld
+**/_bin
 **/R
-**/___*___
+**/___*
 
 #########################
 # ParaMonte temp files

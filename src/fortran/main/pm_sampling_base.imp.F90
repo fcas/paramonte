@@ -445,13 +445,13 @@
     end type
 
    !character(:,SKG)        , allocatable   :: plang ! namelist input
-   !type                                    :: plang_type
-   !   !character(:,SKG)    , allocatable   :: val
-   !   !character(:,SKG)    , allocatable   :: def
-   !   !character(:,SKG)    , allocatable   :: null
-   !   !character(:,SKG)    , allocatable   :: desc
-   !    type(envis_type)                    :: is = envis
-   !end type
+    type                                    :: plang_type ! programming language environment.
+        character(:,SKG)    , allocatable   :: val
+        character(:,SKG)    , allocatable   :: def
+        character(:,SKG)    , allocatable   :: null
+       !character(:,SKG)    , allocatable   :: desc
+       !type(envis_type)                    :: is = envis
+    end type
 
    !integer(IK)                             :: randomSeed ! namelist input
     type                                    :: randomSeed_type
@@ -530,7 +530,7 @@
         type(parallelism_type                   )   :: parallelism
         type(parallelismMpiFinalizeEnabled_type )   :: parallelismMpiFinalizeEnabled
         type(parallelismNumThread_type          )   :: parallelismNumThread
-       !type(plang_type                         )   :: plang
+        type(plang_type                         )   :: plang
         type(randomSeed_type                    )   :: randomSeed
         type(sysInfoFilePath_type               )   :: sysInfoFilePath
         type(targetAcceptanceRate_type          )   :: targetAcceptanceRate
@@ -1270,18 +1270,18 @@ contains
                      &This default behavior allows seamless restart functionality while ensuring old potentially valuable computationally &
                      &expensive simulations are not inadvertently erased and replaced by the new simulation output files."//NL2//&
             SKG_"+   `outputStatus = 'repeat'`"//NL2//&
-            SKG_"    This option is nearly identical to 'extend' except that the new simulation specifications &
+            SKG_"    This option is nearly identical to `'extend'` except that the new simulation specifications &
                      &are not initialized from the specifications of the last successful simulation run (if any exist). &
                      &Instead, a new set of simulation files will be generated as if the last simulation run is replicated. &
                      &If the simulation configuration has not changed since the last successful simulation run, then the new simulation &
                      &output sample, chain, and restart files will be identical to those of the last successful simulation. &
                      &This outputting is primarily useful for cross-platform or cross-compiler testing and development."//NL2//&
             SKG_"+   `outputStatus = 'retry'`"//NL2//&
-            SKG_"    This option is nearly identical to 'repeat' except that the new simulation starts afresh and overwrites &
+            SKG_"    This option is nearly identical to `'repeat'` except that the new simulation starts afresh and overwrites &
                      &any potentially existing output files from the most recent simulation with the same names without ever using them. &
                      &There is no restart functionality with this option. The most recent simulation files are deleted regardless of &
                      &completion status. This option is effectively equivalent to deleting the set of output files from the last simulation &
-                     &run and rerunning the simulation with the default value 'extend' for the specification `outputStatus`. &
+                     &run and rerunning the simulation with the default value `'extend'` for the specification `outputStatus`. &
                      &Use this option for quick tests or small exploratory problems where lots of quick runs must be performed."//NL2//&
             SKG_"The default value for `outputStatus` is `'"//spec%outputStatus%def//SKG_"'`. The input values are case-INsensitive."
             !$omp master
@@ -1383,17 +1383,17 @@ contains
             !$omp end master
         end block parallelismNumThread_block
 
-        !plang_block: block
-        !    use pm_sampling_scio, only: plang
-        !    spec%plang%null = repeat(SUB, len(plang, IK))
-        !    spec%plang%def = envname
-        !    spec%plang%desc = &
-        !    SKG_"The simulation specification `plang` is a scalar string of maximum length `"//getStr(spec%plang%null)//&
-        !    SKG_"`. It is an internal ParaMonte variable used to provide information about other languages interface with the ParaMonte routines."
-        !    !$omp master
-        !    plang = spec%plang%null
-        !    !$omp end master
-        !end block plang_block
+        plang_block: block
+            use pm_sampling_scio, only: plang
+            spec%plang%null = repeat(SUB, len(plang, IK))
+            spec%plang%def = SKG_"The "//envname//SKG_"."
+            !spec%plang%desc = &
+            !SKG_"The simulation specification `plang` is a scalar string of maximum length `"//getStr(spec%plang%null)//&
+            !SKG_"`. It is an internal ParaMonte variable used to provide information about other languages interface with the ParaMonte routines."
+            !$omp master
+            plang = spec%plang%null
+            !$omp end master
+        end block plang_block
 
         randomSeed_block: block
             use pm_sampling_scio, only: randomSeed
@@ -1886,15 +1886,16 @@ contains
 #endif
         end block parallelismNumThread_block
 
-       !plang_block: block
-       !    use pm_sampling_scio, only: plang
-       !    if (spec%overridable .and. allocated(sampler%plang)) then
-       !        spec%plang%val = trim(adjustl(sampler%plang))
-       !    else
-       !        spec%plang%val = trim(adjustl(plang))
-       !    end if
-       !    if (spec%plang%val == trim(adjustl(spec%plang%null))) spec%plang%val = spec%plang%def
-       !end block plang_block
+        ! This is an exceptional internal namelist entry that end users must not access.
+        plang_block: block
+            use pm_sampling_scio, only: plang
+            spec%plang%val = trim(adjustl(plang))
+            if (spec%plang%val == trim(adjustl(spec%plang%null))) then
+                spec%plang%val = spec%plang%def
+            else
+                spec%plang%val = spec%plang%def//SKG_" "//spec%plang%val
+            end if
+        end block plang_block
 
         randomSeed_block: block
             use pm_kind, only: IKD, RKD
@@ -1975,7 +1976,7 @@ contains
             if (.not.(lowerUpperSet(1) .or. lowerUpperSet(2))) spec%targetAcceptanceRate%val(:) = spec%targetAcceptanceRate%def
             spec%targetAcceptanceRate%enabled = logical(any(spec%targetAcceptanceRate%val /= spec%targetAcceptanceRate%def), LK)
             if (spec%targetAcceptanceRate%enabled) then
-                spec%targetAcceptanceRate%aim = sum(spec%targetAcceptanceRate%val) / 2._RKG
+                spec%targetAcceptanceRate%aim = sum(spec%targetAcceptanceRate%val) * .5_RKG
             elseif (spec%method%isParaDISE .or. spec%method%isParaDRAM) then
                 spec%targetAcceptanceRate%aim = .234_RKG
             elseif (spec%method%isParaNest) then
@@ -2420,7 +2421,7 @@ contains
                 end if
                 call spec%disp%show(getParaMonteSplash())
                 call spec%disp%text%wrap(NL1//SKG_"ParaMonte.library.interface.specifications"//NL1)
-                call spec%disp%show(getStrWrapped(SKG_"The "//envname//SKG_"."))
+                call spec%disp%show(getStrWrapped(spec%plang%val))
                 call spec%disp%text%wrap(NL1//SKG_"ParaMonte.library.compiler.version"//NL1)
                 call spec%disp%show(getStrWrapped(PARAMONTE_COMPILER_VERSION))
                 call spec%disp%text%wrap(NL1//SKG_"ParaMonte.library.compiler.options"//NL1)
@@ -2579,17 +2580,17 @@ contains
             call spec%disp%note%show(spec%method%desc)
 
             call spec%disp%show("modelr")
-            call spec%disp%show(SK_"      digits: "//getStr(spec%real%      digits, signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
-            call spec%disp%show(SK_"        kind: "//getStr(spec%real%        kind, signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
-            call spec%disp%show(SK_" maxexponent: "//getStr(spec%real% maxexponent, signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
-            call spec%disp%show(SK_" minexponent: "//getStr(spec%real% minexponent, signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
-            call spec%disp%show(SK_"   precision: "//getStr(spec%real%   precision, signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
-            call spec%disp%show(SK_"       radix: "//getStr(spec%real%       radix, signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
-            call spec%disp%show(SK_"       range: "//getStr(spec%real%       range, signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
-            call spec%disp%show(SK_"storage_size: "//getStr(spec%real%storage_size, signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
-            call spec%disp%show(SK_"     epsilon: "//getStr(spec%real%     epsilon, signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
-            call spec%disp%show(SK_"        huge: "//getStr(spec%real%        huge, signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
-            call spec%disp%show(SK_"        tiny: "//getStr(spec%real%        tiny, signed = .true._LK), format = format, tmsize = 0_IK)
+            call spec%disp%show(SK_"      digits: "//getStr(spec%real%      digits          , signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
+            call spec%disp%show(SK_"        kind: "//getStr(spec%real%        kind          , signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
+            call spec%disp%show(SK_" maxexponent: "//getStr(spec%real% maxexponent          , signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
+            call spec%disp%show(SK_" minexponent: "//getStr(spec%real% minexponent          , signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
+            call spec%disp%show(SK_"   precision: "//getStr(spec%real%   precision          , signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
+            call spec%disp%show(SK_"       radix: "//getStr(spec%real%       radix          , signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
+            call spec%disp%show(SK_"       range: "//getStr(spec%real%       range          , signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
+            call spec%disp%show(SK_"storage_size: "//getStr(spec%real%storage_size          , signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
+            call spec%disp%show(SK_"     epsilon: "//getStr(real(spec%real% epsilon, RKG)   , signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
+            call spec%disp%show(SK_"        huge: "//getStr(real(spec%real%    huge, RKG)   , signed = .true._LK), format = format, tmsize = 0_IK, bmsize = 0_IK)
+            call spec%disp%show(SK_"        tiny: "//getStr(real(spec%real%    tiny, RKG)   , signed = .true._LK), format = format, tmsize = 0_IK)
             !associate(modelr => spec%real)
             !call spec%disp%show("modelr%digits", format = format, tmsize = 0_IK, bmsize = 0_IK)
             !call spec%disp%show( modelr%digits , format = format, tmsize = 0_IK, bmsize = 0_IK)

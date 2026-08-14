@@ -26,7 +26,7 @@ legends =   [ "$\kappa, 1/\omega, 1/\sigma = 1.0, 0.5, 0.5$"
 
 for kind in ["IK", "CK", "RK"]:
 
-    pattern = "*."+kind+".txt"
+    pattern = "*." + kind + ".txt"
     fileList = glob.glob(pattern)
     if len(fileList) == 1:
 
@@ -41,7 +41,7 @@ for kind in ["IK", "CK", "RK"]:
                     , marker[kind]
                    #, color = "r"
                     )
-            plt.plot( df.values[:,1]
+            plt.plot( df.values[:, 1]
                     , df.values[:,1:len(legends)+1]
                     , marker[kind]
                    #, color = "blue"
@@ -60,7 +60,7 @@ for kind in ["IK", "CK", "RK"]:
         plt.xticks(fontsize = fontsize - 2)
         plt.yticks(fontsize = fontsize - 2)
         ax.set_xlabel(xlab[kind], fontsize = 17)
-        ax.set_ylabel("Probability Density Function (PDF)", fontsize = 17)
+        ax.set_ylabel("Cumulative Distribution Function (CDF)", fontsize = 17)
         ax.set_xlim([0, 8.])
 
         plt.grid(visible = True, which = "both", axis = "both", color = "0.85", linestyle = "-")

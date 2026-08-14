@@ -65,9 +65,8 @@
 !>  The **Regularized Inverse Incomplete Beta Function** is also the quantile function of the [Beta distribution](@ref pm_distBeta).<br>
 !>
 !>  \see
+!>  [pm_distBeta](@ref pm_distBeta)<br>
 !>  [pm_mathGamma](@ref pm_mathGamma)<br>
-!>  [pm_distBeta](@ref pm_distBeta)<br>
-!>  [pm_distBeta](@ref pm_distBeta)<br>
 !>  Newby, 1991, *The incomplete Beta Integral*, TH Eindhoven. THE/BDK/ORS, Vakgroep ORS: rapporten, Volume 9106.<br>
 !>  Majumder and Bhattacharjee, 1973, *Algorithm AS 63: The incomplete Beta Integral*, Applied Statistics, Volume 22, Number 3, pages 409-411.<br>
 !>
@@ -220,7 +219,7 @@ module pm_mathBeta
     !>                                          <ol>
     !>                                              <li>     If the condition `x < 0` holds, then the value `x = 1 - x < 0` will be used instead of `x`.<br>
     !>                                              <li>     If the output `betaInc` is near `1`, the output will be returned as `betaInc = betaInc - 1 < 0` instead of `betaInc`.<br>
-    !>                                                      Therefore, the user is expected to be aware of and apply the necessary correction (addition by `1`) before using the output value.<br>
+    !>                                                      Therefore, the user is expected to be aware of the convention and apply the necessary correction (addition by `1`) before using the output value.<br>
     !>                                          </ol>
     !>                              </ol>
     !>                              Specifying `signed = .true.` can lead to considerably more accurate calculations (by orders of magnitudes) for values of `x` and `betaInc` that are near `1`.<br>
@@ -242,7 +241,7 @@ module pm_mathBeta
     !>  \endcode
     !>
     !>  \warning
-    !>  The conditions `0 <= x .and. 0 <= x` must hold for the corresponding input arguments.<br>
+    !>  The conditions `0 <= x .and. .not. signed .or. 0 <= x` must hold for the corresponding input arguments.<br>
     !>  The conditions `0 < alpha .and. 0 < beta` must hold for the corresponding input arguments.<br>
     !>  \vericons
     !>
@@ -371,7 +370,7 @@ module pm_mathBeta
     !>                                          <ol>
     !>                                              <li>     If the condition `x < 0` holds, then the value `x = 1 - x < 0` will be used instead of `x`.<br>
     !>                                              <li>     If the output `betaInc` is near `1`, the output will be returned as `betaInc = betaInc - 1 < 0` instead of `betaInc`.<br>
-    !>                                                      Therefore, the user is expected to be aware of and apply the necessary correction (addition by `1`) before using the output value.<br>
+    !>                                                      Therefore, the user is expected to be aware of the convention and apply the necessary correction (addition by `1`) before using the output value.<br>
     !>                                          </ol>
     !>                              </ol>
     !>                              Specifying `signed = .true.` can lead to considerably more accurate calculations (by orders of magnitudes) for values of `x` and `betaInc` that are near `1`.<br>
@@ -619,7 +618,7 @@ module pm_mathBeta
     !>                                          <ol>
     !>                                              <li>     If the condition `betaInc < 0` holds, then the value `betaInc = 1 - betaInc < 0` will be used instead of `betaInc`.<br>
     !>                                              <li>     If the output `betaInv` is near `1`, the output will be returned as `betaInv = betaInv - 1 < 0` instead of `betaInv`.<br>
-    !>                                                      Therefore, the user is expected to be aware of and apply the necessary correction (addition by `1`) before using the output value.<br>
+    !>                                                      Therefore, the user is expected to be aware of the convention and apply the necessary correction (addition by `1`) before using the output value.<br>
     !>                                          </ol>
     !>                              </ol>
     !>                              Specifying `signed = .true.` can lead to considerably more accurate calculations (by orders of magnitudes) for values of `betaInc` and `betaInv` that are near `1`.<br>
@@ -769,7 +768,7 @@ module pm_mathBeta
     !>                                          <ol>
     !>                                              <li>     If the condition `betaInc < 0` holds, then the value `betaInc = 1 - betaInc < 0` will be used instead of `betaInc`.<br>
     !>                                              <li>     If the output `betaInv` is near `1`, the output will be returned as `betaInv = betaInv - 1 < 0` instead of `betaInv`.<br>
-    !>                                                      Therefore, the user is expected to be aware of and apply the necessary correction (addition by `1`) before using the output value.<br>
+    !>                                                      Therefore, the user is expected to be aware of the convention and apply the necessary correction (addition by `1`) before using the output value.<br>
     !>                                          </ol>
     !>                              </ol>
     !>                              Specifying `signed = .true.` can lead to considerably more accurate calculations (by orders of magnitudes) for values of `betaInc` and `betaInv` that are near `1`.<br>

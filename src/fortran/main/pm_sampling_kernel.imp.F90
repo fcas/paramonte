@@ -68,6 +68,28 @@ err%msg = PROCEDURE_NAME//getFine(__FILE__, LINE)//SKG_": "//trim(MSG); \
 call spec%disp%stop%show(err%msg); \
 return; \
 end if;
+
+#if     ParaDISE_ENABLED
+        use pm_sampling_proposal_dise_RK5, only: killMeAlreadyCMake_RK5 => RKG
+        use pm_sampling_proposal_dise_RK4, only: killMeAlreadyCMake_RK4 => RKG
+        use pm_sampling_proposal_dise_RK3, only: killMeAlreadyCMake_RK3 => RKG
+        use pm_sampling_proposal_dise_RK2, only: killMeAlreadyCMake_RK2 => RKG
+        use pm_sampling_proposal_dise_RK1, only: killMeAlreadyCMake_RK1 => RKG
+#elif   ParaDRAM_ENABLED
+        use pm_sampling_proposal_dram_RK5, only: killMeAlreadyCMake_RK5 => RKG
+        use pm_sampling_proposal_dram_RK4, only: killMeAlreadyCMake_RK4 => RKG
+        use pm_sampling_proposal_dram_RK3, only: killMeAlreadyCMake_RK3 => RKG
+        use pm_sampling_proposal_dram_RK2, only: killMeAlreadyCMake_RK2 => RKG
+        use pm_sampling_proposal_dram_RK1, only: killMeAlreadyCMake_RK1 => RKG
+#elif   ParaNest_ENABLED
+        use pm_sampling_proposal_nest_RK5, only: killMeAlreadyCMake_RK5 => RKG
+        use pm_sampling_proposal_nest_RK4, only: killMeAlreadyCMake_RK4 => RKG
+        use pm_sampling_proposal_nest_RK3, only: killMeAlreadyCMake_RK3 => RKG
+        use pm_sampling_proposal_nest_RK2, only: killMeAlreadyCMake_RK2 => RKG
+        use pm_sampling_proposal_nest_RK1, only: killMeAlreadyCMake_RK1 => RKG
+#else
+#error  "Unrecognized interface."
+#endif
         !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #if     ParaDISE_ENABLED || ParaDRAM_ENABLED
         !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -86,7 +108,8 @@ end if;
         use pm_sampling_proposal, only: getErrChainWrite
         use pm_sampling_proposal, only: chainFileColName
         use pm_sampling_proposal, only: isFailedChainResize
-        use pm_sampling_proposal, only: proposal_type, setProposalAdapted, readRestart, writeRestart, setProposalStateNew
+        use pm_sampling_proposal, only: proposal_type, setProposalAdapted
+        use pm_sampling_proposal, only: readRestart, writeRestart, setProposalStateNew
 #if     CAF_ENABLED || MPI_ENABLED
         use pm_sampling_proposal, only: bcastProposalAdaptation
 #endif
@@ -130,29 +153,29 @@ end if;
 
 contains
 
-        !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-#if     ParaDISE_ENABLED
-        subroutine killMeAlreadyCMake_RK5(); use pm_sampling_proposal_dise_RK5, only: RKG; end subroutine
-        subroutine killMeAlreadyCMake_RK4(); use pm_sampling_proposal_dise_RK4, only: RKG; end subroutine
-        subroutine killMeAlreadyCMake_RK3(); use pm_sampling_proposal_dise_RK3, only: RKG; end subroutine
-        subroutine killMeAlreadyCMake_RK2(); use pm_sampling_proposal_dise_RK2, only: RKG; end subroutine
-        subroutine killMeAlreadyCMake_RK1(); use pm_sampling_proposal_dise_RK1, only: RKG; end subroutine
-#elif   ParaDRAM_ENABLED
-        subroutine killMeAlreadyCMake_RK5(); use pm_sampling_proposal_dram_RK5, only: RKG; end subroutine
-        subroutine killMeAlreadyCMake_RK4(); use pm_sampling_proposal_dram_RK4, only: RKG; end subroutine
-        subroutine killMeAlreadyCMake_RK3(); use pm_sampling_proposal_dram_RK3, only: RKG; end subroutine
-        subroutine killMeAlreadyCMake_RK2(); use pm_sampling_proposal_dram_RK2, only: RKG; end subroutine
-        subroutine killMeAlreadyCMake_RK1(); use pm_sampling_proposal_dram_RK1, only: RKG; end subroutine
-#elif   ParaNest_ENABLED
-        subroutine killMeAlreadyCMake_RK5(); use pm_sampling_proposal_nest_RK5, only: RKG; end subroutine
-        subroutine killMeAlreadyCMake_RK4(); use pm_sampling_proposal_nest_RK4, only: RKG; end subroutine
-        subroutine killMeAlreadyCMake_RK3(); use pm_sampling_proposal_nest_RK3, only: RKG; end subroutine
-        subroutine killMeAlreadyCMake_RK2(); use pm_sampling_proposal_nest_RK2, only: RKG; end subroutine
-        subroutine killMeAlreadyCMake_RK1(); use pm_sampling_proposal_nest_RK1, only: RKG; end subroutine
-#else
-#error  "Unrecognized interface."
-#endif
+!        !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+!
+!#if     ParaDISE_ENABLED
+!        subroutine killMeAlreadyCMake_RK5(); use pm_sampling_proposal_dise_RK5, only: RKG; end subroutine
+!        subroutine killMeAlreadyCMake_RK4(); use pm_sampling_proposal_dise_RK4, only: RKG; end subroutine
+!        subroutine killMeAlreadyCMake_RK3(); use pm_sampling_proposal_dise_RK3, only: RKG; end subroutine
+!        subroutine killMeAlreadyCMake_RK2(); use pm_sampling_proposal_dise_RK2, only: RKG; end subroutine
+!        subroutine killMeAlreadyCMake_RK1(); use pm_sampling_proposal_dise_RK1, only: RKG; end subroutine
+!#elif   ParaDRAM_ENABLED
+!        subroutine killMeAlreadyCMake_RK5(); use pm_sampling_proposal_dram_RK5, only: RKG; end subroutine
+!        subroutine killMeAlreadyCMake_RK4(); use pm_sampling_proposal_dram_RK4, only: RKG; end subroutine
+!        subroutine killMeAlreadyCMake_RK3(); use pm_sampling_proposal_dram_RK3, only: RKG; end subroutine
+!        subroutine killMeAlreadyCMake_RK2(); use pm_sampling_proposal_dram_RK2, only: RKG; end subroutine
+!        subroutine killMeAlreadyCMake_RK1(); use pm_sampling_proposal_dram_RK1, only: RKG; end subroutine
+!#elif   ParaNest_ENABLED
+!        subroutine killMeAlreadyCMake_RK5(); use pm_sampling_proposal_nest_RK5, only: RKG; end subroutine
+!        subroutine killMeAlreadyCMake_RK4(); use pm_sampling_proposal_nest_RK4, only: RKG; end subroutine
+!        subroutine killMeAlreadyCMake_RK3(); use pm_sampling_proposal_nest_RK3, only: RKG; end subroutine
+!        subroutine killMeAlreadyCMake_RK2(); use pm_sampling_proposal_nest_RK2, only: RKG; end subroutine
+!        subroutine killMeAlreadyCMake_RK1(); use pm_sampling_proposal_nest_RK1, only: RKG; end subroutine
+!#else
+!#error  "Unrecognized interface."
+!#endif
         !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         !>  \brief
@@ -288,7 +311,7 @@ contains
             end if
             ! report progress in the standard output
             if (spec%image%is%first) then
-                write(status, fmt = "(A1,A,*(A25,3X))" ) CR, spec%reportFile%indent, & ! LCOV_EXCL_LINE
+                write(status, fmt = "(A1,A,*(A25,3X))") CR, spec%reportFile%indent, & ! LCOV_EXCL_LINE
                 getStr(getStr(stat%numFunCallAccepted)//SK_" / "//getStr(stat%numFunCallAcceptedRejected), SK_"(125A)"), & ! LCOV_EXCL_LINE
                 getStr(trim(adjustl(getStr(meanAccRateSinceLastReport, SK_"(1F11.4)")))//SK_" / "//trim(adjustl(getStr(stat%numFunCallAccepted / real(stat%numFunCallAcceptedRejected), SK_"(1F11.4)"))), SK_"(125A)"), & ! LCOV_EXCL_LINE
                 getStr(trim(adjustl(getStr(stat%progress%timeElapsedSinceStartInSeconds, SK_"(1F11.4)")))//SK_" / "//trim(adjustl(getStr(min(999999._RKD, timeRemainedToFinishInSeconds), SK_"(1F11.4)"))), SK_"(125A)")

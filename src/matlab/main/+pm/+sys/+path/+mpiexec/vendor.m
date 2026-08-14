@@ -1,45 +1,49 @@
+%>  \brief
+%>  Return the a MATLAB string containing the MPI library vendor
+%>  name corresponding to the input ``mpiexec`` system path.<br>
+%>
+%>  \param[in]  path    :   The input scalar MATLAB string,
+%>                          containing the path to the ``mpiexec``
+%>                          binary whose vendor is to be determined.<br>
+%>                          (**optional**,  default = [pm.sys.path.mpiexec.which()](@ref which))
+%>
+%>  \return
+%>  ``name``            :   The output MATLAB string containing the MPI library vendor name ALL in lower-case.<br>
+%>                          Possible values are:<br>
+%>                          <ol>
+%>                              <li>    ``"Intel"``     :   representing the Intel MPI library.
+%>                              <li>    ``"MPICH"``     :   representing the MPICH MPI library.
+%>                              <li>    ``"OpenMPI"``   :   representing the OpenMPI library.
+%>                          </ol>
+%>                          If the vendor name cannot be identified, the output will be empty ``""``.<br>
+%>
+%>  \interface{vendor}
+%>  \code{.m}
+%>
+%>      name = pm.sys.path.mpiexec.vendor()
+%>      name = pm.sys.path.mpiexec.vendor(path)
+%>
+%>  \endcode
+%>
+%>  \see
+%>  [pm.lib.mpi.name()](@ref name)<br>
+%>  [pm.lib.mpi.vendor()](@ref vendor)<br>
+%>  [pm.sys.path.mpiexec.vendor()](@ref vendor)<br>
+%>
+%>  \example{vendor}
+%>  \include{lineno} example/sys/path/mpiexec/vendor/main.m
+%>  \output{vendor}
+%>  \include{lineno} example/sys/path/mpiexec/vendor/main.out.m
+%>
+%>  \final{vendor}
+%>
+%>  \author
+%>  \JoshuaOsborne, May 21 2024, 5:04 AM, University of Texas at Arlington<br>
+%>  \FatemehBagheri, May 20 2024, 1:25 PM, NASA Goddard Space Flight Center (GSFC), Washington, D.C.<br>
+%>  \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin<br>
 function name = vendor(path)
-    %
-    %   Return the a MATLAB string containing the MPI library vendor
-    %   name corresponding to the input ``mpiexec`` system path.
-    %
-    %   Parameters
-    %   ----------
-    %
-    %       path
-    %
-    %           The input scalar MATLAB string,
-    %           containing the path to the ``mpiexec``
-    %           binary whose vendor is to be determined.
-    %           (**optional**,  default = ``pm.sys.path.mpiexec.which()``)
-    %
-    %   Returns
-    %   -------
-    %
-    %       name
-    %
-    %           The output MATLAB string containing the MPI library vendor name ALL in lower-case.
-    %           Possible values are:
-    %
-    %               -   ``"Intel"``     :   representing the Intel MPI library.
-    %               -   ``"MPICH"``     :   representing the MPICH MPI library.
-    %               -   ``"OpenMPI"``   :   representing the OpenMPI library.
-    %
-    %           If the vendor name cannot be identified, the output will be empty ``[]``.
-    %
-    %   Interface
-    %   ---------
-    %
-    %       name = pm.sys.path.mpiexec.vendor()
-    %       name = pm.sys.path.mpiexec.vendor(path)
-    %
-    %   LICENSE
-    %   -------
-    %
-    %       https://github.com/cdslaborg/paramonte/blob/main/LICENSE.md
-    %
     name = "";
-    if 0 == nargin
+    if  0 == nargin
         path = pm.sys.path.mpiexec.which();
         if  path == ""
             return;
@@ -56,9 +60,13 @@ function name = vendor(path)
         if isunix()
             path = strrep(path, """", "\""");
         end
-        [failed, version] = system("""" + path + """" + " --version");
-        versionLower = lower(version);
+        failed = pm.os.is.lin() && startsWith(path, "/mnt/"); % A Windows-path application in WSL freezes MATLAB.
         if ~failed
+            [failed, version] = system("""" + path + """" + " --version");
+            failed = failed ~= 0;
+        end
+        if ~failed
+            versionLower = lower(version);
             if contains(version, "Intel")
                 name = "Intel";
             elseif contains(versionLower, "openmpi") || contains(versionLower, "open-mpi") || contains(versionLower, "openrte")

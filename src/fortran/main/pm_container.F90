@@ -106,7 +106,7 @@
 !>  \final
 !>
 !>  \author
-!>  \FatemehBagheri, Tuesday April 30, 2019, 12:58 PM, SEIR, UTA
+!>  \FatemehBagheri, Tuesday, April 30, 2019, 12:58 PM, SEIR, UTA
 
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -186,8 +186,8 @@ module pm_container
     !>  \final{css_type}
     !>
     !>  \author
-    !>  \FatemehBagheri, Tuesday April 30, 2019, 12:58 PM, SEIR, UTA
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \FatemehBagheri, Tuesday, April 30, 2019, 12:58 PM, SEIR, UTA
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type :: css_type
         character(:, SK), allocatable :: val
     end type
@@ -199,9 +199,18 @@ module pm_container
         !DEC$ ATTRIBUTES DLLEXPORT :: css_typer_D0
 #endif
         use pm_kind, only: SKG => SK
-        character(*,SKG)    , intent(in)                :: val
-        logical(LK)         , intent(in)    , optional  :: trimmed
-        type(css_type)                                  :: container
+        character(*,SKG)    , intent(in)                	:: val
+        logical(LK)         , intent(in)    , optional  	:: trimmed
+        type(css_type)                                  	:: container
+    end function
+    pure module function css_typer_D1(val, trimmed) result(container)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: css_typer_D1
+#endif
+        use pm_kind, only: SKG => SK
+        character(*,SKG)    , intent(in)					:: val(:)
+        logical(LK)         , intent(in)    , optional  	:: trimmed
+        type(css_type)                                  	:: container(size(val))
     end function
     end interface
     !>  \endcond excluded
@@ -256,8 +265,8 @@ module pm_container
     !>  \final{csi_type}
     !>
     !>  \author
-    !>  \FatemehBagheri, Tuesday April 30, 2019, 12:58 PM, SEIR, UTA
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \FatemehBagheri, Tuesday, April 30, 2019, 12:58 PM, SEIR, UTA
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type :: csi_type
         integer(IK), allocatable :: val
     end type
@@ -271,6 +280,14 @@ module pm_container
         use pm_kind, only: IKG => IK
         integer(IKG)        , intent(in)                :: val
         type(csi_type)                                  :: container
+    end function
+    pure module function csi_typer_D1(val) result(container)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: csi_typer_D1
+#endif
+        use pm_kind, only: IKG => IK
+        integer(IKG)        , intent(in)                :: val(:)
+        type(csi_type)                                  :: container(size(val))
     end function
     end interface
     !>  \endcond excluded
@@ -325,8 +342,8 @@ module pm_container
     !>  \final{csl_type}
     !>
     !>  \author
-    !>  \FatemehBagheri, Tuesday April 30, 2019, 12:58 PM, SEIR, UTA
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \FatemehBagheri, Tuesday, April 30, 2019, 12:58 PM, SEIR, UTA
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type :: csl_type
         logical(LK), allocatable :: val
     end type
@@ -340,6 +357,14 @@ module pm_container
         use pm_kind, only: LKG => LK
         logical(LKG)        , intent(in)                :: val
         type(csl_type)                                  :: container
+    end function
+    pure module function csl_typer_D1(val) result(container)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: csl_typer_D1
+#endif
+        use pm_kind, only: LKG => LK
+        logical(LKG)        , intent(in)                :: val(:)
+        type(csl_type)                                  :: container(size(val))
     end function
     end interface
     !>  \endcond excluded
@@ -394,8 +419,8 @@ module pm_container
     !>  \final{csc_type}
     !>
     !>  \author
-    !>  \FatemehBagheri, Tuesday April 30, 2019, 12:58 PM, SEIR, UTA
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \FatemehBagheri, Tuesday, April 30, 2019, 12:58 PM, SEIR, UTA
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type :: csc_type
         complex(CK), allocatable :: val
     end type
@@ -409,6 +434,14 @@ module pm_container
         use pm_kind, only: CKG => CK
         complex(CKG)        , intent(in)                :: val
         type(csc_type)                                  :: container
+    end function
+    pure module function csc_typer_D1(val) result(container)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: csc_typer_D1
+#endif
+        use pm_kind, only: CKG => CK
+        complex(CKG)        , intent(in)                :: val(:)
+        type(csc_type)                                  :: container(size(val))
     end function
     end interface
     !>  \endcond excluded
@@ -463,8 +496,8 @@ module pm_container
     !>  \final{csr_type}
     !>
     !>  \author
-    !>  \FatemehBagheri, Tuesday April 30, 2019, 12:58 PM, SEIR, UTA
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \FatemehBagheri, Tuesday, April 30, 2019, 12:58 PM, SEIR, UTA
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type :: csr_type
         real(RK), allocatable :: val
     end type
@@ -478,6 +511,14 @@ module pm_container
         use pm_kind, only: RKG => RK
         real(RKG)           , intent(in)                :: val
         type(csr_type)                                  :: container
+    end function
+    pure module function csr_typer_D1(val) result(container)
+#if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
+        !DEC$ ATTRIBUTES DLLEXPORT :: csr_typer_D1
+#endif
+        use pm_kind, only: RKG => RK
+        real(RKG)           , intent(in)                :: val(:)
+        type(csr_type)                                  :: container(size(val))
     end function
     end interface
     !>  \endcond excluded
@@ -528,15 +569,15 @@ module pm_container
     !>  \final{csp_type}
     !>
     !>  \author
-    !>  \FatemehBagheri, Tuesday April 30, 2019, 12:58 PM, SEIR, UTA
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \FatemehBagheri, Tuesday, April 30, 2019, 12:58 PM, SEIR, UTA
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type :: csp_type
         class(*), allocatable :: val
     end type
 
     !>  \cond excluded
     interface csp_type
-    pure elemental module function csp_typer_D0(val) result(container)
+    impure elemental module function csp_typer_D0(val) result(container)
 #if __INTEL_COMPILER && DLL_ENABLED && (_WIN32 || _WIN64)
         !DEC$ ATTRIBUTES DLLEXPORT :: csp_typer_D0
 #endif
@@ -597,7 +638,7 @@ module pm_container
     !>  \final{cvp_type}
     !>
     !>  \author
-    !>  \FatemehBagheri, Tuesday April 30, 2019, 12:58 PM, SEIR, UTA
+    !>  \FatemehBagheri, Tuesday, April 30, 2019, 12:58 PM, SEIR, UTA
     type :: cvp_type
         class(*)            , allocatable   :: val(:)
     end type
@@ -652,7 +693,7 @@ module pm_container
     !>  \final{cmp_type}
     !>
     !>  \author
-    !>  \FatemehBagheri, Tuesday April 30, 2019, 12:58 PM, SEIR, UTA
+    !>  \FatemehBagheri, Tuesday, April 30, 2019, 12:58 PM, SEIR, UTA
     type :: cmp_type
         class(*)            , allocatable   :: val(:,:)
     end type
@@ -707,7 +748,7 @@ module pm_container
     !>  \final{ccp_type}
     !>
     !>  \author
-    !>  \FatemehBagheri, Tuesday April 30, 2019, 12:58 PM, SEIR, UTA
+    !>  \FatemehBagheri, Tuesday, April 30, 2019, 12:58 PM, SEIR, UTA
     type :: ccp_type
         class(*)            , allocatable   :: val(:,:,:)
     end type
@@ -778,8 +819,8 @@ module pm_container
     !>  \final{css_pdt}
     !>
     !>  \author
-    !>  \FatemehBagheri, Tuesday April 30, 2019, 12:58 PM, SEIR, UTA
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \FatemehBagheri, Tuesday, April 30, 2019, 12:58 PM, SEIR, UTA
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type :: css_pdt(kind)
         integer             , kind          :: kind = SK
         character(:, kind)  , allocatable   :: val
@@ -924,8 +965,8 @@ module pm_container
     !>  \final{csi_pdt}
     !>
     !>  \author
-    !>  \FatemehBagheri, Tuesday April 30, 2019, 12:58 PM, SEIR, UTA
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \FatemehBagheri, Tuesday, April 30, 2019, 12:58 PM, SEIR, UTA
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type :: csi_pdt(kind)
         integer             , kind          :: kind = IK
         integer(kind)       , allocatable   :: val
@@ -1063,8 +1104,8 @@ module pm_container
     !>  \final{csl_pdt}
     !>
     !>  \author
-    !>  \FatemehBagheri, Tuesday April 30, 2019, 12:58 PM, SEIR, UTA
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \FatemehBagheri, Tuesday, April 30, 2019, 12:58 PM, SEIR, UTA
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type :: csl_pdt(kind)
         integer             , kind          :: kind = LK
         integer(kind)       , allocatable   :: val
@@ -1202,8 +1243,8 @@ module pm_container
     !>  \final{csc_pdt}
     !>
     !>  \author
-    !>  \FatemehBagheri, Tuesday April 30, 2019, 12:58 PM, SEIR, UTA
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \FatemehBagheri, Tuesday, April 30, 2019, 12:58 PM, SEIR, UTA
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type :: csc_pdt(kind)
         integer             , kind          :: kind = CK
         complex(kind)       , allocatable   :: val
@@ -1341,8 +1382,8 @@ module pm_container
     !>  \final{csc_pdt}
     !>
     !>  \author
-    !>  \FatemehBagheri, Tuesday April 30, 2019, 12:58 PM, SEIR, UTA
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \FatemehBagheri, Tuesday, April 30, 2019, 12:58 PM, SEIR, UTA
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     type :: csr_pdt(kind)
         integer             , kind          :: kind = RK
         real(kind)          , allocatable   :: val
@@ -1514,7 +1555,7 @@ module pm_container
     !>  \final{isless}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     interface operator(<)
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2000,7 +2041,7 @@ module pm_container
     !>  \final{ismore}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     interface operator(>)
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2444,7 +2485,7 @@ module pm_container
     !>  \final{isleq}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     interface operator(<=)
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2888,7 +2929,7 @@ module pm_container
     !>  \final{ismeq}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     interface operator(>=)
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -3332,7 +3373,7 @@ module pm_container
     !>  \final{isneq}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     interface operator(/=)
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -3777,7 +3818,7 @@ module pm_container
     !>  \final{iseq}
     !>
     !>  \author
-    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     interface operator(==)
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -4223,7 +4264,7 @@ module pm_container
     !>  \final{assignment}
     !>
     !>  \author
-    !>  \AmirShahmoradi, April 21, 2017, 3:54 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    !>  \AmirShahmoradi, April 21, 2017, 3:54 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     interface assignment(=)
 
     !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -4628,7 +4669,7 @@ module pm_container
     ! >
     ! >  \author
     ! >  \FatemehBagheri, Tuesday April 30, 2019, 12:58 PM, SEIR, UTA
-    ! >  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+    ! >  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
     !type :: csis_type
     !    integer(IK) :: int
     !    character(:, SK), allocatable :: str
@@ -4694,7 +4735,7 @@ module pm_container
 !    !>  \final{getVal}
 !    !>
 !    !>  \author
-!    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas at Austin
+!    !>  \AmirShahmoradi, September 1, 2017, 12:00 AM, Institute for Computational Engineering and Sciences (ICES), The University of Texas Austin<br>
 !    interface getVal
 !
 !    !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

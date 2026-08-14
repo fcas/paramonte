@@ -15,7 +15,7 @@
 %>                          (**optional**, default = ``50``.)
 %>
 %>  \return
-%>  `bcrd`              :   The output matrix of MATLAB doubles of shape ``[npnt, 2]``
+%>  ``bcrd``            :   The output matrix of MATLAB doubles of shape ``[npnt, 2]``
 %>                          containing the coordinates of a set of ``npnt`` points on
 %>                          the boundary of the target 2D ellipsoid.<br>
 %>
@@ -32,23 +32,22 @@
 %>
 %>  \see
 %>  [pm.geom.ell2.getBorders](@ref getBorders)<br>
-%>  [pm.vis.cascade.Ellipse](@ref Ellipse)<br>
-%>  [pm.vis.subplot.Ellipse](@ref Ellipse)<br>
-%>  [pm.vis.plot.Ellipse](@ref Ellipse)<br>
-%>  [pm.vis.tile.Ellipse](@ref Ellipse)<br>
+%>  [pm.vis.CascadeEllipse](@ref CascadeEllipse)<br>
+%>  [pm.vis.SubplotEllipse](@ref SubplotEllipse)<br>
+%>  [pm.vis.PlotEllipse](@ref PlotEllipse)<br>
+%>  [pm.vis.TileEllipse](@ref TileEllipse)<br>
 %>
 %>  \example{getBorder}
-%>  \include{lineno} example/+geom/+ell2/getBorder/main.m
-%>  \matlabrun{getBorder}
+%>  \include{lineno} example/geom/ell2/getBorder/main.m
 %>  \vis{getBorder}
-%>  \image html example/+geom/+ell2/getBorder/getBorder.2d.png width=700
-%>  \image html example/+geom/+ell2/getBorder/getBorder.3d.png width=700
-%>  \image html example/+geom/+ell2/getBorder/getBorder.wavy.png width=700
+%>  \image html example/geom/ell2/getBorder/getBorder.2d.png width=700
+%>  \image html example/geom/ell2/getBorder/getBorder.3d.png width=700
+%>  \image html example/geom/ell2/getBorder/getBorder.wavy.png width=700
 %>
 %>  \final{getBorder}
 %>
 %>  \author
-%>  \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin
+%>  \AmirShahmoradi, May 16 2016, 9:03 AM, Oden Institute for Computational Engineering and Sciences (ICES), UT Austin<br>
 function bcrd = getBorder(gramian, center, npnt)
     if  nargin < 3
         npnt = [];
