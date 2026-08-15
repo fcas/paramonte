@@ -23,6 +23,7 @@ jobs:
       image: semgrep/semgrep
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
+        # No submodules: recursive here (unlike the shared template) -- an
+        # orphaned gitlink at external/OpenBLAS with no matching .gitmodules
+        # entry makes a recursive submodule checkout fail outright.
       - run: semgrep ci

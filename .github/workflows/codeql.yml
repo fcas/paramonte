@@ -57,8 +57,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
+        # No submodules: recursive here (unlike the shared template) -- this
+        # repo's tree has an orphaned gitlink at external/OpenBLAS with no
+        # matching .gitmodules entry, which makes a recursive submodule
+        # checkout fail outright. Neither of its declared submodules
+        # (OpenBLAS, external/paramonted) is Python code this study analyzes.
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
